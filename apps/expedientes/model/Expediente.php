@@ -82,33 +82,6 @@ class Expediente extends expedienteDB
 
     /* CONSTRUCTOR -------------------------------------------------------------- */
 
-    /**
-     * Constructor de la classe.
-     * Si només necessita un valor, se li pot passar un integer.
-     * En general se li passa un array amb les claus primàries.
-     *
-     * @param integer|array iid_expediente
-     *                        $a_id. Un array con los nombres=>valores de las claves primarias.
-     */
-    function __construct($a_id = null)
-    {
-        $oDbl = $GLOBALS['oDBT'];
-        if (is_array($a_id)) {
-            $this->aPrimary_key = $a_id;
-            foreach ($a_id as $nom_id => $val_id) {
-                if (($nom_id === 'id_expediente') && $val_id !== '') {
-                    $this->iid_expediente = (int)$val_id;
-                }
-            }
-        } else {
-            if (isset($a_id) && $a_id !== '') {
-                $this->iid_expediente = (int)$a_id;
-                $this->aPrimary_key = array('iid_expediente' => $this->iid_expediente);
-            }
-        }
-        $this->setoDbl($oDbl);
-        $this->setNomTabla('expedientes');
-    }
 
     /* MÉTODOS PÚBLICOS ----------------------------------------------------------*/
 
@@ -519,12 +492,19 @@ class Expediente extends expedienteDB
                         break;
                     case 'escrito':
                         $oEscrito = new Escrito($id);
-                        $asunto = $oEscrito->getAsuntoDetalle();
-                        $prot_local = $oEscrito->cabeceraDerecha();
-                        $nom = empty($prot_local) ? '' : $prot_local;
-                        $nom .= empty($nom) ? $asunto : ": $asunto";
-                        $link_mod = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito($id);\" >$nom</span>";
-                        $link_del = "<span class=\"btn btn-outline-danger btn-sm \" onclick=\"fnjs_del_antecedente('$tipo','$id');\" >" . _("quitar") . "</span>";
+                        // por alguna razón se puede haber eliminado el escrito
+                        if ($oEscrito->DBCargar() !== FALSE) {
+                            $asunto = $oEscrito->getAsuntoDetalle();
+                            $prot_local = $oEscrito->cabeceraDerecha();
+                            $nom = empty($prot_local) ? '' : $prot_local;
+                            $nom .= empty($nom) ? $asunto : ": $asunto";
+                            $link_mod = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito($id);\" >$nom</span>";
+                            $link_del = "<span class=\"btn btn-outline-danger btn-sm \" onclick=\"fnjs_del_antecedente('$tipo','$id');\" >" . _("quitar") . "</span>";
+                        } else {
+                            // eliminar el antecedente:
+                            $link_mod = _("antecedente eliminado");
+                            $link_del = "<span class=\"btn btn-outline-danger btn-sm \" onclick=\"fnjs_del_antecedente('$tipo','$id');\" >" . _("quitar") . "</span>";
+                        }
                         break;
                     case 'documento':
                         $oDocumento = new Documento($id);

@@ -117,7 +117,7 @@ if (ConfigGlobal::role_actual() !== 'secretaria') {
 } else {
     $oArrayDesplEtiquetas = new web\DesplegableArray('', [], 'etiquetas');
 }
-$txt_btn_etiquetas = _("Guardar etiquetas");
+$txt_btn_etiquetas = _("Guardar etiquetas y visibilidad");
 
 $lista_antecedentes = $oExpediente->getHtmlAntecedentes(FALSE);
 

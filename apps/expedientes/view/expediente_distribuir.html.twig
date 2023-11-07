@@ -115,7 +115,7 @@
                 {% if vista_dl %}
                     {% if ver_encargar %}
                         <!--  --------------- Encargar a --------------- -->
-                        <div class="mb-2 row align-items-center">
+                        <div class="mb-3 row align-items-center">
                             <!--  --------------- OFICIALES --------------- -->
                             <label for="id_oficial" class="col-1 form-label">{{ "Encargar a"|trans|raw }}:</label>
                             <div id="div_oficiales" class="col-5">
@@ -127,7 +127,7 @@
                         </div>
                     {% endif %}
                     <!--  --------------- VISIBILIDAD --------------- -->
-                    <div id="div_visibilidad" class="mb-2 row align-items-center">
+                    <div id="div_visibilidad" class="mb-3 row align-items-center">
                         <label for="Visibilidad" class="col-1 form-label">{{ "Visibilidad"|trans|raw }}:</label>
                         <div class="col-3">
                             {{ oDesplVisibilidad.desplegable|raw }}
@@ -151,7 +151,7 @@
                     {{ "Volver"|trans|raw }}
                 </button>
                 {% if ver_etiquetas %}
-                    <button tabindex='90' class="btn btn-success" onClick="fnjs_distribuir('guardar_etiquetas');">
+                    <button tabindex='90' class="btn btn-success" onClick="fnjs_distribuir('guardar_etiquetas_y_visibilidad');">
                         {{ txt_btn_etiquetas }}
                     </button>
                 {% endif %}
