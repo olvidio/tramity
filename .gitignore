@@ -42,3 +42,4 @@ log/db/*.sql
 .Trashes
 ehthumbs.db
 Thumbs.db
+/orbix.iml
