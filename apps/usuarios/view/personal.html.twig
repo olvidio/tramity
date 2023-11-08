@@ -5,8 +5,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-12">
-                <form id=preferencias name=preferencias action="" method="post">
-                    <form class="user" id="frm_usuario" name="frm_usuario" action="" method="post">
+                <form id=frm_preferencias name=frm_preferencias action="" method="post">
                         {{ oHash.getCamposHtml|raw }}
                         <div class="mb-3">
                             <label class="form-label">{{ "color"|trans|raw }}: </label>
@@ -65,17 +64,20 @@
         }
         var url_doc = 'apps/usuarios/controller/personal_update.php';
         var data = $(formulario).serialize();
+
         request = $.ajax({
-            url: url_doc,
             data: data,
-            method: 'POST'
+            url: url_doc,
+            method: 'POST',
+            dataType: 'json'
         });
-        request.done(function (rta_txt) {
-            if (rta_txt != '' && rta_txt != '\\n') {
-                alert('{{ "respuesta"|trans|raw }}: ' + rta_txt);
+
+        request.done(function (json) {
+            if (json.success != true) {
+                alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
             } else {
                 alert("{{ "datos guardados"|trans|raw }}");
-                window.location.reload();
+                fnjs_cancelar();
             }
         });
     }
