@@ -70,7 +70,8 @@ class As4Entregar extends As4CollaborationInfo
     private int $categoria;
 
     private array $aLugares;
-    private array $aEntidades;
+    private array $aEntidadesNombre;
+    private array $aEntidadesSchema;
 
     private $anular_txt;
 
@@ -640,7 +641,7 @@ class As4Entregar extends As4CollaborationInfo
 
     private function getEntidadesPlataforma(): array
     {
-        if (!isset($this->aEntidades)) {
+        if (!isset($this->aEntidadesNombre)) {
             $gesEntidades = new GestorEntidadesDB();
             $cEntidades = $gesEntidades->getEntidadesDB(['anulado' => 'false']);
             $aEntidades = [];
@@ -650,9 +651,9 @@ class As4Entregar extends As4CollaborationInfo
 
                 $aEntidades[$id] = $nombre;
             }
-            $this->aEntidades = $aEntidades;
+            $this->aEntidadesNombre = $aEntidades;
         }
-        return $this->aEntidades;
+        return $this->aEntidadesNombre;
     }
 
     private function nuevo(): void
@@ -986,7 +987,7 @@ class As4Entregar extends As4CollaborationInfo
 
     private function getSchemaEntidadesPlataforma(): array
     {
-        if (!isset($this->aEntidades)) {
+        if (!isset($this->aEntidadesSchema)) {
             $gesEntidades = new GestorEntidadesDB();
             $cEntidades = $gesEntidades->getEntidadesDB(['anulado' => 'false']);
             $aEntidades = [];
@@ -996,9 +997,9 @@ class As4Entregar extends As4CollaborationInfo
 
                 $aEntidades[$id] = $schema;
             }
-            $this->aEntidades = $aEntidades;
+            $this->aEntidadesSchema = $aEntidades;
         }
-        return $this->aEntidades;
+        return $this->aEntidadesSchema;
     }
 
     /**

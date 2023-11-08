@@ -171,7 +171,23 @@ switch ($Q_que) {
         $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
 
         // primero se guarda, y al final se guarda la fecha de hoy y se crean las firmas para el trámite
-        $RespuestaGuardar = (new GuardarExpediente)('array', $Q_id_expediente, $Q_tramite, $Q_estado, $Q_prioridad, $Q_asunto, $Q_entradilla, $Q_f_contestar, $Q_ponente, $Q_f_reunion, $Q_f_aprobacion, $Q_a_firmas_oficina, $Q_a_firmas, $Q_vida, $Q_visibilidad, $Q_a_preparar, $Q_filtro);
+        $RespuestaGuardar = (new GuardarExpediente)('array',
+                 $Q_id_expediente,
+                 $Q_tramite,
+                 $Q_estado,
+                 $Q_prioridad,
+                 $Q_asunto,
+                 $Q_entradilla,
+                 $Q_f_contestar,
+                 $Q_ponente,
+                 $Q_f_reunion,
+                 $Q_f_aprobacion,
+                 $Q_a_firmas_oficina,
+                 $Q_a_firmas,
+                 $Q_vida,
+                 $Q_visibilidad,
+                 $Q_a_preparar,
+                 $Q_filtro);
         $error_txt = $RespuestaGuardar['error_txt'];
         $id_expediente = $RespuestaGuardar['id_expediente'];
         if (empty($error_txt)) {
@@ -196,7 +212,23 @@ switch ($Q_que) {
         $Q_visibilidad = (integer)filter_input(INPUT_POST, 'visibilidad');
         $Q_visibilidad = empty($Q_visibilidad)? Visibilidad::V_TODOS : $Q_visibilidad;
         $Q_filtro = (string)filter_input(INPUT_POST, 'filtro');
-        (new GuardarExpediente)('json', $Q_id_expediente, $Q_tramite, $Q_estado, $Q_prioridad, $Q_asunto, $Q_entradilla, $Q_f_contestar, $Q_ponente, $Q_f_reunion, $Q_f_aprobacion, $Q_a_firmas_oficina, $Q_a_firmas, $Q_vida, $Q_visibilidad, $Q_a_preparar, $Q_filtro);
+        (new GuardarExpediente)('json',
+                 $Q_id_expediente,
+                 $Q_tramite,
+                 $Q_estado,
+                 $Q_prioridad,
+                 $Q_asunto,
+                 $Q_entradilla,
+                 $Q_f_contestar,
+                 $Q_ponente,
+                 $Q_f_reunion,
+                 $Q_f_aprobacion,
+                 $Q_a_firmas_oficina,
+                 $Q_a_firmas,
+                 $Q_vida,
+                 $Q_visibilidad,
+                 $Q_a_preparar,
+                 $Q_filtro);
         break;
     case 'cambio_tramite':
         $Q_id_expediente = (integer)filter_input(INPUT_POST, 'id_expediente');
