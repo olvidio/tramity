@@ -72,6 +72,7 @@ class Client
     protected $api_version_docker =  '1.3.0';
     protected $api_version_local = '1.2.15';
     protected $api_version_dlb = '1.3.0';
+    protected $api_version_dlp = '1.2.15';
 
     /**
      * Se encuentra en el servidor etherpad en;

@@ -69,6 +69,28 @@ switch ($Q_que) {
         $oUser = $oUsuarios->getUsuarios(array('usuario' => $Q_usuario));
         $oUsuario = $oUser[0];
         break;
+    case "check_pwd":
+        $Q_id_usuario = (integer)filter_input(INPUT_POST, 'id_usuario');
+        $Qpassword = (string)filter_input(INPUT_POST, 'password');
+
+        $oUsuario = new Usuario($Q_id_usuario);
+        if ($oUsuario->DBCargar() === FALSE ){
+            $error_txt = sprintf(_("OJO! no existe el usuario en %s, linea %s"), __FILE__, __LINE__);
+            break;
+        }
+        $oUsuario->DBCargar();
+        $usuario = $oUsuario->getUsuario();
+
+        if (!empty($Qpassword)) {
+            $oCrypt = new MyCrypt();
+            $jsondata = $oCrypt->is_valid_password($usuario, $Qpassword);
+
+            //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
+            header('Content-type: application/json; charset=utf-8');
+            echo json_encode($jsondata);
+            exit();
+        }
+        break;
     case "guardar_pwd":
         $Q_id_usuario = (integer)filter_input(INPUT_POST, 'id_usuario');
         $Q_password = (string)filter_input(INPUT_POST, 'password');

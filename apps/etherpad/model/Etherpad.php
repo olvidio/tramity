@@ -64,6 +64,9 @@ class Etherpad extends Client
             $this->apikey = $this->apikey_local;
             $this->api_version = $this->api_version_dlb;
         }
+        if (str_contains(ServerConf::getSERVIDOR(), 'bayona')) {
+            $this->api_version = $this->api_version_dlp;
+        }
 
         parent::__construct($this->apikey, $this->url);
     }

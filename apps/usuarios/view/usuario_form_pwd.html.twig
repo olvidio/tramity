@@ -21,7 +21,7 @@
 <br>
 {{ "Requerimientos del password"|trans|raw }}:<br>
 <ol>
-    <li>{{ "Los passwords no pueden contener el valor del \"login\" o de qualquiera de las palabras del \"nombre\". (no tiene en cuenta mayúsculas/minúsculas)"|trans|raw }}.</li>
+    <li>{{ "Los passwords no pueden contener el valor del \"login\". (no tiene en cuenta mayúsculas/minúsculas)"|trans|raw }}.</li>
     <li>{{ "El password ha de tener más de 8 carácteres"|trans|raw }}.</li>
     <li>{{ "El password ha de tener como mínimo 3 de los siguientes grupos de carácteres"|trans|raw }}:
         <ul>
@@ -33,6 +33,28 @@
 </ol>
 
 <script>
+    fnjs_chk_passwd = function (formulario) {
+        id_usuario = $('#id_usuario').val();
+        var password = encodeURIComponent($('#password').val());
+        var url = 'apps/usuarios/controller/usuario_update.php';
+        var parametros = 'que=check_pwd&id_usuario='+id_usuario+'&password=' + password;
+
+        var request = $.ajax({
+            data: parametros,
+            url: url,
+            type: 'post',
+            dataType: 'json'
+        });
+        request.done(function (json) {
+            if (json.success != true) {
+                alert("password error:\n" + json.mensaje);
+                return false;
+            } else {
+                fnjs_guardar_datos(formulario);
+            }
+        });
+    }
+
     fnjs_guardar = function (formulario) {
         // si es 0, no se cambia el password.
         var pwd = $("#password").val();
@@ -54,6 +76,11 @@
             alert("{{ "error: passwords no coincidentes"|trans|raw }}");
             return false;
         }
+
+        fnjs_chk_passwd(formulario);
+    }
+
+    fnjs_guardar_datos = function(formulario) {
         id_usuario = $('#id_usuario').val();
         datos = $(formulario).serialize();
         request = $.ajax({

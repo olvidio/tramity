@@ -341,7 +341,7 @@
         var id_entrada = '{{ id_entrada }}';
         var asunto_buscar = $('#asunto_buscar').val();
 
-        alert("{{ "solamanete busca en los expedientes que están en borrador"|trans|raw }}");
+        alert("{{ "solamente busca en los expedientes que están en borrador"|trans|raw }}");
         if (err != 1) {
             var url_ajax = 'apps/expedientes/controller/antecedentes_ajax.php';
             var param_json = {que: que, id_entrada: id_entrada, asunto_buscar: asunto_buscar};
