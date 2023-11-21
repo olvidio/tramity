@@ -335,29 +335,33 @@ class As4Entregar extends As4CollaborationInfo
                 'num' => $num,
                 'any' => $any,
             ];
+            // Asegurarme que es el primero. Ordeno (si hubiera más de uno)
+            $aWhere = ['anulado' => 'f', '_ordre' => "f_aprobacion DESC, id_escrito DESC"];
             $gesEscritos = new GestorEscritoEntidad($siglaDestino);
-            $cEscritos = $gesEscritos->getEscritosByProtLocalDB($aProt_local);
-            foreach ($cEscritos as $oEscrito) {
-                if ($oEscrito->DBCargar() === FALSE) { continue; }
-                $this->asunto_secretaria = $oEscrito->getAsunto();
-                $this->detalle = $oEscrito->getDetalle();
-                $this->categoria = $oEscrito->getCategoria();
-                // los escritos van por cargos, las entradas por oficinas: pongo al director de la oficina:
-                $id_ponente = $oEscrito->getPonente();
-                $a_firmas = $oEscrito->getResto_oficinas();
+            $cEscritos = $gesEscritos->getEscritosByProtLocalDB($aProt_local, $aWhere);
+            if (!empty($cEscritos)) {
+                $oEscrito = $cEscritos[0];
+                if ($oEscrito->DBCargar() !== FALSE) {
+                    $this->asunto_secretaria = $oEscrito->getAsunto();
+                    $this->detalle = $oEscrito->getDetalle();
+                    $this->categoria = $oEscrito->getCategoria();
+                    // los escritos van por cargos, las entradas por oficinas: pongo al director de la oficina:
+                    $id_ponente = $oEscrito->getPonente();
+                    $a_firmas = $oEscrito->getResto_oficinas();
 
-                $oCargo = new CargoEntidad($siglaDestino);
-                $oCargo->setId_cargo($id_ponente);
-                $id_of_ponente = $oCargo->getId_oficina();
-                $this->id_ponente = $id_of_ponente;
-                $a_oficinas = [];
-                foreach ($a_firmas as $id_cargo) {
                     $oCargo = new CargoEntidad($siglaDestino);
-                    $oCargo->setId_cargo($id_cargo);
-                    $id_oficina = $oCargo->getId_oficina();
-                    $a_oficinas[] = $id_oficina;
+                    $oCargo->setId_cargo($id_ponente);
+                    $id_of_ponente = $oCargo->getId_oficina();
+                    $this->id_ponente = $id_of_ponente;
+                    $a_oficinas = [];
+                    foreach ($a_firmas as $id_cargo) {
+                        $oCargo = new CargoEntidad($siglaDestino);
+                        $oCargo->setId_cargo($id_cargo);
+                        $id_oficina = $oCargo->getId_oficina();
+                        $a_oficinas[] = $id_oficina;
+                    }
+                    $this->oficinas = $a_oficinas;
                 }
-                $this->oficinas = $a_oficinas;
             }
         }
     }
@@ -695,9 +699,12 @@ class As4Entregar extends As4CollaborationInfo
         } else {
             $oEntrada->setCategoria($this->categoria);
         }
-        // añadidos al buscar en referencias
-        if (!empty($this->a_Prot_ref)) {
-            $this->buscar_ref($siglaDestino);
+        // Buscar en referencias por campos adicionales (ponente, asunto secretaria, detalle)
+        // solamente para las dl.
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
+            if (!empty($this->a_Prot_ref)) {
+                $this->buscar_ref($siglaDestino);
+            }
         }
         if (!empty($this->asunto_secretaria)) {
             $oEntrada->setAsunto($this->asunto_secretaria);

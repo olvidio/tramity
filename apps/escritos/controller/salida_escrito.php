@@ -47,8 +47,9 @@ if (!empty($Q_prot_num) && !empty($Q_prot_any)) {
         'num' => $Q_prot_num,
         'any' => $Q_prot_any,
     ];
+    $aWhere = ['anulado' => 'f'];
     $gesEscritos = new GestorEscrito();
-    $cEscritos = $gesEscritos->getEscritosByProtLocalDB($aProt_local);
+    $cEscritos = $gesEscritos->getEscritosByProtLocalDB($aProt_local, $aWhere);
     if (!empty($cEscritos)) {
         $oEscrito = $cEscritos[0];
         $oEscrito->DBCargar();

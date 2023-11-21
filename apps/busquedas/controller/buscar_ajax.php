@@ -58,8 +58,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata, JSON_THROW_ON_ERROR);
         exit();
-
-        break;
     case 'buscar_referencia_correspondiente':
         $Q_para = (string)filter_input(INPUT_POST, 'para');
         $Q_prot_any = core\any_2($Q_prot_any);
@@ -74,9 +72,10 @@ switch ($Q_que) {
                 'num' => $Q_prot_num,
                 'any' => $Q_prot_any,
             ];
+            $aWhere = ['anulado' => 'f'];
             $id_escrito = '';
             $gesEscritos = new GestorEscrito();
-            $cEscritos = $gesEscritos->getEscritosByProtLocalDB($aProt_local);
+            $cEscritos = $gesEscritos->getEscritosByProtLocalDB($aProt_local, $aWhere);
             foreach ($cEscritos as $oEscrito) {
                 $id_escrito = $oEscrito->getId_escrito();
                 $jsondata['asunto'] = $oEscrito->getAsunto();
@@ -163,7 +162,6 @@ switch ($Q_que) {
         header('Content-type: application/json; charset=utf-8');
         echo json_encode($jsondata, JSON_THROW_ON_ERROR);
         exit();
-        break;
     default:
         $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
         exit ($err_switch);

@@ -465,8 +465,9 @@ switch ($Q_que) {
                 'num' => $Q_local_prot_num,
                 'any' => $Q_local_prot_any,
             ];
+            $aWhere = ['anulado' => 'f'];
             $gesEscritos = new GestorEscrito();
-            $cEscritos = $gesEscritos->getEscritosByProtLocalDB($aProt_local);
+            $cEscritos = $gesEscritos->getEscritosByProtLocalDB($aProt_local, $aWhere);
         }
 
         $a_cabeceras = ['', ['width' => 150, 'name' => _("protocolo")],
