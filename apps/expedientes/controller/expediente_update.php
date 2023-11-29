@@ -80,7 +80,7 @@ switch ($Q_que) {
         // nuevo formato: id_entrada#comparida (compartida = boolean)
         $Qid_entrada = (string)filter_input(INPUT_POST, 'id_entrada');
         $Q_visibilidad = (integer)filter_input(INPUT_POST, 'visibilidad');
-        $Q_visibilidad = empty($Q_visibilidad)? Visibilidad::V_TODOS : $Q_visibilidad;
+        $Q_visibilidad = empty($Q_visibilidad)? Visibilidad::V_PERSONAL : $Q_visibilidad;
         (new CrearNuevoExpedienteDeEntrada)($Qid_entrada, $Q_visibilidad);
         break;
     case 'encargar_a':

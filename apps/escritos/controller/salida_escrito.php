@@ -118,6 +118,7 @@ $aOpciones = $oVisibilidad->getArrayVisibilidad();
 $oDesplVisibilidad = new Desplegable();
 $oDesplVisibilidad->setNombre('visibilidad');
 $oDesplVisibilidad->setOpciones($aOpciones);
+$oDesplVisibilidad->setOpcion_sel(Visibilidad::V_PERSONAL);
 $oDesplVisibilidad->setTabIndex(155);
 
 if (!empty($Q_id_escrito)) {
