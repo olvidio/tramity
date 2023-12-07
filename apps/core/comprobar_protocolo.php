@@ -23,6 +23,7 @@ $aviso_txt = '';
 $error_txt = '';
 $aviso_salto = '';
 $aviso_any = '';
+$id_of_ponente = '';
 $asunto = '';
 $detalle = '';
 $visibilidad = '';
@@ -34,19 +35,20 @@ $txt_err = '';
 $Q_que = (string)filter_input(INPUT_POST, 'que');
 $Q_prot_num = (integer)filter_input(INPUT_POST, 'prot_num');
 $Q_prot_any = (string)filter_input(INPUT_POST, 'prot_any'); // string para distinguir el 00 (del 2000) de empty.
+$Q_id_lugar = (integer)filter_input(INPUT_POST, 'id_lugar');
 
-$Q_prot_any = any_2($Q_prot_any);
 // compruebo el año (actual o -1)
-$any = date('y');
-if ($Q_prot_any != $any && $Q_prot_any != $any - 1) {
+$Q_prot_any = any_2($Q_prot_any);
+$any = date('y'); //A two digit representation of a year (Examples: 99 or 03)
+$any_anterior = any_2(date('Y') - 1);
+if (($Q_prot_any !== $any) && ($Q_prot_any !== $any_anterior)) {
     $aviso_any = 1;
 }
 
-if ($Q_que == 's4') {
-    $Q_id_lugar = (integer)filter_input(INPUT_POST, 'id_lugar');
+if ($Q_que === 's4') {
     // compruebo si existe el escrito de referencia (sólo el primero, ordeno por anulado).
     // en entradas:
-    $gesEntradas = new GestorEntrada();       //$aProt_orgigen = ['id_lugar', 'num', 'any', 'mas']
+    $gesEntradas = new GestorEntrada();       //$aProt_origen = ['id_lugar', 'num', 'any', 'mas']
     $aProt_origen = ['id_lugar' => $Q_id_lugar,
         'num' => $Q_prot_num,
         'any' => $Q_prot_any,
@@ -59,7 +61,7 @@ if ($Q_que == 's4') {
 
     foreach ($cEntradas as $oEntrada) {
         $id_entrada = $oEntrada->getId_entrada();
-        $id_reg = 'REN' . $id_entrada; // REN = Regitro Entrada
+        $id_reg = 'REN' . $id_entrada; // REN = Registro Entrada
         $id_of_ponente = $oEntrada->getPonente();
         // para crear un pendiente, no pongo 'reservado'
         $asunto = $oEntrada->getAsuntoDB();
@@ -72,6 +74,24 @@ if ($Q_que == 's4') {
         $oficinas_txt = implode(' ', $resto_oficinas);
     }
     $jsondata['id_reg'] = $id_reg;
+}
+
+if ($Q_que === 'entrada') {
+    // compruebo si está repetido
+    $gesEntradas = new GestorEntrada();       //$aProt_origen = ['id_lugar', 'num', 'any', 'mas']
+    $aProt_origen = ['id_lugar' => $Q_id_lugar,
+        'num' => $Q_prot_num,
+        'any' => $Q_prot_any,
+        'mas' => '',
+    ];
+    // No buscar los anulados:
+    $aWhere = ['bypass' => 'f', 'anulado' => 'x'];
+    $aOperador = ['anulado' => 'IS NULL'];
+    $cEntradas = $gesEntradas->getEntradasByProtOrigenDB($aProt_origen, $aWhere, $aOperador);
+    if (count($cEntradas) > 0) {
+        $prot_num = "";
+        $aviso_repe = 1;
+    }
 }
 
 

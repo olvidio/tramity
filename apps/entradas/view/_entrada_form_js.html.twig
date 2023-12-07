@@ -379,6 +379,37 @@
             }
         }
 
+        /* comprobar que no está ya en la DB */
+        if (num.includes('origen')) {
+            var id_origen = $('#origen').val();
+            var url = 'apps/core/comprobar_protocolo.php';
+            var datos = 'que=entrada&id_lugar=' + id_origen + '&prot_num=' + numero[0] + '&prot_any=' + numero[1];
+            request = $.ajax({
+                url: url,
+                data: datos,
+                method: 'POST',
+                dataType: 'json'
+            });
+            request.done(function (json) {
+                if (json.success != true) {
+                    alert('{{ "respuesta"|trans|raw }}: ' + json.mensaje);
+                } else {
+                    if (json.rango) {
+                        alert("{{ "nº de protocolo fuera de rango"|trans|raw }}");
+                        s = 1;
+                    }
+                    if (json.any) {
+                        alert("{{ "No es de este año, ni del año pasado"|trans|raw }}");
+                        s = 1;
+                    }
+                    if (json.repe) {
+                        alert("{{ "nº de protocolo repetido"|trans|raw }}");
+                        s = 1;
+                    }
+                }
+            });
+        }
+
         /* Para el número de referencias */
         if (num == '#prot_num_referencias[0]') {
             fnjs_buscar_datos_en_ref();
