@@ -350,12 +350,12 @@ class Enviar
         // por permisos
         if ($flag_rdp_en_cola) {
             $autorizacion_lst = $autorizacion_dl . implode('|', $a_lista_auth_rdp);
-            $err_mail = $this->enviarRdp($autorizacion_lst);
+            $err_mail = $this->enviarRdp($autorizacion_lst,true);
         }
         if ($flag_rdp) {
             if ($this->accion === As4CollaborationInfo::ACCION_COMPARTIR) {
                 $autorizacion_lst = $autorizacion_dl . implode('|', $a_lista_auth_rdp);
-                $err_mail = $this->enviarRdp($autorizacion_lst);
+                $err_mail = $this->enviarRdp($autorizacion_lst,false);
             }
         }
         // por plataformas.
@@ -479,7 +479,7 @@ class Enviar
         }
     }
 
-    private function enviarRdp($autorizacion_lst)
+    private function enviarRdp($autorizacion_lst,bool $varios)
     {
         $DIR_CORREO = '/home/correodlp';
         $err_mail = '';
@@ -498,6 +498,12 @@ class Enviar
             $filename = $this->oEntradaBypass->getNombreEscrito('');
             $asunto = $this->oEntradaBypass->getAsunto();
         }
+        // si va a más de un centro (no grupos) cambio el nombre del fichero, y en vez del nombre del primer (o último) centro
+        // pongo "varios"
+        if ($varios) {
+            $filename = preg_replace('/(.*)\(.*\)(.*)/', '$1(varios)$2', $filename);
+        }
+
         $filename_utf8 = $fecha_hora . '-' . $filename . '-' . trim($asunto);
         $this->filename = $filename_utf8;
         $this->filename_iso = mb_convert_encoding($filename_utf8, 'ISO-8859-1', 'UTF-8');
@@ -508,7 +514,7 @@ class Enviar
         $filename_ext = $this->filename . '.pdf';
         $filename_iso_ext = $this->filename_iso . '.pdf';
         $full_filename_iso = $DIR_CORREO . '/' . $filename_iso_ext;
-        $omPdf->Output($full_filename_iso, 'F');
+        ///$omPdf->Output($full_filename_iso, 'F');
 
         $oWin = new FicherosPSWin($DIR_CORREO);
         $oWin->inicializar();
@@ -518,7 +524,10 @@ class Enviar
         $oWin->mover($filename_ext);
 
         // adjuntos:
+        $a = 0;
         foreach ($this->a_adjuntos as $adjunto_filename => $escrito_txt) {
+            $a++;
+            $adjunto_filename = 'adj_'.$a;
             $adjunto_filename_iso = mb_convert_encoding($adjunto_filename, 'ISO-8859-1', 'UTF-8');
             $filename_ext = $this->filename . '-' . $adjunto_filename;
             $filename_iso_ext = $this->filename_iso . '-' . $adjunto_filename_iso;
