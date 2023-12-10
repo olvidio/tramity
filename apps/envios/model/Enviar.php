@@ -17,6 +17,7 @@ use Mpdf\MpdfException;
 use oasis_as4\model\As4;
 use oasis_as4\model\As4CollaborationInfo;
 use PHPMailer\PHPMailer\Exception;
+use SplFileInfo;
 use stdClass;
 use usuarios\model\Categoria;
 use usuarios\model\entity\Cargo;
@@ -421,7 +422,7 @@ class Enviar
         }
 
         $autorizacion_lst = $autorizacion_dl . implode('|', $a_lista_auth_rdp);
-        $err_mail = $this->enviarRdp($autorizacion_lst);
+        $err_mail = $this->enviarRdp($autorizacion_lst, false);
 
         // by default
         $this->a_rta['success'] = TRUE;
@@ -477,6 +478,7 @@ class Enviar
             }
             return $this->oEscrito->getDestinosIds();
         }
+        return [];
     }
 
     private function enviarRdp($autorizacion_lst,bool $varios)
@@ -514,7 +516,7 @@ class Enviar
         $filename_ext = $this->filename . '.pdf';
         $filename_iso_ext = $this->filename_iso . '.pdf';
         $full_filename_iso = $DIR_CORREO . '/' . $filename_iso_ext;
-        ///$omPdf->Output($full_filename_iso, 'F');
+        $omPdf->Output($full_filename_iso, 'F');
 
         $oWin = new FicherosPSWin($DIR_CORREO);
         $oWin->inicializar();
@@ -527,9 +529,12 @@ class Enviar
         $a = 0;
         foreach ($this->a_adjuntos as $adjunto_filename => $escrito_txt) {
             $a++;
-            $adjunto_filename = 'adj_'.$a;
-            $adjunto_filename_iso = mb_convert_encoding($adjunto_filename, 'ISO-8859-1', 'UTF-8');
-            $filename_ext = $this->filename . '-' . $adjunto_filename;
+            $info = new SplFileInfo($adjunto_filename);
+            $extension = $info->getExtension();
+
+            $adjunto_filename_num = 'adj_'.$a.".$extension";
+            $adjunto_filename_iso = mb_convert_encoding($adjunto_filename_num, 'ISO-8859-1', 'UTF-8');
+            $filename_ext = $this->filename . '-' . $adjunto_filename_num;
             $filename_iso_ext = $this->filename_iso . '-' . $adjunto_filename_iso;
             $full_filename_iso = $DIR_CORREO . '/' . $filename_iso_ext;
             file_put_contents($full_filename_iso, $escrito_txt);
