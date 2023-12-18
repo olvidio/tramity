@@ -351,7 +351,11 @@ class Enviar
         // por permisos
         if ($flag_rdp_en_cola) {
             $autorizacion_lst = $autorizacion_dl . implode('|', $a_lista_auth_rdp);
-            $err_mail = $this->enviarRdp($autorizacion_lst,true);
+            $varios = FALSE;
+            if (count($a_lista_auth_rdp) > 1 ) {
+                $varios = TRUE;
+            }
+            $err_mail = $this->enviarRdp($autorizacion_lst,$varios);
         }
         if ($flag_rdp) {
             if ($this->accion === As4CollaborationInfo::ACCION_COMPARTIR) {
