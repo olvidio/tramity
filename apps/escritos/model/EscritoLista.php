@@ -7,6 +7,7 @@ use core\ViewTwig;
 use DateTimeInterface;
 use escritos\model\entity\EscritoDB;
 use escritos\model\entity\GestorEscritoDB;
+use expedientes\model\entity\Accion;
 use expedientes\model\entity\GestorAccion;
 use expedientes\model\Expediente;
 use usuarios\model\entity\Cargo;
@@ -263,6 +264,7 @@ class EscritoLista
         $a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
 
         $aWhere = [
+            'accion' => Escrito::ACCION_ESCRITO,
             '_limit' => 150,
             '_ordre' => 'f_salida DESC, f_escrito DESC'
         ];
