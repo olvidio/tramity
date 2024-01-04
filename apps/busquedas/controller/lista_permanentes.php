@@ -39,9 +39,7 @@ switch ($Q_tipo_lista) {
         $oBuscar = new Buscar();
         // En los centros, no busco en entradas, sino en entradas_compartidas y
         // veo si el centro está en los destinos.
-        if ($_SESSION['oConfig']->getAmbito() != Cargo::AMBITO_CTR
-            || $_SESSION['oConfig']->getAmbito() != Cargo::AMBITO_CTR_CORREO)
-        {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
             // Busco el id_lugar de cr.
             $gesLugares = new GestorLugar();
             $id_cr = $gesLugares->getId_cr();
@@ -144,9 +142,7 @@ switch ($Q_tipo_lista) {
         $oBuscar = new Buscar();
         // En los centros, no busco en entradas, sino en entradas_compartidas y
         // veo si el centro está en los destinos.
-        if ($_SESSION['oConfig']->getAmbito() != Cargo::AMBITO_CTR
-            || $_SESSION['oConfig']->getAmbito() != Cargo::AMBITO_CTR)
-        {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
             // Busco el id_lugar de cr.
             $gesLugares = new GestorLugar();
             $id_cr = $gesLugares->getId_cr();
@@ -166,7 +162,7 @@ switch ($Q_tipo_lista) {
     default:
         //anys posibles:
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
-            || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR)
+            || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO)
         {
             $gesEntradas = new GestorEntradaCompartida();
         } else {
