@@ -167,8 +167,8 @@
 
         // En el caso de crear expediente a partir de una entrada. Ir
         // directo al nuevo escrito dentro del nuevo expediente.
-        {% if vista == 'ctr' %}
-            if (accion == 'en_expediente') {
+        {% if vista != 'home' %}
+            if (accion == 'en_expediente' || accion == 'contestar') {
                 fnjs_update_div('#main', '{{ pagina_contestar|raw }}');
             } else {
         {% endif %}
@@ -185,7 +185,7 @@
                     fnjs_update_div('#main', '{{ pagina_cancel|raw }}');
                 }
             });
-        {% if vista == 'ctr' %}
+        {% if vista != 'home' %}
             }
         {% endif %}
     }

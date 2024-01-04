@@ -1,7 +1,6 @@
 <?php
 
 use core\ConfigGlobal;
-use entradas\model\entity\EntradaCompartida;
 use entradas\model\Entrada;
 use entradas\model\GestorEntrada;
 use escritos\model\Escrito;
@@ -45,69 +44,79 @@ if ($compartida) {
 $f_contestar = $oEntrada->getF_contestar();
 
 // crear el expediente
+if (ConfigGlobal::getVista() === 'ctr') {
 // valores por defecto:
-$ponente = ConfigGlobal::role_id_cargo();
-$estado = Expediente::ESTADO_BORRADOR;
-$prioridad = Expediente::PRIORIDAD_NORMAL;
-$vida = Expediente::VIDA_NORMAL;
-$asunto = _("Respuesta a:") . ' ' . $oEntrada->getAsunto_entrada();
-$entradilla = '';
-$categoria = $oEntrada->getCategoria();
-$visibilidad = $oEntrada->getVisibilidad();
+    $ponente = ConfigGlobal::role_id_cargo();
+    $estado = Expediente::ESTADO_BORRADOR;
+    $prioridad = Expediente::PRIORIDAD_NORMAL;
+    $vida = Expediente::VIDA_NORMAL;
+    $asunto = _("Respuesta a:") . ' ' . $oEntrada->getAsunto_entrada();
+    $entradilla = '';
+    $categoria = $oEntrada->getCategoria();
+    $visibilidad = $oEntrada->getVisibilidad();
 
 // Trámite: Escoger el primero de la lista (por orden) seguramente será el más corto
-$gesTrammites = new GestorTramite();
-$cTramites = $gesTrammites->getTramites(['_ordre' => 'orden']);
-$oTramite = $cTramites[0];
-$tramite = $oTramite->getId_tramite();
+    $gesTrammites = new GestorTramite();
+    $cTramites = $gesTrammites->getTramites(['_ordre' => 'orden']);
+    $oTramite = $cTramites[0];
+    $tramite = $oTramite->getId_tramite();
 
 // nuevo.
-$oExpediente = new Expediente();
-$oExpediente->setPonente($ponente);
+    $oExpediente = new Expediente();
+    $oExpediente->setPonente($ponente);
 
-$oExpediente->setId_tramite($tramite);
-$oExpediente->setEstado($estado);
-$oExpediente->setPrioridad($prioridad);
-$oExpediente->setAsunto($asunto);
-$oExpediente->setEntradilla($entradilla);
-$oExpediente->setVida($vida);
-$oExpediente->setVisibilidad($visibilidad);
-$oExpediente->setFirmas_oficina('');
-$oExpediente->setResto_oficinas('');
-$oExpediente->setF_contestar($f_contestar);
+    $oExpediente->setId_tramite($tramite);
+    $oExpediente->setEstado($estado);
+    $oExpediente->setPrioridad($prioridad);
+    $oExpediente->setAsunto($asunto);
+    $oExpediente->setEntradilla($entradilla);
+    $oExpediente->setVida($vida);
+    $oExpediente->setVisibilidad($visibilidad);
+    $oExpediente->setFirmas_oficina('');
+    $oExpediente->setResto_oficinas('');
+    $oExpediente->setF_contestar($f_contestar);
 
 // que lo vea todos los oficiales de mi oficina:
-$id_oficina = ConfigGlobal::role_id_oficina();
-$gesCargos = new GestorCargo();
-$a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
+    $id_oficina = ConfigGlobal::role_id_oficina();
+    $gesCargos = new GestorCargo();
+    $a_cargos_oficina = $gesCargos->getArrayCargosOficina($id_oficina);
 
-$error_txt = '';
-$new_preparar = [];
-foreach (array_keys($a_cargos_oficina) as $id_cargo) {
-    $oJSON = new stdClass;
-    $oJSON->id = (int)$id_cargo;
-    // hay que asegurar que sea bool
-    $oJSON->visto = FALSE;
-    $new_preparar[] = $oJSON;
-}
-$oExpediente->setJson_preparar($new_preparar);
+    $error_txt = '';
+    $new_preparar = [];
+    foreach (array_keys($a_cargos_oficina) as $id_cargo) {
+        $oJSON = new stdClass;
+        $oJSON->id = (int)$id_cargo;
+        // hay que asegurar que sea bool
+        $oJSON->visto = FALSE;
+        $new_preparar[] = $oJSON;
+    }
+    $oExpediente->setJson_preparar($new_preparar);
 
-if ($oExpediente->DBGuardar() === FALSE) {
-    $error_txt .= $oExpediente->getErrorTxt();
-} else {
-    $oExpediente->DBCargar();
-    $id_expediente = $oExpediente->getId_expediente();
-}
+    if ($oExpediente->DBGuardar() === FALSE) {
+        $error_txt .= $oExpediente->getErrorTxt();
+    } else {
+        $oExpediente->DBCargar();
+        $id_expediente = $oExpediente->getId_expediente();
+    }
 
 // adjuntar entrada como antecedente
-if ($compartida) {
-    $a_antecedente = ['tipo' => 'entrada_compartida', 'id' => $Q_id_entrada];
+    if ($compartida) {
+        $a_antecedente = ['tipo' => 'entrada_compartida', 'id' => $Q_id_entrada];
+    } else {
+        $a_antecedente = ['tipo' => 'entrada', 'id' => $Q_id_entrada];
+    }
+
+    $oExpediente->addAntecedente($a_antecedente);
+    if ($oExpediente->DBGuardar() === FALSE) {
+        $error_txt .= $oExpediente->getErrorTxt();
+    }
 } else {
-    $a_antecedente = ['tipo' => 'entrada', 'id' => $Q_id_entrada];
-}
-$oExpediente->addAntecedente($a_antecedente);
-if ($oExpediente->DBGuardar() === FALSE) {
-    $error_txt .= $oExpediente->getErrorTxt();
+    // para el caso de ctr_correo
+    $asunto = _("Respuesta a:") . ' ' . $oEntrada->getAsunto_entrada();
+    $categoria = $oEntrada->getCategoria();
+    $visibilidad = $oEntrada->getVisibilidad();
+    $ponente = ConfigGlobal::role_id_cargo();
+    $error_txt = '';
 }
 
 // crear el escrito
@@ -144,14 +153,18 @@ if ($oEscrito->DBGuardar() === FALSE) {
 $id_escrito = $oEscrito->getId_escrito();
 
 // añadirlo al expediente
-if ($nuevo === TRUE) {
-    $oAccion = new Accion();
-    $oAccion->setId_expediente($id_expediente);
-    $oAccion->setId_escrito($id_escrito);
-    $oAccion->setTipo_accion($accion);
-    if ($oAccion->DBGuardar() === FALSE) {
-        $error_txt .= $oAccion->getErrorTxt();
+if (ConfigGlobal::getVista() === 'ctr') {
+    if ($nuevo === TRUE) {
+        $oAccion = new Accion();
+        $oAccion->setId_expediente($id_expediente);
+        $oAccion->setId_escrito($id_escrito);
+        $oAccion->setTipo_accion($accion);
+        if ($oAccion->DBGuardar() === FALSE) {
+            $error_txt .= $oAccion->getErrorTxt();
+        }
     }
+} else {
+    $id_expediente = 0;
 }
 
 // mostrar el form para empezar el etherpad

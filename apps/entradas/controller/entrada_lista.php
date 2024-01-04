@@ -39,7 +39,7 @@ if ($Q_filtro === 'en_aceptado') {
     }
 
     // para los ctr no hace falta
-    if ($_SESSION['oConfig']->getAmbito() != Cargo::AMBITO_CTR) {
+    if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
         $chk_of_propia = ($Q_oficina === 'propia') ? 'checked' : '';
         $chk_of_resto = ($Q_oficina === 'resto') ? 'checked' : '';
 
@@ -102,7 +102,7 @@ if ($Q_filtro === 'en_encargado') {
 }
 
 if (empty($msg)) {
-    echo $oEntradaLista->mostrarTabla();
+    $oEntradaLista->mostrarTabla();
 } else {
     echo $msg;
 }

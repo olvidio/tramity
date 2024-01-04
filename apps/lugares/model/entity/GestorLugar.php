@@ -79,7 +79,8 @@ class GestorLugar extends core\ClaseGestor
      */
     public function getId_cancilleria(): int
     {
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+            || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
             exit (_("Error al buscar el id del Cancillería"));
         }
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
@@ -95,7 +96,8 @@ class GestorLugar extends core\ClaseGestor
      */
     public function getId_uden(): int
     {
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+            || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
             exit (_("Error al buscar el id del IESE/UDEN"));
         }
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
@@ -182,7 +184,8 @@ class GestorLugar extends core\ClaseGestor
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
 
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+            || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
             $mi_ctr = $_SESSION['oConfig']->getSigla();
             $mi_dl = $this->getSigla_superior($mi_ctr);
             $mi_cr = $this->getSigla_superior($mi_dl);
@@ -300,7 +303,8 @@ class GestorLugar extends core\ClaseGestor
      */
     function getArrayBusquedas($ctr_anulados = FALSE)
     {
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+            || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
             return $this->getArrayBusquedasCtr();
         } else {
             return $this->getArrayBusquedasDl($ctr_anulados);

@@ -1,63 +1,46 @@
+<button type="button" class="btn btn-info" onClick="fnjs_nueva_accion('escrito');">
+    {{ "nuevo escrito"|trans|raw }}
+</button>
+<hr>
 <table class="table table-sm table-bordered">
     <thead class="thead-light">
     <tr>
-        {% if ver_ok %}
-            <th scope="col">{{ "ok"|trans|raw }}</th>
-        {% endif %}
-        <th scope="col">{{ ver_todo|raw }}</th>
+        <th scope="col">{{ "datos"|trans|raw }}</th>
         {% if modo == 'mod' or filtro == 'archivados' %}
-            {% if bdistribuir %}
-                <th scope="col">{{ "rev.datos"|trans|raw }}</th>
-            {% endif %}
             <th scope="col">{{ prot_local_header }}</th>
         {% endif %}
-        {% if filtro != 'archivados' %}
-            <th scope="col">{{ "tipo"|trans|raw }}</th>
-        {% endif %}
-        <th scope="col">{{ "destino"|trans|raw }}</th>
-        <th scope="col">{{ "ref."|trans|raw }}</th>
         <th scope="col">{{ "asunto"|trans|raw }}</th>
         <th scope="col">{{ "adj."|trans|raw }}</th>
-        {% if vista == 'ctr' %}
-            <th scope="col">{{ "enviar"|trans|raw }}</th>
-            <th scope="col">{{ "eliminar"|trans|raw }}</th>
-        {% endif %}
+        <th scope="col">{{ "fecha escrito"|trans|raw }}</th>
+        <th scope="col">{{ "destino"|trans|raw }}</th>
+        <th scope="col">{{ "ref."|trans|raw }}</th>
+        <th scope="col">{{ "enviar"|trans|raw }}</th>
+        <th scope="col">{{ "eliminar"|trans|raw }}</th>
     </tr>
     </thead>
     <tbody>
     {% for row in a_acciones %}
         <tr>
-            {% if ver_ok %}
-                <td>{{ row.ok|raw }}</td>
-            {% endif %}
             <td>{{ row.link_ver|raw }}</td>
             {% if modo == 'mod' or filtro == 'archivados' %}
-                {% if bdistribuir %}
-                    <td>{{ row.link_mod|raw }}</td>
-                {% endif %}
                 <td>{{ row.prot_local|raw }}</td>
             {% endif %}
-            {% if filtro != 'archivados' %}
-                <td>{{ row.tipo|raw }}</td>
-            {% endif %}
-            <td>{{ row.destino|raw }}</td>
-            <td>{{ row.ref|raw }}</td>
             <td>{{ row.asunto|raw }}</td>
             <td>{{ row.adjuntos|raw }}</td>
-            {% if vista == 'ctr' %}
-                <td>{{ row.enviar|raw }}</td>
-                <td>{{ row.eliminar|raw }}</td>
-            {% endif %}
+            <td>{{ row.f_escrito|raw }}</td>
+            <td>{{ row.destino|raw }}</td>
+            <td>{{ row.ref|raw }}</td>
+            <td>{{ row.enviar|raw }}</td>
+            <td>{{ row.eliminar|raw }}</td>
         </tr>
     {% endfor %}
     </tbody>
 </table>
 <script type="text/javascript">
-    {% if show_tabs %} //Cuando se abre una ventana via GET no existen los tabs (ver un adjunto).
-    $(document).ready(function () {
-        tabs_show('{{ vista }}', '{{ filtro }}');
-    });
-    {% endif %}
+
+    fnjs_nueva_accion = function (tipo_accion) {
+        fnjs_update_div('#main', '{{ pag_nuevo_escrito|raw }}');
+    }
 
     fnjs_distribuir_escrito = function (id_escrito) {
         var ssfsv = 'sv';
@@ -120,6 +103,34 @@
             $('#main').html(rta);
         });
     }
+    fnjs_eliminar_escrito = function (id_escrito) {
+        seguro = confirm("{{ "¿Está Seguro que desea borrar este escrito?"|trans|raw }}");
+        if (seguro) {
+            $('#slow_load').show();
+            var url_doc = "apps/escritos/controller/escrito_update.php";
+            var param_json = {que: 'eliminar', id_expediente: 0, id_escrito: id_escrito};
+            request = $.ajax({
+                data: param_json,
+                url: url_doc,
+                method: 'POST',
+                dataType: 'json'
+            });
+            request.done(function (json) {
+                if (json.success != true) {
+                    alert(json.mensaje);
+                } else {
+                    fnjs_actualizar();
+                }
+            });
+        }
+    }
+
+    fnjs_actualizar = function () {
+        fnjs_update_div('#main', '{{ pagina_actualizar|raw }}');
+    }
+
+
 </script>
+
 {# Hace falta para que los ctr puedan enviar desde cualquier estado (no solo acabados) #}
 {% include '_escrito_enviar_js.html.twig' %}

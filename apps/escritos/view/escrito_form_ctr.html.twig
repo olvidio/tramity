@@ -107,6 +107,7 @@
             #}
             <!--  --------------- CATEGORIA --------------- -->
             <div class="row">
+                {% if vista != 'ctr_correo' %}
                 <div class="mb-3 col-md-2">
                     <label for="categoria" class="form-label">{{ "Categoría"|trans|raw }}</label>
                     {{ oDesplCategoria.desplegable|raw }}
@@ -115,6 +116,7 @@
                     <label for="visibilidad" class="form-label">{{ "Visibilidad"|trans|raw }}</label>
                     {{ oDesplVisibilidad.desplegable|raw }}
                 </div>
+                {% endif %}
                 <div class="mb-3 col-md-4">
                     <label for="f_escrito" class="form-label">{{ "Fecha del escrito"|trans|raw }}</label>
                     <div class="col-8 date">
@@ -138,11 +140,13 @@
                     {{ "Guardar"|trans|raw }}
                 </button>
             </div>
-            <div class="mt-5">
-                <button tabindex='94' class="btn btn-info" onClick="fnjs_conmutar();">
-                    {{ conmutar_txt }}
-                </button>
-            </div>
+            {% if vista == 'ctr' %}
+                <div class="mt-5">
+                    <button tabindex='94' class="btn btn-info" onClick="fnjs_conmutar();">
+                        {{ conmutar_txt }}
+                    </button>
+                </div>
+            {% endif %}
             {% if explotar %}
                 <div class="col-3">
                     <button tabindex='90' class="btn btn-danger" onClick="fnjs_explotar();">
@@ -185,10 +189,13 @@
                         <button tabindex='100' class="col-2 btn btn-info" onClick="fnjs_add_escrito(1);">
                             {{ "Nuevo"|trans|raw }}
                         </button>
-                        <button tabindex='101' type="button" class="col-4 btn btn-info ms-3 me-1" data-bs-toggle="modal"
-                                data-bs-target="#ModalBuscar" onClick="fnjs_buscar_antecedentes_para_escrito(5);">
-                            {{ "Buscar en Documentos"|trans|raw }}
-                        </button>
+                        {% if vista == 'ctr' %}
+                            <button tabindex='101' type="button" class="col-4 btn btn-info ms-3 me-1"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#ModalBuscar" onClick="fnjs_buscar_antecedentes_para_escrito(5);">
+                                {{ "Buscar en Documentos"|trans|raw }}
+                            </button>
+                        {% endif %}
                     </div>
                 {% endif %}
                 <hr class="mt-1">
@@ -197,12 +204,15 @@
                         <div class="d-inline-flex float-start align-self-center">
                             <label for="escrito_adjunto" class="form-label">{{ "Adjuntos"|trans|raw }}:</label>
                         </div>
-                        <div class="d-inline-flex float-end align-self-center">
-                            <button type="button" class="btn btn-info me-1" data-bs-toggle="modal"
-                                    data-bs-target="#ModalBuscar" onClick="fnjs_buscar_antecedentes_para_escrito(4);">
-                                {{ "Buscar en Documentos"|trans|raw }}
-                            </button>
-                        </div>
+                        {% if vista == 'ctr' %}
+                            <div class="d-inline-flex float-end align-self-center">
+                                <button type="button" class="btn btn-info me-1" data-bs-toggle="modal"
+                                        data-bs-target="#ModalBuscar"
+                                        onClick="fnjs_buscar_antecedentes_para_escrito(4);">
+                                    {{ "Buscar en Documentos"|trans|raw }}
+                                </button>
+                            </div>
+                        {% endif %}
                     </div>
                     <div id="lista_adjuntos_etherpad">
                         {{ lista_adjuntos_etherpad|raw }}

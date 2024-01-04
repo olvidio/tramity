@@ -252,8 +252,8 @@ $val_ctr = Cargo::AMBITO_CTR;
 $chk_ctr = ($valor == $val_ctr) ? 'checked' : '';
 $val_dl = Cargo::AMBITO_DL;
 $chk_dl = ($valor == $val_dl) ? 'checked' : '';
-$val_cr = Cargo::AMBITO_CR;
-$chk_cr = ($valor == $val_cr) ? 'checked' : '';
+$val_correo = Cargo::AMBITO_CTR_CORREO;
+$chk_correo = ($valor == $val_correo) ? 'checked' : '';
 
 $oHashDLR = new Hash();
 $oHashDLR->setUrl($url);
@@ -265,8 +265,8 @@ $a_campos['val_ctr'] = $val_ctr;
 $a_campos['chk_ctr'] = $chk_ctr;
 $a_campos['val_dl'] = $val_dl;
 $a_campos['chk_dl'] = $chk_dl;
-$a_campos['val_cr'] = $val_cr;
-$a_campos['chk_cr'] = $chk_cr;
+$a_campos['val_correo'] = $val_correo;
+$a_campos['chk_correo'] = $chk_correo;
 
 // ----------- Servidor SMTP -------------------
 $parametro = 'smtp_secure';

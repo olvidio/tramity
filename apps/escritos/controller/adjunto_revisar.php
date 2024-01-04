@@ -2,6 +2,7 @@
 
 use core\ViewTwig;
 use escritos\model\Escrito;
+use usuarios\model\entity\Cargo;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -58,7 +59,9 @@ if ($Q_filtro === 'distribuir') {
         $pagina_cancel = web\Hash::link('apps/expedientes/controller/expediente_ver.php?' . http_build_query($a_cosas));
     }
 }
-
+if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
+    $pagina_cancel = web\Hash::link('apps/escritos/controller/escrito_lista_correo.php?' . http_build_query($a_cosas));
+}
 
 $a_campos = [
     'titulo' => $titulo,

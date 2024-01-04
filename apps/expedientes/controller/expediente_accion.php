@@ -66,7 +66,8 @@ switch ($Q_filtro) {
             case 'permanentes_cr':
                 $pagina_cancel = web\Hash::link('apps/busquedas/controller/lista_permanentes.php?' . http_build_query($a_condicion));
                 // En los ctr, buscar en entradas compartidas:
-                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+                    || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
                     $oEntrada = new EntradaCompartida($Q_id_entrada);
                     $asunto = $oEntrada->getAsunto_entrada();
                 }
@@ -97,7 +98,8 @@ switch ($Q_filtro) {
         $url_cancel = 'apps/entradas/controller/entrada_lista.php';
         $pagina_cancel = Hash::link($url_cancel . '?' . http_build_query(['filtro' => $Q_filtro, 'oficina' => $Q_oficina]));
         // En los ctr, ir directo a contestar:
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+            || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
             $url_contestar = 'apps/escritos/controller/escrito_from_entrada.php';
         } else {
             $url_contestar = $url_cancel;
@@ -167,6 +169,18 @@ $hoy_iso = '';
 $titulo = _("Acciones para el expediente");
 switch ($Q_filtro) {
     case 'en_aceptado':
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
+            $titulo = _("Acciones para la entrada");
+            $a_botones[6] = ['accion' => 'en_visto',
+                'txt' => _("marcar como visto"),
+                'tipo' => '',
+            ];
+            $a_botones[7] = ['accion' => 'contestar',
+                'txt' => _("contestar"),
+                'tipo' => '',
+            ];
+            break;
+        }
     case 'en_encargado':
     case 'entradas_semana':
         $titulo = _("Acciones para la entrada");

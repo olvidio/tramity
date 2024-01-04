@@ -295,12 +295,12 @@
     <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);">
 </form>
 <hr>
-<h3>{{ "Ámbito de la nombre_entidad: centro, delegación, comisión regional"|trans|raw }}:</h3>
+<h3>{{ "Ámbito de la entidad: centro, delegación, comisión regional"|trans|raw }}:</h3>
 <form id="frm_dl_r" name="frm_dl_r" action="">
     {{ oHashDLR.getCamposHtml|raw }}
     <input type="radio" name="valor" value="{{ val_ctr }}" {{ chk_ctr }} > {{ "centro"|trans|raw }}
     <input type="radio" name="valor" value="{{ val_dl }}" {{ chk_dl }} > {{ "delegación"|trans|raw }}
-    <input type="radio" name="valor" value="{{ val_cr }}" {{ chk_cr }} > {{ "comisión"|trans|raw }}
+    <input type="radio" name="valor" value="{{ val_correo }}" {{ chk_correo }} > {{ "ctr-correo"|trans|raw }}
     <input type="button" value="{{ "guardar"|trans|raw }}" onclick="fnjs_guardar(this.form);">
 </form>
 <hr>

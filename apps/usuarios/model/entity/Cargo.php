@@ -35,6 +35,7 @@ class Cargo extends ClasePropiedades
     public const AMBITO_CR = 2;
     public const AMBITO_DL = 3;
     public const AMBITO_CTR = 4;
+    public const AMBITO_CTR_CORREO = 5;
 
     public const CARGO_PONENTE = 1;
     public const CARGO_OFICIALES = 2;

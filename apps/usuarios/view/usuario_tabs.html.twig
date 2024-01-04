@@ -99,6 +99,9 @@
     }
     tabs_show = function (vista, filtro = '') {
         var url_ajax = '';
+        if (vista == 'ctr_correo') {
+            url_ajax = 'apps/usuarios/controller/usuario_ctr_correo.php';
+        }
         if (vista == 'ctr') {
             url_ajax = 'apps/usuarios/controller/usuario_ctr.php';
         }

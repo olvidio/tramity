@@ -641,7 +641,8 @@ switch ($Q_que) {
 
         $id_escrito = $oEscrito->getId_escrito();
 
-        if ($nuevo === TRUE) {
+        // ctr_correo: Se crea directamente el escrito sin expediente.
+        if ($nuevo === TRUE && !empty($Q_id_expediente)) {
             $oAccion = new Accion();
             $oAccion->setId_expediente($Q_id_expediente);
             $oAccion->setId_escrito($id_escrito);

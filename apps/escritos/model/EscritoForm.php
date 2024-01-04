@@ -67,7 +67,7 @@ class EscritoForm
         $post_max_size = $_SESSION['oConfig']->getMax_filesize_en_kilobytes();
 
         $gesLugares = new GestorLugar();
-        if ($_SESSION['oConfig']->getAmbito() !== Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
             $a_posibles_lugares = $gesLugares->getArrayBusquedas();
             $a_posibles_lugares_ref = $gesLugares->getArrayBusquedas();
 
@@ -206,7 +206,7 @@ class EscritoForm
             $id_ponente = $oEscrito->getCreador();
             $categoria = $oEscrito->getCategoria();
             $oDesplCategoria->setOpcion_sel($categoria);
-            $visibilidad = $oEscrito->getVisibilidad()?? Visibilidad::V_PERSONAL;
+            $visibilidad = $oEscrito->getVisibilidad() ?? Visibilidad::V_PERSONAL;
             $oDesplVisibilidad->setOpcion_sel($visibilidad);
             if (!empty($oEscrito->getVisibilidad_dst())) {
                 $visibilidad_dst = $oEscrito->getVisibilidad_dst();
@@ -307,7 +307,8 @@ class EscritoForm
                 $oArrayProtDestino = new ProtocoloArray($json_prot_dst, $a_posibles_lugares, 'destinos');
                 $oArrayProtDestino->setBlanco('t');
                 $oArrayProtDestino->setAccionConjunto('fnjs_mas_destinos()');
-                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+                    || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
                     $oArrayProtDestino->setAdd(FALSE);
                 }
 
@@ -368,7 +369,11 @@ class EscritoForm
             case 'acabados':
             case 'acabados_encargados':
             case 'distribuir':
-                $pagina_cancel = Hash::link('apps/expedientes/controller/expediente_distribuir.php?' . http_build_query($a_cosas));
+                if ($this->Q_volver_a === 'escrito_lista_correo') {
+                    $pagina_cancel = Hash::link('apps/escritos/controller/escrito_lista_correo.php?' . http_build_query($a_cosas));
+                } else {
+                    $pagina_cancel = Hash::link('apps/expedientes/controller/expediente_distribuir.php?' . http_build_query($a_cosas));
+                }
                 break;
             case 'enviar':
                 $devolver = TRUE;
@@ -390,6 +395,9 @@ class EscritoForm
 
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR && $this->Q_filtro === 'circulando') {
             $pagina_cancel = Hash::link('apps/expedientes/controller/expediente_ver.php?' . http_build_query($a_cosas));
+        }
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
+            $pagina_cancel = Hash::link('apps/escritos/controller/escrito_lista_correo.php?' . http_build_query($a_cosas));
         }
 
 
@@ -426,7 +434,8 @@ class EscritoForm
             $conmutar_txt = _("pasar a propuesta");
         }
 
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+            || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
             $a_campos = [
                 'titulo' => $titulo,
                 'id_expediente' => $this->Q_id_expediente,
@@ -473,6 +482,7 @@ class EscritoForm
                 // para ver comentario cuando se devuelve a la oficina
                 'comentario' => $comentario,
                 'conmutar_txt' => $conmutar_txt,
+                'vista' => ConfigGlobal::getVista(),
             ];
 
             $oView = new ViewTwig('escritos/controller');

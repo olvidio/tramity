@@ -96,12 +96,12 @@ class EntradaLista
             case 'en_aceptado':
                 $oficina = $this->aWhereADD['ponente'];
                 $pagina_accion = ConfigGlobal::getWeb() . '/apps/expedientes/controller/expediente_accion.php';
-                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-                    $pagina_mod = ConfigGlobal::getWeb() . '/apps/entradas/controller/entrada_form_ctr.php';
-                    $ver_oficina = FALSE;
-                } else {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
                     $pagina_mod = ConfigGlobal::getWeb() . '/apps/entradas/controller/entrada_ver.php';
                     $ver_oficina = TRUE;
+                } else {
+                    $pagina_mod = ConfigGlobal::getWeb() . '/apps/entradas/controller/entrada_form_ctr.php';
+                    $ver_oficina = FALSE;
                 }
                 $pagina_nueva = '';
                 break;
@@ -234,7 +234,8 @@ class EntradaLista
         $txt_btn_dock = '';
         $btn_dock = FALSE;
         $secretaria = FALSE;
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR && $this->filtro === 'en_aceptado') {
+        if (($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO)
+            && $this->filtro === 'en_aceptado') {
             $btn_dock = TRUE;
             if (ConfigGlobal::soy_dtor()) {
                 $secretaria = TRUE;
@@ -371,7 +372,7 @@ class EntradaLista
                 }
 
                 $a_entradas_ponente = [];
-                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+                if (($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO)) {
                     // visibilidad:
                     $oVisibilidad = new Visibilidad();
                     $a_visibilidad = $oVisibilidad->getArrayCondVisibilidad();

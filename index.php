@@ -231,6 +231,9 @@ switch ($role_actual) {
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
             include_once 'apps/usuarios/controller/usuario_ctr.php';
         }
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
+            include_once 'apps/usuarios/controller/usuario_ctr_correo.php';
+        }
 }
 ?>
 </body>

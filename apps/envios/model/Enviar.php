@@ -67,7 +67,9 @@ class Enviar
         }
         if ($this->tipo === 'entrada') {
             // Los centros no tienen bypass
-            if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+            if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+                || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO)
+            {
                 $this->oEntradaBypass = new Entrada($this->iid);
             } else {
                 $this->oEntradaBypass = new EntradaBypass($this->iid);
@@ -231,7 +233,11 @@ class Enviar
             // En el caso de los ctr, se envía directamente sin los pasos
             // de circular por secretaria, y al llegar aquí todavía no se ha generado el
             // número de protocolo.
-            if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR && empty((array)$json_prot_local)) {
+            if ( ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+                  ||$_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO
+                 )
+                && empty((array)$json_prot_local))
+            {
                 $this->oEscrito->generarProtocolo();
                 if ($this->oEscrito->DBCargar() === FALSE) {
                     $err_cargar = sprintf(_("OJO! no existe el escrito a enviar en %s, linea %s"), __FILE__, __LINE__);

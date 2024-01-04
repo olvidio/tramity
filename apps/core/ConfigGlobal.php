@@ -142,6 +142,9 @@ class ConfigGlobal extends ServerConf
             if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
                 $vista = 'ctr';
             }
+            if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
+                $vista = 'ctr_correo';
+            }
         }
         return $vista;
     }

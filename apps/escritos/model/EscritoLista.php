@@ -57,6 +57,7 @@ class EscritoLista
      */
     private bool $estan_todos_los_escritos_enviados;
 
+    private string $volver_a = '';
 
     /*
      * filtros posibles: 
@@ -169,10 +170,6 @@ class EscritoLista
 
         $server = ConfigGlobal::getWeb(); //http://tramity.local
         $ver_ok = FALSE;
-        $vista_dl = TRUE;
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-            $vista_dl = FALSE;
-        }
 
         $a_campos = [
             'filtro' => $this->filtro,
@@ -181,7 +178,7 @@ class EscritoLista
             'server' => $server,
             'ver_ok' => $ver_ok,
             // para que el javascript sepa actualizar la vista
-            'vista_dl' => $vista_dl,
+            'vista' => ConfigGlobal::getVista(),
         ];
 
         $oView = new ViewTwig('escritos/controller');
@@ -246,6 +243,163 @@ class EscritoLista
         }
     }
 
+    public function mostrarTablaCtrCorreo(): void
+    {
+        $a_campos = $this->getCamposTablaCorreo();
+
+        $a_cosas = ['volver_a' => 'escrito_lista_correo', 'filtro' => $this->filtro, 'accion' => Escrito::ACCION_ESCRITO];
+        $pag_nuevo_escrito = Hash::link('apps/escritos/controller/escrito_form.php?' . http_build_query($a_cosas));
+
+        $a_campos['pag_nuevo_escrito'] = $pag_nuevo_escrito;
+
+        $oView = new ViewTwig('escritos/controller');
+        $oView->renderizar('escrito_lista_correo.html.twig', $a_campos);
+    }
+
+    private function getCamposTablaCorreo(): array
+    {
+        // visibilidad destino
+        $oVisibilidad = new Visibilidad();
+        $a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
+
+        $aWhere = [
+            '_limit' => 150,
+            '_ordre' => 'f_salida DESC, f_escrito DESC'
+        ];
+        $gesEscritos = new GestorEscrito();
+        $cEscritos = $gesEscritos->getEscritos($aWhere);
+
+        $oProtLocal = new Protocolo();
+        $oProtLocal->setNombre('local');
+        $prot_local_header = _("rev.texto");
+        $a_acciones = [];
+        $todos_escritos_enviados = TRUE;
+        foreach ($cEscritos as $oEscrito) {
+            $id_escrito = $oEscrito->getId_escrito();
+            $f_salida = $oEscrito->getF_salida()->getFromLocal();
+            $f_escrito = $oEscrito->getF_escrito()->getFromLocal();
+            $tipo_accion = $oEscrito->getAccion();
+
+            $enviado = FALSE;
+            if (!empty($f_salida)) {
+                $a_accion['enviar'] = _("enviado") . " ($f_salida)";
+                $enviado = TRUE;
+            } else {
+                // si es anulado NO enviar!
+                if (is_true($oEscrito->getAnulado())) {
+                    $a_accion['enviar'] = "-";
+                } else {
+                    // Se pasa a secretaria
+                    $todos_escritos_enviados = FALSE;
+                    $a_accion['enviar'] = "<span class=\"btn btn-link\" onclick=\"fnjs_enviar_escrito('$id_escrito');\" >" . _("enviar") . "</span>";
+                }
+            }
+            if (!$enviado) {
+                $a_accion['eliminar'] = "<span class=\"btn btn-link\" onclick=\"fnjs_eliminar_escrito('$id_escrito');\" >" . _("eliminar") . "</span>";
+            } else {
+                $a_accion['eliminar'] = "<span class=\"btn\" title=\"" . _("no se puede eliminar") . "\">---</span>";
+            }
+
+            $a_cosas = [
+                'id_escrito' => $id_escrito,
+                'accion' => $tipo_accion,
+                'filtro' => $this->filtro,
+                'modo' => $this->modo,
+                'volver_a' => $this->volver_a,
+            ];
+            $pag_escrito = Hash::link('apps/escritos/controller/escrito_form.php?' . http_build_query($a_cosas));
+            $pag_rev = Hash::link('apps/escritos/controller/escrito_rev.php?' . http_build_query($a_cosas));
+
+            if ($enviado) {
+                $a_accion['link_mod'] = "-";
+            } else {
+                $a_accion['link_mod'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_escrito');\" >" . _("mod.datos") . "</span>";
+            }
+            $a_accion['link_rev'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_rev');\" >" . _("rev.texto") . "</span>";
+
+            if ($enviado) {
+                $a_accion['link_ver'] = "<span class=\"btn\" title=\"" . _("los datos no se pueden modificar") . "\">---</span>";
+            } else {
+                $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_update_div('#main','$pag_escrito');\" >" . _("mod.datos") . "</span>";
+            }
+
+            if ($this->filtro === 'archivados') {
+                $prot_local_header = _("prot. local");
+            } else {
+                $prot_local_header = _("rev.texto");
+            }
+
+            $destino_txt = $oEscrito->getDestinosEscrito();
+            $visibilidad_dst = $oEscrito->getVisibilidad_dst();
+            if (!empty($visibilidad_dst) && $visibilidad_dst != Visibilidad::V_CTR_TODOS) {
+                $visibilidad_txt = $a_visibilidad_dst[$visibilidad_dst];
+                $destino_txt .= " ($visibilidad_txt)";
+            }
+
+            $default = ($this->filtro === 'archivados') ? '-' : '';
+            $prot_local_txt = $oEscrito->getProt_local_txt($default);
+            // Tiene adjuntos?
+            $adjuntos = '';
+            $a_id_adjuntos = $oEscrito->getArrayIdAdjuntos();
+            if (!empty($a_id_adjuntos)) {
+                $adjuntos = "<i class=\"fas fa-paperclip fa-fw\" style=\"cursor: pointer;\" onclick=\"fnjs_revisar_adjunto('$id_escrito');\"  ></i>";
+            } else {
+                $adjuntos = "<i class=\"far fa-sticky-note fa-fw\" style=\"cursor: pointer;\" onclick=\"fnjs_revisar_adjunto('$id_escrito');\"  ></i>";
+            }
+
+            $json_ref = $oEscrito->getJson_prot_ref();
+            $oArrayProtRef = new ProtocoloArray($json_ref, '', '');
+            $oArrayProtRef->setRef(TRUE);
+
+            if (($this->getModo() === 'mod') && !$enviado) {
+                $prot_local = "<span class=\"btn btn-link\" onclick=\"fnjs_revisar_escrito('$id_escrito');\" >";
+                $prot_local .= $prot_local_txt;
+                $prot_local .= "</span>";
+            } else {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+                    || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
+                    $prot_local = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$id_escrito');\" >$prot_local_txt</span>";
+                } else {
+                    $prot_local = $prot_local_txt;
+                }
+            }
+
+            $asunto_detalle = $oEscrito->getAsuntoDetalle();
+            if (is_true($oEscrito->getAnulado())) {
+                $anulado_txt = _("ANULADO");
+                $asunto_detalle = $anulado_txt . ' ' . $asunto_detalle;
+            }
+
+            $a_accion['prot_local'] = $prot_local;
+            $a_accion['destino'] = $destino_txt;
+            $a_accion['ref'] = $oArrayProtRef->ListaTxtBr();
+            $a_accion['f_escrito'] = $f_escrito;
+            $a_accion['asunto'] = $asunto_detalle;
+            $a_accion['adjuntos'] = $adjuntos;
+
+            $a_acciones[] = $a_accion;
+        }
+        $this->setEstanTodosLosEscritosEnviados($todos_escritos_enviados);
+        $server = ConfigGlobal::getWeb(); //http://tramity.local
+
+        $aQuery = ['filtro' => 'acabados'];
+        $pagina_actualizar = Hash::link('apps/escritos/controller/escrito_lista_correo.php?' . http_build_query($aQuery));
+
+        $a_campos = [
+            'filtro' => $this->filtro,
+            'modo' => $this->modo,
+            'id_expediente' => $this->id_expediente,
+            'a_acciones' => $a_acciones,
+            'server' => $server,
+            'prot_local_header' => $prot_local_header,
+            // tabs_show
+            'pagina_actualizar' => $pagina_actualizar,
+            'vista' => ConfigGlobal::getVista(),
+        ];
+
+        return $a_campos;
+    }
+
     private function getCamposTabla(): array
     {
         // visibilidad destino
@@ -299,7 +453,8 @@ class EscritoLista
                             $a_accion['enviar'] = _("en secretaría");
                             $enviado = TRUE;
                         } else {
-                            if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+                            if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+                                || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
                                 $a_accion['enviar'] = "<span class=\"btn btn-link\" onclick=\"fnjs_enviar_escrito('$id_escrito');\" >" . _("enviar") . "</span>";
                             } else {
                                 $a_accion['enviar'] = "<span class=\"btn btn-link\" onclick=\"fnjs_enviar_a_secretaria('$id_escrito');\" >" . _("pasar a secretaría") . "</span>";
@@ -311,7 +466,10 @@ class EscritoLista
                 }
             }
             // solamente para los centros
-            if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR && !$enviado) {
+            if (($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+                    || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO
+                )
+                && !$enviado) {
                 $a_accion['eliminar'] = "<span class=\"btn btn-link\" onclick=\"fnjs_eliminar_escrito('$id_escrito');\" >" . _("eliminar") . "</span>";
             } else {
                 $a_accion['eliminar'] = "<span class=\"btn\" title=\"" . _("no se puede eliminar") . "\">---</span>";
@@ -322,6 +480,7 @@ class EscritoLista
                 'accion' => $tipo_accion,
                 'filtro' => $this->filtro,
                 'modo' => $this->modo,
+                'volver_a' => $this->volver_a,
             ];
             $pag_escrito = Hash::link('apps/escritos/controller/escrito_form.php?' . http_build_query($a_cosas));
             $pag_rev = Hash::link('apps/escritos/controller/escrito_rev.php?' . http_build_query($a_cosas));
@@ -338,7 +497,8 @@ class EscritoLista
                 $prot_local_header = _("prot. local/rev.texto");
             } else {
                 $a_accion['link_ver'] = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$id_escrito');\" >" . _("ver") . "</span>";
-                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+                    || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
                     if ($enviado) {
                         $a_accion['link_ver'] = "<span class=\"btn\" title=\"" . _("los datos no se pueden modificar") . "\">---</span>";
                     } else {
@@ -379,7 +539,8 @@ class EscritoLista
                 $prot_local .= $prot_local_txt;
                 $prot_local .= "</span>";
             } else {
-                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+                    || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
                     $prot_local = "<span class=\"btn btn-link\" onclick=\"fnjs_ver_escrito('$id_escrito');\" >$prot_local_txt</span>";
                 } else {
                     $prot_local = $prot_local_txt;
@@ -426,10 +587,6 @@ class EscritoLista
         }
 
         $vista = ConfigGlobal::getVista();
-        $vista_dl = TRUE;
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-            $vista_dl = FALSE;
-        }
 
         $a_campos = [
             'filtro' => $this->filtro,
@@ -443,7 +600,6 @@ class EscritoLista
             'ver_ok' => $ver_ok,
             // tabs_show
             'vista' => $vista,
-            'vista_dl' => $vista_dl,
             'show_tabs' => $this->isShow_tabs(),
         ];
 
@@ -458,7 +614,9 @@ class EscritoLista
         $aWhere = [];
         $aOperador = [];
 
-        $aWhere['id_expediente'] = $this->id_expediente;
+        if (!empty($this->id_expediente)) {
+            $aWhere['id_expediente'] = $this->id_expediente;
+        }
         $aWhere['_ordre'] = 'tipo_accion';
 
         $this->aWhere = $aWhere;
@@ -551,6 +709,11 @@ class EscritoLista
     public function setEstanTodosLosEscritosEnviados(bool $estan_todos_los_escritos_enviados): void
     {
         $this->estan_todos_los_escritos_enviados = $estan_todos_los_escritos_enviados;
+    }
+
+    public function setVolverA(string $volver_a): void
+    {
+        $this->volver_a = $volver_a;
     }
 
 
