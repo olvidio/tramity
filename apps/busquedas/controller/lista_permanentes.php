@@ -161,12 +161,10 @@ switch ($Q_tipo_lista) {
     case 'lst_years':
     default:
         //anys posibles:
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
-            || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO)
-        {
-            $gesEntradas = new GestorEntradaCompartida();
-        } else {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
             $gesEntradas = new GestorEntrada();
+        } else {
+            $gesEntradas = new GestorEntradaCompartida();
         }
         $a_anys = $gesEntradas->posiblesYear();
 

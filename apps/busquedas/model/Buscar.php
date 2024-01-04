@@ -146,9 +146,11 @@ class Buscar
         switch ($opcion) {
             // permanentes de cr
             case 'proto':
-                // En los centros, no busco en entradas, sino en emtradas_compartidas y
+                // En los centros, no busco en entradas, sino en entradas_compartidas y
                 // veo si el centro está en los destinos.
-                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+                    || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO)
+                {
                     $aWhereEntrada = [];
                     $aOperadorEntrada = [];
                     // por asunto
@@ -200,7 +202,9 @@ class Buscar
                 // por año
                 // En los centros, no busco en entradas, sino en entradas_compartidas y
                 // veo si el centro está en los destinos.
-                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+                    || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO)
+                {
                     $aWhereEntrada = [];
                     $aOperadorEntrada = [];
                     $aWhereEntrada['categoria'] = Categoria::CAT_PERMANENTE;
@@ -236,7 +240,9 @@ class Buscar
             case 'lst_todos':
                 // En los centros, no busco en entradas, sino en entradas_compartidas y
                 // veo si el centro está en los destinos.
-                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+                    || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO)
+                {
                     $aWhereEntrada = [];
                     $aOperadorEntrada = [];
                     $aWhereEntrada['categoria'] = Categoria::CAT_PERMANENTE;
