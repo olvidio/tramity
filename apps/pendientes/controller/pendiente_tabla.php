@@ -156,7 +156,9 @@ $a_cabeceras = array(ucfirst(_("protocolo")),
 );
 
 // para los ctr quitar columna oficina y calendario
-if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+    || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO)
+{
     unset($a_cabeceras[5], $a_cabeceras[7]);
 }
 
@@ -287,7 +289,9 @@ if (!empty($a_valores)) {
     foreach ($a_valores as $key => $row) {
         $fechas[$key] = $row['order'];
         // para los ctr quitar columna oficina y calendario
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+            || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO)
+        {
             unset($a_valores[$key][6]);
             unset($a_valores[$key][8]);
         }

@@ -70,13 +70,13 @@ class GestorCargo extends core\ClaseGestor
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
 
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-            $Where = "WHERE activo = 't' AND id_oficina = $id_oficina";
-        } else {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
             $Where = "WHERE activo = 't' AND id_oficina > 0";
             if (!empty($id_oficina)) {
                 $Where .= " AND id_oficina = $id_oficina";
             }
+        } else {
+            $Where = "WHERE activo = 't' AND id_oficina = $id_oficina";
         }
         $sQuery = "SELECT id_cargo, id_usuario, cargo FROM $nom_tabla
                 $Where ORDER BY cargo";
@@ -120,13 +120,13 @@ class GestorCargo extends core\ClaseGestor
         $oDbl = $this->getoDbl();
         $nom_tabla = $this->getNomTabla();
 
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-            $Where = "WHERE activo = 't' AND id_oficina = " . Cargo::OFICINA_ESQUEMA;
-        } else {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
             $Where = "WHERE activo = 't' AND id_oficina > 0";
             if (!empty($id_oficina)) {
                 $Where .= " AND id_oficina = $id_oficina";
             }
+        } else {
+            $Where = "WHERE activo = 't' AND id_oficina = " . Cargo::OFICINA_ESQUEMA;
         }
         $sQuery = "SELECT id_cargo, cargo FROM $nom_tabla
                 $Where ORDER BY cargo";
@@ -183,10 +183,10 @@ class GestorCargo extends core\ClaseGestor
 
         $Where = "WHERE activo = 't' AND id_ambito = $id_ambito";
         if ($conOficina) {
-            if ($id_ambito == Cargo::AMBITO_CTR) {
-                $Where .= " AND id_oficina = " . Cargo::OFICINA_ESQUEMA;
-            } else {
+            if ($id_ambito == Cargo::AMBITO_DL) {
                 $Where .= " AND id_oficina > 0";
+            } else {
+                $Where .= " AND id_oficina = " . Cargo::OFICINA_ESQUEMA;
             }
         }
         $sQuery = "SELECT id_cargo, cargo FROM $nom_tabla
