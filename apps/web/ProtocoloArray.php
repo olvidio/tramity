@@ -79,7 +79,7 @@ class ProtocoloArray extends Protocolo
         if (!empty($aSeleccionados)) {
             foreach ($aSeleccionados as $oProt) {
                 $oProt = json_decode(json_encode($oProt));
-                if (!property_exists($oProt, 'id_lugar')) {
+                if (empty($oProt) || !property_exists($oProt, 'id_lugar')) {
                     continue;
                 }
                 $id_lugar = $oProt->id_lugar;
@@ -117,9 +117,10 @@ class ProtocoloArray extends Protocolo
         $sLista = "";
         $ref = ($this->bRef) ? 'ref. ' : '';
         if (!empty($aSeleccionados)) {
+            $id_lugar_anterior = '';
             foreach ($aSeleccionados as $oProt) {
                 $oProt = json_decode(json_encode($oProt));
-                if (!property_exists($oProt, 'id_lugar')) {
+                if (empty($oProt) || !property_exists($oProt, 'id_lugar')) {
                     continue;
                 }
                 $id_lugar = $oProt->id_lugar;
@@ -135,7 +136,7 @@ class ProtocoloArray extends Protocolo
                     $nom_lugar = '?sigla';
                 }
                 // para sacar solo un destino
-                if (!empty($id_lugar) && $id_lugar != $id_lugar) {
+                if (!empty($id_lugar) && $id_lugar === $id_lugar_anterior) {
                     continue;
                 }
 
@@ -147,6 +148,7 @@ class ProtocoloArray extends Protocolo
 
                 $sLista .= !empty($sLista) ? "<br>" : '';
                 $sLista .= $ref . $txt;
+                $id_lugar_anterior = $id_lugar;
             }
         }
         return $sLista;
@@ -164,7 +166,7 @@ class ProtocoloArray extends Protocolo
         if (!empty($aSeleccionados)) {
             foreach ($aSeleccionados as $oProt) {
                 $oProt = json_decode(json_encode($oProt));
-                if (!property_exists($oProt, 'id_lugar')) {
+                if (empty($oProt) || !property_exists($oProt, 'id_lugar')) {
                     continue;
                 }
                 $id_lugar = $oProt->id_lugar;
@@ -213,7 +215,7 @@ class ProtocoloArray extends Protocolo
         if (!empty($aSeleccionados)) {
             foreach ($aSeleccionados as $oProt) {
                 $oProt = json_decode(json_encode($oProt));
-                if (!property_exists($oProt, 'id_lugar')) {
+                if (empty($oProt) || !property_exists($oProt, 'id_lugar')) {
                     continue;
                 }
                 $this->ilugar = empty($oProt->id_lugar) ? '' : $oProt->id_lugar;
