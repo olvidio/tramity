@@ -126,7 +126,7 @@ switch ($Q_que) {
         $encargado_old = $oEntrada->getEncargado();
 
         // Para los ctr, hay que cambiar el estado a ESTADO_ACEPTADO
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() !== Cargo::AMBITO_DL) {
             $oEntrada->setEstado(Entrada::ESTADO_ACEPTADO);
         }
         $oEntrada->setEncargado($Qid_cargo_encargado);

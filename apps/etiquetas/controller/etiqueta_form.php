@@ -75,9 +75,9 @@ if (!empty($Q_id_etiqueta)) {
     $nom_etiqueta = '';
 }
 
-$entorno = _("de la oficina");
-if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-    $entorno = _("del centro");
+$entorno = _("del centro");
+if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
+    $entorno = _("de la oficina");
 }
 
 

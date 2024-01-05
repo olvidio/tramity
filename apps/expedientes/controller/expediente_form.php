@@ -52,9 +52,9 @@ if (!empty($oCargo)) {
 }
 
 // para reducir la vista en el caso de los ctr
-$vista_dl = TRUE;
-if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-    $vista_dl = FALSE;
+$vista_dl = FALSE;
+if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
+    $vista_dl = TRUE;
 }
 
 // preparar
@@ -274,7 +274,8 @@ if ($Q_id_expediente) {
         $oficiales = array_keys($a_posibles_cargos_oficina);
     }
 
-    if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+    if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+        || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
         $oDesplVisibilidad->setOpcion_sel(Visibilidad::V_CTR_TODOS);
     } else {
         $oDesplVisibilidad->setOpcion_sel(Visibilidad::V_PERSONAL);

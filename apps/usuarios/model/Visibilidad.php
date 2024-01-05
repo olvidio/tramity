@@ -29,7 +29,8 @@ class Visibilidad
 
     public function getArrayCondVisibilidad()
     {
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+            || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
             // visibilidad:
             $a_visibilidad[] = self::V_CTR_TODOS;
             $id_cargo = ConfigGlobal::role_id_cargo();
@@ -52,7 +53,8 @@ class Visibilidad
     public function getArrayVisibilidad($limitar_por_usuario=FALSE): array
     {
         $a_visibilidad = [];
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+            || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
             $a_visibilidad = $this->getArrayVisibilidadCtr($limitar_por_usuario);
         }
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
@@ -65,7 +67,8 @@ class Visibilidad
     public function getArrayVisibilidadCtr($limitar_por_usuario=FALSE):array
     {
         $a_visibilidad[ self::V_CTR_TODOS] = _("todos");
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+            || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
             if ($limitar_por_usuario) {
                 if (ConfigGlobal::soy_dtor()) {
                     $a_visibilidad[self::V_CTR_DTOR] = _("d");

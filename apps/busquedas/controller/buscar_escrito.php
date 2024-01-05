@@ -208,9 +208,9 @@ $format = $oFecha::getFormat();
 $vista = ConfigGlobal::getVista();
 
 // para reducir la vista en el caso de los ctr
-$vista_dl = TRUE;
-if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-    $vista_dl = FALSE;
+$vista_dl = FALSE;
+if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
+    $vista_dl = TRUE;
 }
 
 $a_campos = [

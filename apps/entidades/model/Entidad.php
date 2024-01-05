@@ -17,6 +17,7 @@ class Entidad extends EntidadDB
     const AMBITO_CR  = 2;
     const AMBITO_DL  = 3;  //"dl"
     const AMBITO_CTR = 4;
+    const AMBITO_CTR_CORREO = 5;
     */
 
     private $sdir;
@@ -59,6 +60,7 @@ class Entidad extends EntidadDB
     public function getArrayTipo()
     {
         return [
+            Cargo::AMBITO_CTR_CORREO => _("ctr-correo"),
             Cargo::AMBITO_CTR => _("ctr"),
             Cargo::AMBITO_DL => _("dl"),
             Cargo::AMBITO_CR => _("cr"),

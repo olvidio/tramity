@@ -58,7 +58,8 @@ switch ($Q_filtro) {
             case 'en_buscar':
                 $pagina_cancel = web\Hash::link('apps/busquedas/controller/buscar_escrito.php?' . http_build_query($a_condicion));
                 // En los ctr, ir directo a contestar:
-                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+                    || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
                     $url_contestar = 'apps/escritos/controller/escrito_from_entrada.php';
                     $pagina_contestar = Hash::link($url_contestar . '?' . http_build_query(['filtro' => $Q_filtro, 'id_entrada' => $Qid_entrada_compuesta]));
                 }

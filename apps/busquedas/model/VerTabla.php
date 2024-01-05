@@ -184,10 +184,10 @@ class VerTabla
     {
         switch ($this->sKey) {
             case 'entradas_ref':
-                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-                    $this->sTitulo = _("escritos recibidos en el centro con referencias al escrito");
-                } else {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
                     $this->sTitulo = _("escritos recibidos en la Delegación con referencias al escrito");
+                } else {
+                    $this->sTitulo = _("escritos recibidos en el centro con referencias al escrito");
                 }
                 $this->tabla_entradas($this->aCollection);
                 break;
@@ -196,34 +196,34 @@ class VerTabla
                 $this->tabla_entradas($this->aCollection);
                 break;
             case 'entradas':
-                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-                    $this->sTitulo = _("escritos recibidos en el centro");
-                } else {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
                     $this->sTitulo = _("escritos recibidos en la Delegación");
+                } else {
+                    $this->sTitulo = _("escritos recibidos en el centro");
                 }
                 $this->tabla_entradas($this->aCollection);
                 break;
             case 'entradas_compartidas':
-                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-                    $this->sTitulo = _("escritos recibidos en el centro");
-                } else {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
                     $this->sTitulo = _("escritos recibidos en la Delegación");
+                } else {
+                    $this->sTitulo = _("escritos recibidos en el centro");
                 }
                 $this->tabla_entradas_compartidas($this->aCollection);
                 break;
             case 'escritos_ref':
-                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-                    $this->sTitulo = _("escritos aprobados en el centro con referencias al escrito");
-                } else {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
                     $this->sTitulo = _("escritos aprobados en la Delegación con referencias al escrito");
+                } else {
+                    $this->sTitulo = _("escritos aprobados en el centro con referencias al escrito");
                 }
                 $this->tabla_escritos($this->aCollection);
                 break;
             case 'escritos':
-                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-                    $this->sTitulo = _("escritos aprobados en el centro");
-                } else {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
                     $this->sTitulo = _("escritos aprobados en la Delegación");
+                } else {
+                    $this->sTitulo = _("escritos aprobados en el centro");
                 }
                 $this->tabla_escritos($this->aCollection);
                 break;
@@ -618,7 +618,7 @@ class VerTabla
                 $this->aBotones[] = ['txt' => _('detalle'), 'click' => "fnjs_modificar_det_entrada(\"#$this->sKey\")"];
                 $this->aBotones[] = ['txt' => _('ver'), 'click' => "fnjs_buscar_ver_entrada(\"#$this->sKey\")"];
                 $this->aBotones[] = ['txt' => _('acción'), 'click' => "fnjs_buscar_accion_entrada(\"#$this->sKey\")"];
-                if ($_SESSION['oConfig']->getAmbito() !== Cargo::AMBITO_CTR) {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
                     $this->aBotones[] = ['txt' => _('ver destinos'), 'click' => "fnjs_buscar_ver_destinos(\"#$this->sKey\",\"entrada\")"];
                 }
                 break;
@@ -642,7 +642,7 @@ class VerTabla
 
                 $this->aBotones[] = ['txt' => _('detalle'), 'click' => "fnjs_modificar_det_escrito(\"#$this->sKey\")"];
                 $this->aBotones[] = ['txt' => _('ver'), 'click' => "fnjs_buscar_ver_escrito(\"#$this->sKey\")"];
-                if ($_SESSION['oConfig']->getAmbito() !== Cargo::AMBITO_CTR) {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
                     $this->aBotones[] = ['txt' => _('ver destinos'), 'click' => "fnjs_buscar_ver_destinos(\"#$this->sKey\",\"escrito\")"];
                 }
                 break;

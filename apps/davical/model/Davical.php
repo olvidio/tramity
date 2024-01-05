@@ -45,6 +45,7 @@ class Davical
      *  const AMBITO_CR  = 2;
      *  const AMBITO_DL  = 3;  //"dl"
      *  const AMBITO_CTR = 4;
+     *  const AMBITO_CTR_CORREO = 5;
      *
      * @var integer
      */
@@ -73,7 +74,8 @@ class Davical
         $cargo = $aDatosCargo['cargo'];
         $descripcion = $aDatosCargo['descripcion'];
         $id_oficina = $aDatosCargo['id_oficina'];
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+            || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
             $oficina = $_SESSION['oConfig']->getSigla();
             $oficina_mod = $this->getNombreRecursoPorNombreOficina($oficina);
         } else {
@@ -166,7 +168,8 @@ class Davical
     {
         $sigla = $_SESSION['oConfig']->getSigla();
         $sigla_norm = StringLocal::lowerNormalized($sigla);
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+            || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
             $oficina_norm = '';
         } else {
             if (empty($oficina)) {
@@ -183,11 +186,11 @@ class Davical
     {
         $sigla = $_SESSION['oConfig']->getSigla();
         $sigla_norm = StringLocal::lowerNormalized($sigla);
-        if ($this->ambito == Cargo::AMBITO_CTR) {
-            $nom_grupo = $sigla_norm . "_grupo";
-        } else {
+        if ($this->ambito == Cargo::AMBITO_DL) {
             $oficina_norm = StringLocal::lowerNormalized($oficina);
             $nom_grupo = $sigla_norm . "_grupo_" . $oficina_norm;
+        } else {
+            $nom_grupo = $sigla_norm . "_grupo";
         }
         return $nom_grupo;
     }
@@ -323,7 +326,7 @@ class Davical
 
         // Dar al grupo, permiso distinto para cada colección. (el registro no borrar...)
         // Resulta que para los eventos con CLASS= PRIVATE, si no tiene todos los privilegios no va.
-        if ($_SESSION['oConfig']->getAmbito() !== Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
             // para registro:
             $aData['by_principal'] = '';
             $aData['to_principal'] = $a_ids_grupo['principal_id'];

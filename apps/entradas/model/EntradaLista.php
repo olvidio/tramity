@@ -234,7 +234,9 @@ class EntradaLista
         $txt_btn_dock = '';
         $btn_dock = FALSE;
         $secretaria = FALSE;
-        if (($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO)
+        if ( ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+                || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO
+             )
             && $this->filtro === 'en_aceptado') {
             $btn_dock = TRUE;
             if (ConfigGlobal::soy_dtor()) {
@@ -372,7 +374,9 @@ class EntradaLista
                 }
 
                 $a_entradas_ponente = [];
-                if (($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO)) {
+                if ( $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+                      || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO)
+                {
                     // visibilidad:
                     $oVisibilidad = new Visibilidad();
                     $a_visibilidad = $oVisibilidad->getArrayCondVisibilidad();

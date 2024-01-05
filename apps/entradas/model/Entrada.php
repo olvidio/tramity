@@ -77,16 +77,16 @@ class Entrada extends EntradaDB
         if (!is_true($this->getBypass())) {
             $visibilidad = $this->getVisibilidad();
             // si soy dl o ctr
-            if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+            if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
                 if ($visibilidad !== NULL && $visibilidad !== Visibilidad::V_CTR_TODOS) {
-                    $a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
-                    $visibilidad_txt = $a_visibilidad_dst[$visibilidad];
+                    $a_visibilidad_dl = $oVisibilidad->getArrayVisibilidadDl();
+                    $visibilidad_txt = $a_visibilidad_dl[$visibilidad];
                     $destinos_txt .= " ($visibilidad_txt)";
                 }
             } else {
                 if ($visibilidad !== NULL && $visibilidad !== Visibilidad::V_CTR_TODOS) {
-                    $a_visibilidad_dl = $oVisibilidad->getArrayVisibilidadDl();
-                    $visibilidad_txt = $a_visibilidad_dl[$visibilidad];
+                    $a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
+                    $visibilidad_txt = $a_visibilidad_dst[$visibilidad];
                     $destinos_txt .= " ($visibilidad_txt)";
                 }
             }

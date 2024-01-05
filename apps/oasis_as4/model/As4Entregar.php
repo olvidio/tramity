@@ -675,7 +675,12 @@ class As4Entregar extends As4CollaborationInfo
         }
 
         // Compruebo si hay que generar un pendiente
-        if (!empty($this->oF_contestar) && $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+        if (!empty($this->oF_contestar)
+            && ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+                || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO)
+            )
+        {
+
             $this->nuevoPendiente($id_entrada, $siglaDestino);
         }
     }
@@ -821,12 +826,12 @@ class As4Entregar extends As4CollaborationInfo
         // Para dl, Hace falta el nombre de la oficina;
         // para ctr, uso el nombre del esquema. Pero si es una entrada compartida,
         // hay que saber para que ctr. (no sirve el esquema que siempre es el mismo).
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
+            $cal_oficina = $oDavical->getNombreRecursoPorIdOficina($id_oficina);
+        } else {
             $id_oficina = Cargo::OFICINA_ESQUEMA;
             $sigla_norm = StringLocal::toRFC952($siglaDestino);
             $cal_oficina = $sigla_norm . "_oficina";
-        } else {
-            $cal_oficina = $oDavical->getNombreRecursoPorIdOficina($id_oficina);
         }
         $calendario = 'oficina';
 
@@ -921,7 +926,11 @@ class As4Entregar extends As4CollaborationInfo
                 if (in_array($siglaDestino, $this->getEntidadesPlataforma(), true)) {
                     $id_entrada = $this->nuevaEntrada($siglaDestino, $id_entrada_compartida);
                     // Compruebo si hay que generar un pendiente
-                    if (!empty($this->oF_contestar) && $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+                    if (!empty($this->oF_contestar)
+                        && ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+                           || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO)
+                    )
+                    {
                         $this->nuevoPendiente($id_entrada, $siglaDestino);
                     }
                 }

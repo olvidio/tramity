@@ -64,9 +64,9 @@ foreach ($cEtiquetas as $oEtiqueta) {
     $id_cargo = $oEtiqueta->getId_cargo();
     $oficina = $oEtiqueta->getOficina();
     if (is_true($oficina)) {
-        $oficina_txt = _("de la oficina");
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-            $oficina_txt = _("del centro");
+        $oficina_txt = _("del centro");
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
+            $oficina_txt = _("de la oficina");
         }
         $cargo_txt = empty($a_oficinas[$id_cargo]) ? $id_cargo : $a_oficinas[$id_cargo];
     } else {

@@ -335,20 +335,20 @@ class Pendiente
     {
         switch ($class) {
             case 'PUBLIC':
-                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-                    $visibilidad = Visibilidad::V_CTR_TODOS;
-                } else {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
                     $visibilidad = Visibilidad::V_TODOS;
+                } else {
+                    $visibilidad = Visibilidad::V_CTR_TODOS;
                 }
                 break;
             case 'PRIVATE':
                 $visibilidad = Visibilidad::V_PERSONAL;
                 break;
             case 'CONFIDENTIAL':
-                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-                    $visibilidad = Visibilidad::V_CTR_DTOR;
-                } else {
+                if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
                     $visibilidad = Visibilidad::V_DIRECTORES;
+                } else {
+                    $visibilidad = Visibilidad::V_CTR_DTOR;
                 }
                 //$visibilidad = Visibilidad::V_RESERVADO; // solo añade no ver a los directores de otras oficinas no implicadas
                 break;

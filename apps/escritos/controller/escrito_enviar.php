@@ -61,7 +61,8 @@ if ($a_rta['marcar'] === TRUE) {
         exit ($err_cargar);
     }
     $oEscrito->setF_salida($f_salida, FALSE);
-    if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+    if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+        || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
         $oEscrito->setF_aprobacion($f_salida, FALSE);
     }
     $oEscrito->setOk(Escrito::OK_SECRETARIA);

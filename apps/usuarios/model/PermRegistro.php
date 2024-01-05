@@ -35,10 +35,10 @@ class PermRegistro
 
     public function __construct()
     {
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-            $this->init_ctr();
-        } else {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
             $this->init();
+        } else {
+            $this->init_ctr();
         }
     }
 
@@ -391,7 +391,8 @@ class PermRegistro
             }
         }
 
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+            || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
             $soy_dtor = ConfigGlobal::soy_dtor();
             $soy_sacd = ConfigGlobal::soy_sacd();
             if ($visibilidad === Visibilidad::V_CTR_DTOR && $soy_dtor) {
@@ -420,10 +421,10 @@ class PermRegistro
     public function permiso_detalle($objeto, string $que): int
     {
 
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR) {
-            $rta = $this->permiso_detalle_ctr($objeto, $que);
-        } else {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
             $rta = $this->permiso_detalle_dl($objeto, $que);
+        } else {
+            $rta = $this->permiso_detalle_ctr($objeto, $que);
         }
 
         return $rta;
