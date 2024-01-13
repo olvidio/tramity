@@ -16,6 +16,8 @@
     "ext-mailparse": "*",
     "smalot/pdfparser": "^2.3",
     "ext-intl": "*",
-    "symfony/http-foundation": "^6.3"
+    "symfony/http-foundation": "^6.3",
+    "ext-zip": "*",
+    "ext-xml": "*"
   }
 }

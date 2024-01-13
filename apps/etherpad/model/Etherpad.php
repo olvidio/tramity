@@ -60,7 +60,7 @@ class Etherpad extends Client
             $this->apikey = $this->apikey_local;
             $this->api_version = $this->api_version_docker;
         }
-        if ( ServerConf::getSERVIDOR() === 'tramity.local') {
+        if (ServerConf::getSERVIDOR() === 'tramity.local') {
             $this->apikey = $this->apikey_local;
             $this->api_version = $this->api_version_dlb;
         }
@@ -143,6 +143,13 @@ class Etherpad extends Client
     {
         $contenido = $this->getHHtml();
 
+        /*
+        // otra forma canbiar <br>xxx<br> por <p>xxx</p>
+        $pattern = "/(?:<p[^>]*>\s*)?([^<>\s][^<>]*)(?:<(?:br\s*\/?>\s*<br\s*\/?|\/p[^>]*)>(?:\s*\n)?|$)/";
+        $replace = "<p>$1</p>\n";
+        $contenido2 = preg_replace($pattern, $replace, $contenido);
+*/
+
         $dom = new DOMDocument;
         /* la '@' sirve para evita los errores:  Warning: DOMDocument::loadHTML()
          *
@@ -180,6 +187,7 @@ class Etherpad extends Client
                 $domElement->parentNode->removeChild($domElement);
             }
         }
+        $dom->normalizeDocument();
 
         $xpath = new DOMXPath($dom);
         /* Quitar los <td> con display:none:
@@ -234,13 +242,32 @@ class Etherpad extends Client
         $txt = $body->ownerDocument->saveHTML($body);
         $txt2 = substr($txt, 6); // Quitar el tag <body> inicial
         $txt3 = substr($txt2, 0, -7); // Quitar el tag </body> final
-        // eliminar dobles lineas: <br><br>
-        //$txt4 = str_replace("<br><br>", "<br>", $txt3);
-        $txt4 = str_replace("</p><br>", "</p>", $txt3);
-        $txt5 = str_replace("</table><br>", "</table>", $txt4);
 
         //<br value="tblBreak">
-        $txt6 = str_replace("<br value=\"tblBreak\">", "", $txt5);
+        $txt4 = str_replace("<br value=\"tblBreak\">", "", $txt3);
+        // salto de página (4 o más ':' entre dos saltos de línea
+        /* $txt7 = str_replace("/<br( *\/)?>:{4,}<br( *\/)?>/", "<div style=\"page-break-after: always;\"></div>", $txt6); */
+        $txt5 = preg_replace("/:{4,}/", "<div class='salta_pag'></div>", $txt4);
+
+        // añadir tag <br> al inicio
+        $txt5_1 = '<br>' . $txt5;
+        // y después poner entre <p> el texto entre <br> (siempre que no esté ya encapsulado en algo '<xx>')
+        $pattern = "/<br\ ?\/?>([^<].*?)<br\ ?\/?>/";
+        $txt5_2 = preg_replace($pattern, "<p>$1</p><br>", $txt5_1);
+
+        // También poner entre <p> el texto entre <br> y <p>
+        $pattern = "/<br\ ?\/?>([^<].*?)<p\ ?\/?>/";
+        $txt5_3 = preg_replace($pattern, "<p>$1</p><p>", $txt5_2);
+        // eliminar párrafos vacíos: <p></p>
+        $txt5_4 = str_replace("<p></p>", "", $txt5_3);
+
+        // eliminar dobles lineas: <br><br>
+        //$txt3_5 = str_replace("<br><br>", "<br>", $txt3_4);
+        // eliminar todos los <br>
+        $txt6 = str_replace("<br>", "", $txt5_4);
+        //$txt4 = str_replace("</p><br>", "</p>", $txt3_5);
+        //$txt5 = str_replace("</table><br>", "</table>", $txt4);
+
 
         return str_replace("</tbody></table><table><tbody>", "", $txt6);
     }
@@ -581,6 +608,19 @@ class Etherpad extends Client
     */
 
     /**
+     * devuelve el escrito en formato ODT.
+     *
+     * @param array $a_header ['left', 'center', 'right']
+     * @return string
+     */
+    public function generarODT(string $filename_ext, array $a_header = [], string $fecha = ''): string
+    {
+        $html = $this->cleanHtml();
+
+        return (new Etherpad2ODF())->generarODT($filename_ext, $html, $a_header, $fecha);
+    }
+
+    /**
      * devuelve el escrito en formato PDF.
      *
      * @param array $a_header ['left', 'center', 'right']
@@ -683,6 +723,7 @@ class Etherpad extends Client
         }
 
     }
+
     /*----------------------------------------------------------------------------------------*/
 
     public function getApiVersion(): string

@@ -327,6 +327,10 @@ class Enviar
                         $a_lista_auth_rdp[] = $autorizacion;
                     }
                     break;
+                case Lugar::MODO_ODT:
+                    $email = $oLugar->getE_mail();
+                    $err_mail = $this->enviarODT($id_lugar, $email);
+                    break;
                 case Lugar::MODO_PDF:
                     $email = $oLugar->getE_mail();
                     $err_mail = $this->enviarPdf($id_lugar, $email);
@@ -581,6 +585,66 @@ class Enviar
                 $this->filename_ext = $this->filename . '.pdf';
                 $omPdf = $this->oEtherpad->generarPDF($a_header, $this->f_salida);
                 $this->contentFile = $omPdf->Output($this->filename_ext, 'S');
+
+                $subject = "$this->filename ($this->asunto)";
+                // Attachments
+                ////$oMail->addAttachment($File, $filename);    // Optional name
+                $oMail->addStringAttachment($this->contentFile, $this->filename_ext);    // Optional name
+                ////$oMail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+                ////$oMail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+
+                // adjuntos:
+                foreach ($this->a_adjuntos as $adjunto_filename => $escrito_txt) {
+                    $oMail->addStringAttachment($escrito_txt, $adjunto_filename);    // Optional name
+                }
+
+                // Content
+                $oMail->isHTML(true);                                  // Set email format to HTML
+                $oMail->Subject = $subject;
+                $oMail->Body = $message;
+                ////$oMail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+                $oMail->send();
+                $this->a_rta['success'] = TRUE;
+                $this->a_rta['mensaje'] = 'Message has been sent<br>';
+                $this->a_rta['marcar'] = TRUE;
+            } catch (Exception $e) {
+                $err_mail .= empty($err_mail) ? '' : '<br>';
+                $err_mail .= "Message could not be sent. Mailer Error: $oMail->ErrorInfo";
+            }
+        } else {
+            $oLugar = new Lugar($id_lugar);
+
+            $err_mail .= empty($err_mail) ? '' : '<br>';
+            $err_mail .= $oLugar->getNombre() . "($email)";
+        }
+        return $err_mail;
+    }
+
+    private function enviarODT($id_lugar, $email)
+    {
+        $err_mail = '';
+
+        $message = $_SESSION['oConfig']->getBodyMail();
+        $message = empty($message) ? _("Ver archivos adjuntos") : $message;
+
+        $oMail = new TramityMail(TRUE); //passing 'true' enables exceptions
+        // Activo codificación utf-8
+        $oMail->CharSet = 'UTF-8';
+
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $oMail->addBCC($email);
+            // generar el mail, Uno para cada destino (para poder poner bien la cabecera) en cco (bcc):
+            try {
+                // generar un nuevo content, con la cabecera al ctr concreto.
+                $this->getDocumento();
+
+                // formato pdf:
+                // cabeceras fuera del if loaded, para cambiarlas para cada ctr del grupo
+                $a_header = $this->getHeader($id_lugar);
+                $this->filename_ext = $this->filename . '.odt';
+                $file_odt = $this->oEtherpad->generarODT($this->filename_ext, $a_header, $this->f_salida);
+                $this->contentFile = file_get_contents($file_odt);
 
                 $subject = "$this->filename ($this->asunto)";
                 // Attachments
