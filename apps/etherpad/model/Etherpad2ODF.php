@@ -22,7 +22,7 @@ class Etherpad2ODF
             if (!empty($a_header['right']) ) {
                 $a_dcha = explode( '<br>', $a_header['right'] );
                 $origen = $a_dcha[0];
-                $ref = $a_dcha[1];
+                $ref = empty($a_dcha[1])? '' : $a_dcha[1];
             }
             $cabecera = "<cabecera>";
             $cabecera .= $a_header['left'];
@@ -91,35 +91,6 @@ class Etherpad2ODF
         $ODF->newOds();
 
         return $file_odt;
-        /*
-        if (file_exists($file_odt)) {
-            $file_size = (int)filesize($file_odt);
-            header('Pragma: public');
-            header('Expires: 0');
-            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-
-            header("Content-Type: application/force-download");
-            header("Content-Type: application/octet-stream");
-            header("Content-Type: application/download");
-
-            header('Content-type: application/vnd.oasis.opendocument.text');
-            header("Content-Disposition: attachment; filename=\"$file_odt\"");
-            header("Content-Length: $file_size");
-            header('Content-Description: File Transfer');
-            header("Content-Transfer-Encoding: binary ");
-            //in case of more output buffers was opened.
-            while (ob_get_level()) {
-                ob_end_clean();
-            }
-            flush();
-            readfile($file_odt);
-            unlink($file_odt);
-        }
-        */
-
-        unlink($file_txt);
-        unlink($file_xml);
-
     }
 
     /**
