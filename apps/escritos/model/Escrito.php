@@ -343,20 +343,6 @@ class Escrito extends EscritoDB
         return $origen_txt;
     }
 
-    public function generarPDF()
-    {
-        $a_header = ['left' => $this->cabeceraIzquierda(),
-            'center' => '',
-            'right' => $this->cabeceraDerecha(),
-        ];
-
-        $oEtherpad = new Etherpad();
-        $oEtherpad->setId(Etherpad::ID_ESCRITO, $this->iid_escrito);
-
-        $f_salida = $this->getF_salida()->getFromLocal('.');
-        return $oEtherpad->generarPDF($a_header, $f_salida);
-    }
-
     /**
      * id_lugar sólo se pasa cuando el escrito va dirigido a un grupo, y hay que generar escritos
      * individuales para cada ctr del grupo.

@@ -30,7 +30,10 @@ if (!empty($Q_filename)) {
     header('Content-Type: application/force-download');
     header('Content-Type: application/download', false);
     header('Content-disposition: attachment; filename="' . $Q_filename . '"');
-    ob_clean();
+    //in case of more output buffers was opened.
+    while (ob_get_level()) {
+        ob_end_clean();
+    }
     flush();
     echo $doc;
     exit();

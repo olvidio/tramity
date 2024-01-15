@@ -13,7 +13,6 @@ use etherpad\model\Etherpad;
 use lugares\model\entity\GestorLugar;
 use lugares\model\entity\Grupo;
 use lugares\model\entity\Lugar;
-use Mpdf\MpdfException;
 use oasis_as4\model\As4;
 use oasis_as4\model\As4CollaborationInfo;
 use PHPMailer\PHPMailer\Exception;
@@ -94,7 +93,6 @@ class Enviar
      *
      * @param bool $is_compartida
      * @return array
-     * @throws MpdfException
      */
     public function getPdf(bool $is_compartida = FALSE): array
     {
@@ -123,9 +121,16 @@ class Enviar
             }
         }
         // formato pdf:
+        // old: con mPdf
+        /*
         $this->filename_ext = $this->filename . '.pdf';
         $omPdf = $this->oEtherpad->generarPDF($a_header, $this->f_salida);
         $this->contentFile = $omPdf->Output($this->filename_ext, 'S');
+        */
+        // new: con LibreOffice
+        $this->filename_ext = $this->filename . '.pdf';
+        $file_pdf = $this->oEtherpad->generarLOPDF($this->filename, $a_header, $this->f_salida);
+        $this->contentFile = file_get_contents($file_pdf);
 
         return ['content' => $this->contentFile,
             'name' => $this->filename,
@@ -264,7 +269,7 @@ class Enviar
                         $id_adjunto = $oEscritoAdjunto->getId_item();
                         $oEtherpadAdj = new Etherpad();
                         $oEtherpadAdj->setId(Etherpad::ID_ADJUNTO, $id_adjunto);
-                        $escrito_txt = $oEtherpadAdj->generarPDF();
+                        $escrito_txt = $oEtherpadAdj->generarLOPDF();
                         $this->a_adjuntos[$adjunto_filename] = $escrito_txt;
                         break;
                     default:
@@ -520,12 +525,13 @@ class Enviar
         $this->filename_iso = mb_convert_encoding($filename_utf8, 'ISO-8859-1', 'UTF-8');
         // escribir en el directorio para bonita
         $a_header = $this->getHeader();
-        $omPdf = $this->oEtherpad->generarPDF($a_header, $this->f_salida);
+        $file_pdf = $this->oEtherpad->generarLOPDF($this->filename, $a_header, $this->f_salida);
+        $contentText = file_get_contents($file_pdf);
 
         $filename_ext = $this->filename . '.pdf';
         $filename_iso_ext = $this->filename_iso . '.pdf';
         $full_filename_iso = $DIR_CORREO . '/' . $filename_iso_ext;
-        $omPdf->Output($full_filename_iso, 'F');
+        file_put_contents($full_filename_iso, $contentText);
 
         $oWin = new FicherosPSWin($DIR_CORREO);
         $oWin->inicializar();
@@ -717,8 +723,8 @@ class Enviar
 
     private function convertOdt2(string $file_odt, string $nuevo_tipo): string
     {
-        $command = escapeshellcmd("libreoffice -env:UserInstallation=file:///tmp/test --headless --convert-to $nuevo_tipo --outdir /tmp $file_odt 2>&1");
-        exec($command, $output,  $retval);
+        $command = escapeshellcmd("LC_ALL=es_ES.UTF-8 libreoffice -env:UserInstallation=file:///tmp/test --headless --convert-to $nuevo_tipo --outdir /tmp $file_odt 2>&1");
+        exec($command, $output, $retval);
 
         return "/tmp/$this->filename" . '.' . $nuevo_tipo;
     }

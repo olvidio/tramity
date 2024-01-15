@@ -37,7 +37,10 @@ if (!empty($Q_id_doc)) {
     header('Content-Type: application/download', false);
     header('Content-Type: ' . $ctype);
     header('Content-disposition: attachment; filename="' . $nombre_fichero . '"');
-    ob_clean();
+    //in case of more output buffers was opened.
+    while (ob_get_level()) {
+        ob_end_clean();
+    }
     flush();
     echo $doc;
 

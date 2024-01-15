@@ -570,7 +570,8 @@ class Payload
                         $id_adjunto = $oEscritoAdjunto->getId_item();
                         $oEtherpadAdj = new Etherpad();
                         $oEtherpadAdj->setId(Etherpad::ID_ADJUNTO, $id_adjunto);
-                        $escrito_txt = $oEtherpadAdj->generarPDF();
+                        $file_pdf = $oEtherpadAdj->generarLOPDF($adjunto_filename, [], '');
+                        $escrito_txt = file_get_contents($file_pdf);
                         $a_adjuntos[$adjunto_filename] = $escrito_txt;
                         break;
                     default:

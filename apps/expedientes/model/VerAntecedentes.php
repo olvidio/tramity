@@ -132,8 +132,8 @@ class VerAntecedentes
                             // formato pdf:
                             $file_name = $this->path_temp . $nom;
                             $filename_local_con_extension = $file_name . '.pdf';
-                            $omPdf = $oEtherpad->generarPDF($a_header, $f_salida);
-                            $file_content = $omPdf->Output($filename_local_con_extension, 'S');
+                            $file_pdf = $oEtherpad->generarLOPDF($file_name, $a_header, $f_salida);
+                            $file_content = file_get_contents($file_pdf);
 
                             // con los espacios hay problemas, no bastan las comillas
                             $filename_local_sin_espacios_con_extension = str_replace(' ', '_', $filename_local_con_extension);

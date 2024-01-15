@@ -44,8 +44,10 @@ if (!empty($Q_id_escrito)) {
     header('Content-Type: application/octet-stream', false);
     header('Content-Type: application/download', false);
     header('Content-disposition: attachment; filename="' . $nom . '"');
-
-    ob_clean();
+    //in case of more output buffers was opened.
+    while (ob_get_level()) {
+        ob_end_clean();
+    }
     flush();
     echo $escrito;
     exit();

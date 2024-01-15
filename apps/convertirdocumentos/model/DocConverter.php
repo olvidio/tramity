@@ -19,6 +19,21 @@ final class DocConverter
     private string $nombreFicheroNuevoConExtension = '';
     private string $nombreFicheroNuevoSinExtension = '';
 
+    public function convertOdt2(string $file_odt, string $nuevo_tipo): string
+    {
+        $path_parts = pathinfo($file_odt);
+        $extension_original = $path_parts['extension'];
+        $nombreFicheroOriginalSinExtension = $path_parts['filename'];
+
+        $path_temp = '/tmp/';
+        // para el bash. poner el nombre de fichero entre comillas simples, y escapar las posibles comillas del nombre.
+        $file_odt_escaped = "'".str_replace("'","\'", $file_odt)."'";
+        // Hay que poner el LC_ALL para asegurar acentos etc.
+        $command = escapeshellcmd("LC_ALL=es_ES.UTF-8 libreoffice -env:UserInstallation=file:///tmp/test --headless --convert-to $nuevo_tipo --outdir /tmp $file_odt_escaped  2>&1");
+        exec($command, $output,  $retval);
+
+        return $path_temp . $nombreFicheroOriginalSinExtension . '.' . $nuevo_tipo;
+    }
 
     public function convert($nuevo_tipo, $borrarTemporales = TRUE)
     {
@@ -33,7 +48,7 @@ final class DocConverter
         $filename_original_sin_espacios = $filename_local_sin_espacios_sin_extension . '.' .$this->file_extension_original;
 
         file_put_contents($filename_original_sin_espacios, $this->documento);
-        $command = escapeshellcmd("libreoffice -env:UserInstallation=file:///tmp/test --headless --convert-to $nuevo_tipo --outdir $path_temp $filename_original_sin_espacios 2>&1");
+        $command = escapeshellcmd("LC_ALL=es_ES.UTF-8 libreoffice -env:UserInstallation=file:///tmp/test --headless --convert-to $nuevo_tipo --outdir $path_temp $filename_original_sin_espacios 2>&1");
 
         exec($command, $output,  $retval);
 
@@ -45,6 +60,10 @@ final class DocConverter
         $filename_nuevo_sin_espacios_sin_extension = str_replace(' ', '_', $filename_nuevo_sin_extension);
         $filename_nuevo_con_extension = $filename_nuevo_sin_espacios_sin_extension . '.'. $nuevo_tipo;
         $doc_converted = file_get_contents($filename_nuevo_con_extension);
+
+        //Look Out for BOM
+        $bom = pack('H*','EFBBBF');
+        $doc_converted = preg_replace("/^$bom/", '', $doc_converted);
 
         // borrar los ficheros temporales
         unlink($filename_original_sin_espacios);

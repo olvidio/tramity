@@ -2,6 +2,7 @@
 
 namespace etherpad\model;
 
+use convertirdocumentos\model\DocConverter;
 use core\ConfigGlobal;
 use core\ServerConf;
 use DOMDocument;
@@ -608,25 +609,42 @@ class Etherpad extends Client
     */
 
     /**
-     * devuelve el escrito en formato ODT.
+     * devuelve la ruta del fichero odt creado a partir del Etherpad.
      *
      * @param array $a_header ['left', 'center', 'right']
-     * @return string
+     * @return string ruta del fichero odt que se ha creado
      */
-    public function generarODT(string $filename_ext, array $a_header = [], string $fecha = ''): string
+    public function generarODT(string $filename_sin_ext, array $a_header = [], string $fecha = ''): string
     {
         $html = $this->cleanHtml();
 
-        return (new Etherpad2ODF())->crearFicheroOdt($filename_ext, $html, $a_header, $fecha);
+        return (new Etherpad2ODF())->crearFicheroOdt($filename_sin_ext, $html, $a_header, $fecha);
     }
 
     /**
-     * devuelve el escrito en formato PDF.
+     * devuelve la ruta del fichero en formato PDF. USANDO EL LIBREOFFICE
+     *
+     * @param array $a_header ['left', 'center', 'right']
+     * @return string $nombre_del_fichero
+     */
+    public function generarLOPDF(string $filename_sin_ext, array $a_header = [], string $fecha = '')
+    {
+        $file_odt = $this->generarODT($filename_sin_ext, $a_header, $fecha);
+
+        $oDocConverter = new DocConverter();
+        $file_pdf = $oDocConverter->convertOdt2($file_odt, 'pdf');
+
+        return  $file_pdf;
+    }
+
+
+    /**
+     * devuelve el escrito en formato PDF. Usando la librería MPDF
      *
      * @param array $a_header ['left', 'center', 'right']
      * @return Mpdf
      */
-    public function generarPDF(array $a_header = [], string $fecha = ''): Mpdf
+    public function generarMPDF(array $a_header = [], string $fecha = ''): Mpdf
     {
         $stylesheet = "<style>
                 TABLE { border: 1px solid black; border-collapse: collapse; }

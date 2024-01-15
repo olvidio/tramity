@@ -48,8 +48,10 @@ header('Content-Type: application/force-download');
 header('Content-Type: application/octet-stream', false);
 header('Content-Type: application/download', false);
 header('Content-disposition: attachment; filename="' . $filenameOut . '"');
-
-ob_clean();
+//in case of more output buffers was opened.
+while (ob_get_level()) {
+    ob_end_clean();
+}
 flush();
 echo $all_content;
 exit();

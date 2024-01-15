@@ -12,9 +12,9 @@ class Etherpad2ODF
      * devuelve el escrito en formato ODT.
      *
      * @param array $a_header ['left', 'center', 'right']
-     * @return *.odt
+     * @return $file_odt la ruta del fichero odt creado.
      */
-    public function crearFicheroOdt($filename_ext, $txt, $a_header = [], $fecha = '')
+    public function crearFicheroOdt(string $filename_sin_ext, string $contentText, array $a_header = [], string $fecha = '')
     {
         $cabecera = '';
         if (!empty($a_header)) {
@@ -36,8 +36,8 @@ class Etherpad2ODF
             $cabecera .= "<br>";
         }
 
-        $txt2 = str_replace("<tbody>", "", $txt);
-        $documento = $cabecera . str_replace("</tbody>", "", $txt2);
+        $txt = str_replace("<tbody>", "", $contentText);
+        $documento = $cabecera . str_replace("</tbody>", "", $txt);
 
         if (!empty($fecha)) {
             $documento .= "<fecha>$fecha</fecha>";
@@ -54,8 +54,8 @@ class Etherpad2ODF
         $documento_html = preg_replace('/<form.*>/', '', $documento_html);
         $documento_html = str_replace('/<\/form>/', '', $documento_html);
 
-        $file_txt = "/tmp/$filename_ext.txt";
-        $file_xml = "/tmp/$filename_ext.xml";
+        $file_txt = "/tmp/$filename_sin_ext.txt";
+        $file_xml = "/tmp/$filename_sin_ext.xml";
 
         if (!$handle = fopen($file_txt, 'wb+')) {
             echo "Cannot open file ($file_txt)";
@@ -85,9 +85,8 @@ class Etherpad2ODF
         $content_xml = file_get_contents($file_xml);
 
         $ODF = new Odf(); //create a new ods file
-        $file_odt = "/tmp/$filename_ext";
+        $file_odt = "/tmp/$filename_sin_ext".".odt";
         $ODF->saveOds($file_odt, $content_xml, $conv_style, $doc_type); //save the object to a ods file
-
         $ODF->newOds();
 
         return $file_odt;
