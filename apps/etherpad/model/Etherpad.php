@@ -617,7 +617,7 @@ class Etherpad extends Client
     {
         $html = $this->cleanHtml();
 
-        return (new Etherpad2ODF())->generarODT($filename_ext, $html, $a_header, $fecha);
+        return (new Etherpad2ODF())->crearFicheroOdt($filename_ext, $html, $a_header, $fecha);
     }
 
     /**
@@ -626,7 +626,7 @@ class Etherpad extends Client
      * @param array $a_header ['left', 'center', 'right']
      * @return Mpdf
      */
-    public function generarPDF($a_header = [], $fecha = '')
+    public function generarPDF(array $a_header = [], string $fecha = ''): Mpdf
     {
         $stylesheet = "<style>
                 TABLE { border: 1px solid black; border-collapse: collapse; }

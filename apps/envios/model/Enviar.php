@@ -68,8 +68,7 @@ class Enviar
         if ($this->tipo === 'entrada') {
             // Los centros no tienen bypass
             if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
-                || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO)
-            {
+                || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
                 $this->oEntradaBypass = new Entrada($this->iid);
             } else {
                 $this->oEntradaBypass = new EntradaBypass($this->iid);
@@ -233,11 +232,10 @@ class Enviar
             // En el caso de los ctr, se envía directamente sin los pasos
             // de circular por secretaria, y al llegar aquí todavía no se ha generado el
             // número de protocolo.
-            if ( ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
-                  ||$_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO
-                 )
-                && empty((array)$json_prot_local))
-            {
+            if (($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
+                    || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO
+                )
+                && empty((array)$json_prot_local)) {
                 $this->oEscrito->generarProtocolo();
                 if ($this->oEscrito->DBCargar() === FALSE) {
                     $err_cargar = sprintf(_("OJO! no existe el escrito a enviar en %s, linea %s"), __FILE__, __LINE__);
@@ -328,12 +326,9 @@ class Enviar
                     }
                     break;
                 case Lugar::MODO_ODT:
-                    $email = $oLugar->getE_mail();
-                    $err_mail = $this->enviarODT($id_lugar, $email);
-                    break;
+                case Lugar::MODO_DOCX:
                 case Lugar::MODO_PDF:
-                    $email = $oLugar->getE_mail();
-                    $err_mail = $this->enviarPdf($id_lugar, $email);
+                    $err_mail = $this->enviarMail($id_lugar, $modo_envio);
                     break;
                 case Lugar::MODO_AS4;
                     $plataforma = $oLugar->getPlataforma();
@@ -362,15 +357,15 @@ class Enviar
         if ($flag_rdp_en_cola) {
             $autorizacion_lst = $autorizacion_dl . implode('|', $a_lista_auth_rdp);
             $varios = FALSE;
-            if (count($a_lista_auth_rdp) > 1 ) {
+            if (count($a_lista_auth_rdp) > 1) {
                 $varios = TRUE;
             }
-            $err_mail = $this->enviarRdp($autorizacion_lst,$varios);
+            $err_mail = $this->enviarRdp($autorizacion_lst, $varios);
         }
         if ($flag_rdp) {
             if ($this->accion === As4CollaborationInfo::ACCION_COMPARTIR) {
                 $autorizacion_lst = $autorizacion_dl . implode('|', $a_lista_auth_rdp);
-                $err_mail = $this->enviarRdp($autorizacion_lst,false);
+                $err_mail = $this->enviarRdp($autorizacion_lst, false);
             }
         }
         // por plataformas.
@@ -495,7 +490,7 @@ class Enviar
         return [];
     }
 
-    private function enviarRdp($autorizacion_lst,bool $varios)
+    private function enviarRdp($autorizacion_lst, bool $varios)
     {
         $DIR_CORREO = '/home/correodlp';
         $err_mail = '';
@@ -546,7 +541,7 @@ class Enviar
             $info = new SplFileInfo($adjunto_filename);
             $extension = $info->getExtension();
 
-            $adjunto_filename_num = 'adj_'.$a.".$extension";
+            $adjunto_filename_num = 'adj_' . $a . ".$extension";
             $adjunto_filename_iso = mb_convert_encoding($adjunto_filename_num, 'ISO-8859-1', 'UTF-8');
             $filename_ext = $this->filename . '-' . $adjunto_filename_num;
             $filename_iso_ext = $this->filename_iso . '-' . $adjunto_filename_iso;
@@ -561,6 +556,7 @@ class Enviar
         return $err_mail;
     }
 
+    /*
     private function enviarPdf($id_lugar, $email)
     {
         $err_mail = '';
@@ -677,6 +673,95 @@ class Enviar
 
             $err_mail .= empty($err_mail) ? '' : '<br>';
             $err_mail .= $oLugar->getNombre() . "($email)";
+        }
+        return $err_mail;
+    }
+    */
+
+    private function enviarMail($id_lugar, $modo_envio): string
+    {
+        $err_mail = '';
+        $oLugar = new Lugar($id_lugar);
+        $email = $oLugar->getE_mail();
+
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            // generar un nuevo content, con la cabecera al ctr concreto.
+            $this->getDocumento();
+            $a_header = $this->getHeader($id_lugar);
+            // generar el odt y luego convertirlo:
+            $this->filename_ext = $this->filename . '.odt';
+            $file_odt = $this->oEtherpad->generarODT($this->filename_ext, $a_header, $this->f_salida);
+            switch ($modo_envio) {
+                case Lugar::MODO_ODT:
+                    $this->contentFile = file_get_contents($file_odt);
+                    break;
+                case Lugar::MODO_DOCX:
+                    $file_docx = $this->convertOdt2($file_odt, 'docx');
+                    $this->contentFile = file_get_contents($file_docx);
+                    break;
+                case Lugar::MODO_PDF:
+                    $file_pdf = $this->convertOdt2($file_odt, 'pdf');
+                    $this->contentFile = file_get_contents($file_pdf);
+                    //$err_mail = $this->enviarPdf($id_lugar, $email);
+                    break;
+            }
+
+            $err_mail .= $this->enviarContenido($email);
+        } else {
+
+            $err_mail .= empty($err_mail) ? '' : '<br>';
+            $err_mail .= $oLugar->getNombre() . "($email)";
+        }
+        return $err_mail;
+    }
+
+    private function convertOdt2(string $file_odt, string $nuevo_tipo): string
+    {
+        $command = escapeshellcmd("libreoffice -env:UserInstallation=file:///tmp/test --headless --convert-to $nuevo_tipo --outdir /tmp $file_odt 2>&1");
+        exec($command, $output,  $retval);
+
+        return "/tmp/$this->filename" . '.' . $nuevo_tipo;
+    }
+
+    private function enviarContenido($email): string
+    {
+        $err_mail = '';
+
+        $message = $_SESSION['oConfig']->getBodyMail();
+        $message = empty($message) ? _("Ver archivos adjuntos") : $message;
+
+        $oMail = new TramityMail(TRUE); //passing 'true' enables exceptions
+        // Activo codificación utf-8
+        $oMail->CharSet = 'UTF-8';
+
+        $oMail->addBCC($email);
+        // generar el mail, Uno para cada destino (para poder poner bien la cabecera) en cco (bcc):
+        try {
+            $subject = "$this->filename ($this->asunto)";
+            // Attachments
+            ////$oMail->addAttachment($File, $filename);    // Optional name
+            $oMail->addStringAttachment($this->contentFile, $this->filename_ext);    // Optional name
+            ////$oMail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+            ////$oMail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+
+            // adjuntos:
+            foreach ($this->a_adjuntos as $adjunto_filename => $escrito_txt) {
+                $oMail->addStringAttachment($escrito_txt, $adjunto_filename);    // Optional name
+            }
+
+            // Content
+            $oMail->isHTML(true);                                  // Set email format to HTML
+            $oMail->Subject = $subject;
+            $oMail->Body = $message;
+            ////$oMail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+            $oMail->send();
+            $this->a_rta['success'] = TRUE;
+            $this->a_rta['mensaje'] = 'Message has been sent<br>';
+            $this->a_rta['marcar'] = TRUE;
+        } catch (Exception $e) {
+            $err_mail .= empty($err_mail) ? '' : '<br>';
+            $err_mail .= "Message could not be sent. Mailer Error: $oMail->ErrorInfo";
         }
         return $err_mail;
     }

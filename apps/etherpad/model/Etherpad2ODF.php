@@ -14,7 +14,7 @@ class Etherpad2ODF
      * @param array $a_header ['left', 'center', 'right']
      * @return *.odt
      */
-    public function generarODT($filename_ext, $txt, $a_header = [], $fecha = '')
+    public function crearFicheroOdt($filename_ext, $txt, $a_header = [], $fecha = '')
     {
         $cabecera = '';
         if (!empty($a_header)) {

@@ -35,6 +35,7 @@ class Lugar extends core\ClasePropiedades
     const MODO_RDP = 2;
     const MODO_AS4 = 3;
     const MODO_ODT = 4;
+    const MODO_DOCX = 5;
 
     /* ATRIBUTOS ----------------------------------------------------------------- */
     /**
@@ -513,6 +514,7 @@ class Lugar extends core\ClasePropiedades
             self::MODO_PDF => _("pdf"),
             self::MODO_RDP => _("rdp"),
             self::MODO_ODT => _("odt"),
+            self::MODO_DOCX => _("docx"),
         ];
 
         return $a_tipos;
