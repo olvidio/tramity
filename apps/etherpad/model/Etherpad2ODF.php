@@ -77,11 +77,6 @@ class Etherpad2ODF
         $cmd = "xsltproc --html " . ConfigGlobal::getDIR(). ODF::DIR_COMPONENTES . "xslt/$xslt $file_txt_escaped > $file_xml_escaped";
         $a_output = [];
         exec($cmd, $a_output, $return_var);
-        if ($return_var !== 0) {
-            echo "cmd: $cmd <br>error: $return_var<br>";
-            print_r($a_output);
-            exit();
-        }
         $content_xml = file_get_contents($file_xml);
 
         $ODF = new Odf(); //create a new ods file

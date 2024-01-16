@@ -12,6 +12,7 @@ use escritos\model\entity\EscritoAdjunto;
 use etherpad\model\Etherpad;
 use lugares\model\entity\GestorLugar;
 use usuarios\model\Visibilidad;
+use function core\borrar_tmp;
 use function core\is_true;
 
 
@@ -52,6 +53,8 @@ class Payload
 
     private string $sufijo_dst;
     private string $anular_txt;
+    private mixed $prot_org;
+    private mixed $prot_ref;
 
     public function __construct()
     {
@@ -570,9 +573,12 @@ class Payload
                         $id_adjunto = $oEscritoAdjunto->getId_item();
                         $oEtherpadAdj = new Etherpad();
                         $oEtherpadAdj->setId(Etherpad::ID_ADJUNTO, $id_adjunto);
-                        $file_pdf = $oEtherpadAdj->generarLOPDF($adjunto_filename, [], '');
+                        $filename_uniq = uniqid('adj_', true);
+                        $file_pdf = $oEtherpadAdj->generarLOPDF($filename_uniq, [], '');
                         $escrito_txt = file_get_contents($file_pdf);
                         $a_adjuntos[$adjunto_filename] = $escrito_txt;
+                        // borrar los archivos temporales
+                        borrar_tmp($filename_uniq);
                         break;
                     default:
                         $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);

@@ -72,6 +72,21 @@ function urlsafe_b64decode($string)
     return base64_decode($data);
 }
 
+/** borrar los archivos derivados de $filenam_uniq del directorio /tmp
+ *      hola.txt
+ *      hola.xml
+ *      hola.odt
+ *      etc.
+ */
+function borrar_tmp($filename_uniq)
+{
+    $files = glob("/tmp/$filename_uniq.*"); //obtenemos todos los nombres de los ficheros
+    foreach ($files as $file) {
+        if (is_file($file)) {
+            unlink($file); //elimino el fichero
+        }
+    }
+}
 /**
  * Para unificar los valores true ('t', 'true', 1, 'on...)
  * Devuelve string 'true' or 'false' (para el postgres??)
@@ -94,7 +109,7 @@ function is_true($val)
 
 
 /**
- * Devuelve vlaores boolean: TRUE or FALSE.
+ * Devuelve valores boolean: TRUE or FALSE.
  *
  * @param mixed $val
  * @return bool

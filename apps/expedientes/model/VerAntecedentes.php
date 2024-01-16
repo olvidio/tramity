@@ -10,6 +10,7 @@ use envios\model\Enviar;
 use escritos\model\entity\EscritoAdjunto;
 use escritos\model\Escrito;
 use etherpad\model\Etherpad;
+use function core\borrar_tmp;
 
 class VerAntecedentes
 {
@@ -132,8 +133,11 @@ class VerAntecedentes
                             // formato pdf:
                             $file_name = $this->path_temp . $nom;
                             $filename_local_con_extension = $file_name . '.pdf';
-                            $file_pdf = $oEtherpad->generarLOPDF($file_name, $a_header, $f_salida);
+                            $filename_uniq = uniqid('escrito_', true);
+                            $file_pdf = $oEtherpad->generarLOPDF($filename_uniq, $a_header, $f_salida);
                             $file_content = file_get_contents($file_pdf);
+                            // borrar los archivos temporales
+                            borrar_tmp($filename_uniq);
 
                             // con los espacios hay problemas, no bastan las comillas
                             $filename_local_sin_espacios_con_extension = str_replace(' ', '_', $filename_local_con_extension);

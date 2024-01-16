@@ -21,6 +21,7 @@ use stdClass;
 use usuarios\model\Categoria;
 use usuarios\model\entity\Cargo;
 use web\Protocolo;
+use function core\borrar_tmp;
 use function core\is_true;
 
 
@@ -129,8 +130,11 @@ class Enviar
         */
         // new: con LibreOffice
         $this->filename_ext = $this->filename . '.pdf';
-        $file_pdf = $this->oEtherpad->generarLOPDF($this->filename, $a_header, $this->f_salida);
+        $filename_uniq = uniqid('escrito_', true);
+        $file_pdf = $this->oEtherpad->generarLOPDF($filename_uniq, $a_header, $this->f_salida);
         $this->contentFile = file_get_contents($file_pdf);
+        // borrar los archivos temporales
+        borrar_tmp($filename_uniq);
 
         return ['content' => $this->contentFile,
             'name' => $this->filename,
@@ -269,9 +273,12 @@ class Enviar
                         $id_adjunto = $oEscritoAdjunto->getId_item();
                         $oEtherpadAdj = new Etherpad();
                         $oEtherpadAdj->setId(Etherpad::ID_ADJUNTO, $id_adjunto);
-                        $file_pdf = $oEtherpadAdj->generarLOPDF($adjunto_filename);
+                        $filename_uniq = uniqid('adj_', true);
+                        $file_pdf = $oEtherpadAdj->generarLOPDF($filename_uniq);
                         $escrito_txt = file_get_contents($file_pdf);
                         $this->a_adjuntos[$adjunto_filename] = $escrito_txt;
+                        // borrar los archivos temporales
+                        borrar_tmp($filename_uniq);
                         break;
                     default:
                         $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
@@ -525,11 +532,12 @@ class Enviar
         $this->filename = $filename_utf8;
         $this->filename_iso = mb_convert_encoding($filename_utf8, 'ISO-8859-1', 'UTF-8');
         // escribir en el directorio para bonita
-        $filename_uniq = uniqid('escrito_', true);
+        $filename_uniq = uniqid('escrito_rdp_', true);
         $a_header = $this->getHeader();
-        //$file_pdf = $this->oEtherpad->generarLOPDF($this->filename, $a_header, $this->f_salida);
         $file_uniq_pdf = $this->oEtherpad->generarLOPDF($filename_uniq, $a_header, $this->f_salida);
         $contentText = file_get_contents($file_uniq_pdf);
+        // borrar los archivos temporales
+        borrar_tmp($filename_uniq);
 
         $filename_ext = $this->filename . '.pdf';
         $filename_iso_ext = $this->filename_iso . '.pdf';
@@ -699,7 +707,8 @@ class Enviar
             $a_header = $this->getHeader($id_lugar);
             // generar el odt y luego convertirlo:
             $this->filename_ext = $this->filename . '.odt';
-            $file_odt = $this->oEtherpad->generarODT($this->filename_ext, $a_header, $this->f_salida);
+            $filename_uniq = uniqid('enviar_', true);
+            $file_odt = $this->oEtherpad->generarODT($filename_uniq, $a_header, $this->f_salida);
             switch ($modo_envio) {
                 case Lugar::MODO_ODT:
                     $this->contentFile = file_get_contents($file_odt);
@@ -711,9 +720,10 @@ class Enviar
                 case Lugar::MODO_PDF:
                     $file_pdf = $this->convertOdt2($file_odt, 'pdf');
                     $this->contentFile = file_get_contents($file_pdf);
-                    //$err_mail = $this->enviarPdf($id_lugar, $email);
                     break;
             }
+            // borrar los archivos temporales
+            borrar_tmp($filename_uniq);
 
             $err_mail .= $this->enviarContenido($email);
         } else {
