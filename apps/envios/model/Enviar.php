@@ -2,6 +2,7 @@
 
 namespace envios\model;
 
+use convertirdocumentos\model\DocConverter;
 use documentos\model\Documento;
 use entradas\model\entity\EntradaAdjunto;
 use entradas\model\entity\EntradaBypass;
@@ -714,11 +715,13 @@ class Enviar
                     $this->contentFile = file_get_contents($file_odt);
                     break;
                 case Lugar::MODO_DOCX:
-                    $file_docx = $this->convertOdt2($file_odt, 'docx');
+                    $oDocConverter = new DocConverter();
+                    $file_docx = $oDocConverter->convertOdt2($file_odt, 'docx');
                     $this->contentFile = file_get_contents($file_docx);
                     break;
                 case Lugar::MODO_PDF:
-                    $file_pdf = $this->convertOdt2($file_odt, 'pdf');
+                    $oDocConverter = new DocConverter();
+                    $file_pdf = $oDocConverter->convertOdt2($file_odt, 'pdf');
                     $this->contentFile = file_get_contents($file_pdf);
                     break;
             }
@@ -732,14 +735,6 @@ class Enviar
             $err_mail .= $oLugar->getNombre() . "($email)";
         }
         return $err_mail;
-    }
-
-    private function convertOdt2(string $file_odt, string $nuevo_tipo): string
-    {
-        $command = escapeshellcmd("LC_ALL=es_ES.UTF-8 libreoffice -env:UserInstallation=file:///tmp/test --headless --convert-to $nuevo_tipo --outdir /tmp $file_odt 2>&1");
-        exec($command, $output, $retval);
-
-        return "/tmp/$this->filename" . '.' . $nuevo_tipo;
     }
 
     private function enviarContenido($email): string
