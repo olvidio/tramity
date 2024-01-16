@@ -26,10 +26,8 @@ final class DocConverter
         $nombreFicheroOriginalSinExtension = $path_parts['filename'];
 
         $path_temp = '/tmp/';
-        // para el bash. poner el nombre de fichero entre comillas simples, y escapar las posibles comillas del nombre.
-        $file_odt_escaped = "'".str_replace("'","\'", $file_odt)."'";
         // Hay que poner el LC_ALL para asegurar acentos etc.
-        $command = escapeshellcmd("LC_ALL=es_ES.UTF-8 libreoffice -env:UserInstallation=file:///tmp/test --headless --convert-to $nuevo_tipo --outdir /tmp $file_odt_escaped  2>&1");
+        $command = escapeshellcmd("LC_ALL=es_ES.UTF-8 libreoffice -env:UserInstallation=file:///tmp/test --headless --convert-to $nuevo_tipo --outdir /tmp $file_odt  2>&1");
         exec($command, $output,  $retval);
 
         return $path_temp . $nombreFicheroOriginalSinExtension . '.' . $nuevo_tipo;
