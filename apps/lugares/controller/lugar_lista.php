@@ -89,6 +89,7 @@ foreach ($cLugares as $oLugar) {
             $donde = $plataforma;
             break;
         case Lugar::MODO_ODT:
+        case Lugar::MODO_DOCX:
         case Lugar::MODO_PDF:
             $donde = $e_mail;
             break;
