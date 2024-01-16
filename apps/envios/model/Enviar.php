@@ -269,7 +269,8 @@ class Enviar
                         $id_adjunto = $oEscritoAdjunto->getId_item();
                         $oEtherpadAdj = new Etherpad();
                         $oEtherpadAdj->setId(Etherpad::ID_ADJUNTO, $id_adjunto);
-                        $escrito_txt = $oEtherpadAdj->generarLOPDF();
+                        $file_pdf = $oEtherpadAdj->generarLOPDF($adjunto_filename);
+                        $escrito_txt = file_get_contents($file_pdf);
                         $this->a_adjuntos[$adjunto_filename] = $escrito_txt;
                         break;
                     default:
@@ -524,9 +525,11 @@ class Enviar
         $this->filename = $filename_utf8;
         $this->filename_iso = mb_convert_encoding($filename_utf8, 'ISO-8859-1', 'UTF-8');
         // escribir en el directorio para bonita
+        $filename_uniq = uniqid('escrito_', true);
         $a_header = $this->getHeader();
-        $file_pdf = $this->oEtherpad->generarLOPDF($this->filename, $a_header, $this->f_salida);
-        $contentText = file_get_contents($file_pdf);
+        //$file_pdf = $this->oEtherpad->generarLOPDF($this->filename, $a_header, $this->f_salida);
+        $file_uniq_pdf = $this->oEtherpad->generarLOPDF($filename_uniq, $a_header, $this->f_salida);
+        $contentText = file_get_contents($file_uniq_pdf);
 
         $filename_ext = $this->filename . '.pdf';
         $filename_iso_ext = $this->filename_iso . '.pdf';

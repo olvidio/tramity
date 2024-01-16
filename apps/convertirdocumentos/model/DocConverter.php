@@ -27,7 +27,10 @@ final class DocConverter
 
         $path_temp = '/tmp/';
         // Hay que poner el LC_ALL para asegurar acentos etc.
-        $command = escapeshellcmd("LC_ALL=es_ES.UTF-8 libreoffice -env:UserInstallation=file:///tmp/test --headless --convert-to $nuevo_tipo --outdir /tmp $file_odt  2>&1");
+        $file_escaped = escapeshellarg($file_odt);
+        $file_escaped = str_replace(' ', '\ ', $file_escaped);
+        //$command = escapeshellcmd("LC_ALL=es_ES.UTF-8 libreoffice -env:UserInstallation=file:///tmp/test --headless --convert-to $nuevo_tipo --outdir /tmp $file_escaped 2>&1");
+        $command = "LC_ALL=es_ES.UTF-8 libreoffice -env:UserInstallation=file:///tmp/test --headless --convert-to $nuevo_tipo --outdir /tmp $file_escaped 2>&1";
         exec($command, $output,  $retval);
 
         return $path_temp . $nombreFicheroOriginalSinExtension . '.' . $nuevo_tipo;
