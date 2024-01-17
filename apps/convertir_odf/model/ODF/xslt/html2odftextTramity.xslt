@@ -503,9 +503,9 @@
             </xsl:when>
             <xsl:when test="@class='indent'">
                 <xsl:for-each select="li">
-                        <text:p text:style-name="subApartado">
+                        <!-- <text:p text:style-name="subApartado"> -->
                             <xsl:call-template name="text_applyer"/>
-                        </text:p>
+                        <!-- </text:p> -->
                 </xsl:for-each>
             </xsl:when>
             <xsl:otherwise>
