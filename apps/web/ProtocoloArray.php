@@ -107,7 +107,7 @@ class ProtocoloArray extends Protocolo
         return $aRef;
     }
 
-    public function ListaTxtBr()
+    public function ListaTxtBr($segundaRegion = '')
     {
         $aSeleccionados = '';
         if (is_array($this->sSeleccionados)) {
@@ -145,6 +145,10 @@ class ProtocoloArray extends Protocolo
                     $txt .= " $prot_num/$prot_any";
                 }
                 $txt .= !empty($prot_mas) ? ", $prot_mas" : '';
+
+                if (!empty($segundaRegion)) {
+                    $txt = $this->addSegundaRegion($txt, $segundaRegion);
+                }
 
                 $sLista .= !empty($sLista) ? "<br>" : '';
                 $sLista .= $ref . $txt;

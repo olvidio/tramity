@@ -3,6 +3,7 @@
 namespace escritos\model;
 
 use config\model\entity\ConfigSchema;
+use core\ConfigGlobal;
 use documentos\model\Documento;
 use escritos\model\entity\EscritoAdjunto;
 use escritos\model\entity\EscritoDB;
@@ -19,6 +20,7 @@ use usuarios\model\PermRegistro;
 use usuarios\model\Visibilidad;
 use web\Protocolo;
 use web\ProtocoloArray;
+use const http\Client\Curl\PROXY_HTTP;
 
 
 class Escrito extends EscritoDB
@@ -384,10 +386,13 @@ class Escrito extends EscritoDB
                         $oProtDestino = new Protocolo();
                         $oProtDestino->setJson($json_prot_dst);
                         $destinos_txt = $oProtDestino->ver_txt();
+                        // segunda región, para escrito cabecera izquierda es: mi_dl
+                        $segundaRegion = $_SESSION['oConfig']->getSigla();
+                        $destinos_txt = $oProtDestino->addSegundaRegion($destinos_txt, $segundaRegion);
                     }
                 }
             } else {
-                //(segun individuales)
+                //(según individuales)
                 if (!empty((array)$a_json_prot_dst)) {
                     $json_prot_dst = $a_json_prot_dst[0];
                     if (!empty((array)$json_prot_dst)) {
@@ -397,7 +402,9 @@ class Escrito extends EscritoDB
                     }
                 }
                 $oArrayProtDestino = new ProtocoloArray($a_json_prot_dst, '', 'destinos');
-                $destinos_txt = $oArrayProtDestino->ListaTxtBr();
+                // segunda región, para escrito cabecera izquierda es: mi_dl
+                $segundaRegion = $_SESSION['oConfig']->getSigla();
+                $destinos_txt = $oArrayProtDestino->ListaTxtBr($segundaRegion);
 
                 $visibilidad_dst = $this->getVisibilidad_dst();
                 if (!empty($visibilidad_dst) && $visibilidad_dst != Visibilidad::V_CTR_TODOS) {
@@ -432,6 +439,11 @@ class Escrito extends EscritoDB
         $oArrayProtRef = new ProtocoloArray($a_json_prot_ref, '', 'referencias');
         $oArrayProtRef->setRef(TRUE);
         $aRef = $oArrayProtRef->ArrayListaTxtBr($id_dst);
+        // segunda región, para escrito cabecera izquierda es: mi_dl
+        if (!empty($id_dst) && !empty($aRef)) {
+            $segundaRegion = $_SESSION['oConfig']->getSigla();
+            $aRef = $oArrayProtRef->addSegundaRegionEnArray($aRef, $segundaRegion);
+        }
 
         if (!empty($aRef['dst_org'])) {
             $destinos_txt .= '<br>';
@@ -459,6 +471,12 @@ class Escrito extends EscritoDB
         $oArrayProtRef = new ProtocoloArray($a_json_prot_ref, '', 'referencias');
         $oArrayProtRef->setRef(TRUE);
         $aRef = $oArrayProtRef->ArrayListaTxtBr($id_dst);
+        // segunda región, para escrito cabecera derecha es la región destino
+        if (!empty($id_dst) && !empty($aRef)) {
+            $oLugar = new Lugar($id_dst);
+            $segundaRegion = $oLugar->getSigla();
+            $aRef = $oArrayProtRef->addSegundaRegionEnArray($aRef, $segundaRegion);
+        }
 
         $json_prot_local = $this->getJson_prot_local();
         if (count(get_object_vars($json_prot_local)) === 0){
@@ -481,6 +499,12 @@ class Escrito extends EscritoDB
             $oProtOrigen->setMas($json_prot_local->mas);
 
             $origen_txt = $oProtOrigen->ver_txt();
+            // segunda región, para escrito cabecera derecha es la región destino
+            if (!empty($id_dst)) {
+                $oLugar = new Lugar($id_dst);
+                $segundaRegion = $oLugar->getSigla();
+                $origen_txt = $oProtOrigen->addSegundaRegion($origen_txt, $segundaRegion);
+            }
         }
 
         if (!empty($aRef['local'])) {

@@ -73,6 +73,15 @@ class Entrada extends EntradaDB
 
         $sigla = $_SESSION['oConfig']->getSigla();
         $destinos_txt = $sigla;
+        // segunda región, para entrada cabecera izquierda es la región origen
+        $json_prot_origen = $this->getJson_prot_origen();
+        if (!empty((array)$json_prot_origen)) {
+            $id_org = $json_prot_origen->id_lugar;
+            $oLugar = new Lugar($id_org);
+            $segundaRegion = $oLugar->getSigla();
+            $oProtocolo = new Protocolo();
+            $destinos_txt = $oProtocolo->addSegundaRegion($destinos_txt, $segundaRegion);
+        }
         // excepción para bypass
         if (!is_true($this->getBypass())) {
             $visibilidad = $this->getVisibilidad();
@@ -102,6 +111,10 @@ class Entrada extends EntradaDB
             $oArrayProtRef = new ProtocoloArray($a_json_prot_ref, '', 'referencias');
             $oArrayProtRef->setRef(TRUE);
             $aRef = $oArrayProtRef->ArrayListaTxtBr($id_sigla);
+            // segunda región, para entrada cabecera izquierda es: origen
+            if (!empty($aRef) && !empty($segundaRegion)) {
+                $aRef = $oArrayProtRef->addSegundaRegionEnArray($aRef, $segundaRegion);
+            }
         } else {
             $aRef['dst_org'] = '??';
         }
@@ -128,6 +141,11 @@ class Entrada extends EntradaDB
             $oArrayProtRef = new ProtocoloArray($a_json_prot_ref, '', 'referencias');
             $oArrayProtRef->setRef(TRUE);
             $aRef = $oArrayProtRef->ArrayListaTxtBr($id_org);
+            // segunda región, para escrito cabecera izquierda es: mi_dl
+            if (!empty($aRef)) {
+                $segundaRegion = $_SESSION['oConfig']->getSigla();
+                $aRef = $oArrayProtRef->addSegundaRegionEnArray($aRef, $segundaRegion);
+            }
 
             $oProtOrigen = new Protocolo();
             $oProtOrigen->setLugar($json_prot_origen->id_lugar);
@@ -136,6 +154,9 @@ class Entrada extends EntradaDB
             $oProtOrigen->setMas($json_prot_origen->mas);
 
             $origen_txt = $oProtOrigen->ver_txt();
+            // segunda región, para escrito cabecera izquierda es: mi_dl
+            $segundaRegion = $_SESSION['oConfig']->getSigla();
+            $origen_txt = $oProtOrigen->addSegundaRegion($origen_txt, $segundaRegion);
         } else {
             $origen_txt = '??';
         }

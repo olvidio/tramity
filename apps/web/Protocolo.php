@@ -2,8 +2,10 @@
 
 namespace web;
 
+use lugares\model\entity\GestorLugar;
 use lugares\model\entity\Lugar;
 use stdClass;
+use usuarios\model\entity\Cargo;
 use function core\any_2;
 
 class Protocolo
@@ -26,12 +28,12 @@ class Protocolo
      * id del lugar
      * @var integer|null
      */
-    protected  $ilugar = null;
+    protected $ilugar = null;
     /**
      *
      * @var integer|null
      */
-    protected  $iprot_num = null;
+    protected $iprot_num = null;
     /**
      * Debe ser un string para permitir "00", "01" etc.
      * @var string|null
@@ -41,7 +43,7 @@ class Protocolo
      *
      * @var string|null
      */
-    protected  $sprot_mas = null;
+    protected $sprot_mas = null;
 
     /* CONSTRUCTOR ------------------------------ */
     function __construct($ilugar = null, $iprot_num = null, $iprot_any = '', $sprot_mas = '')
@@ -127,6 +129,51 @@ class Protocolo
     public function ver_txt_mas()
     {
         return empty($this->sprot_mas) ? '' : $this->sprot_mas;
+    }
+
+    public function addSegundaRegionEnArray($aRef, $segundaRegion)
+    {
+        $anewRef = [];
+        foreach ($aRef as $key => $protocolo) {
+            $anewRef[$key] = $this->addSegundaRegion($protocolo, $segundaRegion);
+        }
+        return $anewRef;
+    }
+
+    public function addSegundaRegion($protocolo, $segundaRegion)
+    {
+        $protocolo_rta = $protocolo;
+        // solamente para las delegaciones/regiones
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
+            //Eso 8/23
+            $pattern = '/^\s*(ref.)?\s*(\P{N}+)(\s+\d+\/\d{2})?,?(\s*\w*\s*)$/u';
+            $coincide = preg_match($pattern, $protocolo, $matches);
+            if ($coincide === 1) {
+                $ref = trim($matches[1]);
+                $origen = trim($matches[2]);
+                $origen_prot = empty($matches[3]) ? '' : $matches[3];
+                $mas = empty($matches[4]) ? '' : ', '.trim($matches[4]);
+
+                $gesLugar = new GestorLugar();
+                // region de la sigla del protocolo (puede ser un ctr o dl)
+                $cLugares = $gesLugar->getLugares(['sigla' => $origen, 'anulado' => 'f']);
+                $oLugar = $cLugares[0];
+                $region_1 = $oLugar->getRegion();
+                // region de la sigla a añadir
+                $cLugares = $gesLugar->getLugares(['sigla' => $segundaRegion, 'anulado' => 'f']);
+                $oLugar = $cLugares[0];
+                $region_2 = $oLugar->getRegion();
+                if ($region_1 !== $region_2) {
+                    // si no hay número, hay que dejarlo en blanco
+                    if (empty($origen_prot)) {
+                        $protocolo_rta = '<br>';
+                    } else {
+                        $protocolo_rta = "$ref $origen-$segundaRegion $origen_prot".$mas;
+                    }
+                }
+            }
+        }
+        return $protocolo_rta;
     }
 
     /**
