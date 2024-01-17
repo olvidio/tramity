@@ -244,28 +244,37 @@ class Etherpad extends Client
         $txt2 = substr($txt, 6); // Quitar el tag <body> inicial
         $txt3 = substr($txt2, 0, -7); // Quitar el tag </body> final
 
+        // Unificar posibles <br />  a <br> simple>
+        $pattern = "/<br.*?\/?>/";
+        $txt3_1 = preg_replace($pattern, "<br>", $txt3);
         //<br value="tblBreak">
-        $txt4 = str_replace("<br value=\"tblBreak\">", "", $txt3);
-        // salto de página (4 o más ':' entre dos saltos de línea
-        /* $txt7 = str_replace("/<br( *\/)?>:{4,}<br( *\/)?>/", "<div style=\"page-break-after: always;\"></div>", $txt6); */
-        $txt5 = preg_replace("/:{4,}/", "<div class='salta_pag'></div>", $txt4);
+        $txt3_2 = str_replace("<br value=\"tblBreak\">", "", $txt3_1);
 
         // añadir tag <br> al inicio
-        $txt5_1 = '<br>' . $txt5;
+        $txt3_4 = '<br>' . $txt3_2;
+
+        // Añadir <br> delante del texto entre una etiqueta distinta de <br> y el siguiente <br>
+        $pattern = "/<.*?>(?<!<br>)([^<]+)(?=<br)/";
+        $txt3_5 = preg_replace($pattern, "<br>$1", $txt3_4);
+
         // y después poner entre <p> el texto entre <br> (siempre que no esté ya encapsulado en algo '<xx>')
         $pattern = "/<br\ ?\/?>([^<].*?)<br\ ?\/?>/";
-        $txt5_2 = preg_replace($pattern, "<p>$1</p><br>", $txt5_1);
+        $txt4 = preg_replace($pattern, "<p>$1</p><br>", $txt3_5);
 
         // También poner entre <p> el texto entre <br> y <p>
         $pattern = "/<br\ ?\/?>([^<].*?)<p\ ?\/?>/";
-        $txt5_3 = preg_replace($pattern, "<p>$1</p><p>", $txt5_2);
+        $txt4_1 = preg_replace($pattern, "<p>$1</p><p>", $txt4);
         // eliminar párrafos vacíos: <p></p>
-        $txt5_4 = str_replace("<p></p>", "", $txt5_3);
+        $txt4_2 = str_replace("<p></p>", "", $txt4_1);
+
+        // salto de página (4 o más ':' entre dos saltos de línea
+        /* $txt7 = str_replace("/<br( *\/)?>:{4,}<br( *\/)?>/", "<div style=\"page-break-after: always;\"></div>", $txt6); */
+        $txt5 = preg_replace("/:{4,}/", "<div class='salta_pag'></div>", $txt4_2);
 
         // eliminar dobles lineas: <br><br>
         //$txt3_5 = str_replace("<br><br>", "<br>", $txt3_4);
         // eliminar todos los <br>
-        $txt6 = str_replace("<br>", "", $txt5_4);
+        $txt6 = str_replace("<br>", "", $txt5);
         //$txt4 = str_replace("</p><br>", "</p>", $txt3_5);
         //$txt5 = str_replace("</table><br>", "</table>", $txt4);
 

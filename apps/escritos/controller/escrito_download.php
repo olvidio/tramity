@@ -20,7 +20,7 @@ if (!empty($Q_id_escrito)) {
 
     $oEnviar = new Enviar($Q_id_escrito, 'escrito');
 
-    if (($File = $oEnviar->getPdf()) === FALSE) {
+    if ($oEnviar === FALSE) {
         $txt_alert = $_SESSION['oGestorErrores']->ver();
         if (empty($txt_alert)) {
             $txt_alert = _("Algún error al generar el pdf. Es posible que no tenga el protocolo.");
@@ -30,6 +30,7 @@ if (!empty($Q_id_escrito)) {
         $oView->renderizar('alerta.html.twig', $a_campos);
         exit();
     }
+    $File = $oEnviar->getPdf();
 
     $escrito = $File['content'];
     $nom = $File['ext'];
