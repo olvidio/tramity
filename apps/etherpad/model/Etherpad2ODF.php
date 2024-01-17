@@ -19,21 +19,38 @@ class Etherpad2ODF
         $cabecera = '';
         if (!empty($a_header)) {
             $origen = '';
+            $destino = '';
+            if (!empty($a_header['left']) ) {
+                $a_izq = explode( '<br>', $a_header['left'] );
+                $destino = $a_izq[0];
+                $ref_izq = empty($a_izq[1])? '' : $a_izq[1];
+            }
             if (!empty($a_header['right']) ) {
                 $a_dcha = explode( '<br>', $a_header['right'] );
                 $origen = $a_dcha[0];
-                $ref = empty($a_dcha[1])? '' : $a_dcha[1];
+                $ref_dcha = empty($a_dcha[1])? '' : $a_dcha[1];
             }
+            // linea 1
             $cabecera = "<cabecera>";
-            $cabecera .= $a_header['left'];
+            $cabecera .= $destino;
             $cabecera .= "<cabecera_end>";
             $cabecera .= $origen;
-            if (!empty($ref)) {
-                $cabecera .= "<ref>$ref</ref>";
-            }
             $cabecera .= "</cabecera_end>";
             $cabecera .= "</cabecera>";
-            $cabecera .= "<br>";
+            // liena 2
+            if (!empty($ref_izq) || !empty($ref_dcha)) {
+                $cabecera .= "<cabecera>";
+                if (!empty($ref_izq)) {
+                    $cabecera .= $ref_izq;
+                }
+                if (!empty($ref_dcha)) {
+                    $cabecera .= "<cabecera_end>";
+                    $cabecera .= $ref_dcha;
+                    $cabecera .= "</cabecera_end>";
+                }
+                $cabecera .= "</cabecera>";
+            }
+            $cabecera .= "<separacion></separacion>";
         }
 
         $txt = str_replace("<tbody>", "", $contentText);

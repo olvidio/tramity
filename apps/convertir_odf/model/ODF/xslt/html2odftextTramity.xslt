@@ -614,6 +614,11 @@
         <xsl:apply-templates select="node()"/>
     </xsl:template>
 
+    <xsl:template match="separacion">
+        <text:p text:style-name="separacion">
+        </text:p>
+    </xsl:template>
+
     <xsl:template match="ref">
         <text:tab/>
         <xsl:apply-templates select="node()"/>

@@ -186,12 +186,22 @@
         <style:style style:name="cabecera" style:family="paragraph" style:parent-style-name="correo"
                      style:next-style-name="parrafo" style:master-page-name="">
             <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="justify"
-                                        fo:margin-bottom="1cm"
+                                        fo:margin-bottom="0cm"
                                         style:justify-single-word="false" fo:text-indent="0cm"
                                         style:auto-text-indent="false" style:page-number="auto">
                 <style:tab-stops>
                     <style:tab-stop style:position="16cm" style:type="right"/>
                 </style:tab-stops>
+            </style:paragraph-properties>
+            <style:text-properties fo:font-size="13pt"/>
+        </style:style>
+
+        <style:style style:name="separacion" style:family="paragraph" style:parent-style-name="correo"
+                     style:next-style-name="parrafo" style:master-page-name="">
+            <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="justify"
+                                        fo:margin-bottom="1cm"
+                                        style:justify-single-word="false" fo:text-indent="0cm"
+                                        style:auto-text-indent="false" style:page-number="auto">
             </style:paragraph-properties>
             <style:text-properties fo:font-size="13pt"/>
         </style:style>
