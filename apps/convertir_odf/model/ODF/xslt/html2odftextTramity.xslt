@@ -520,9 +520,9 @@
             <!-- FIXME: should not do this... instead simply apply on node() and have template matches for li -->
             <xsl:for-each select="li">
                 <text:list-item>
-                    <text:p text:style-name="subApartado">
+                    <!-- <text:p text:style-name="subApartado"> -->
                         <xsl:call-template name="text_applyer"/>
-                    </text:p>
+                    <!-- </text:p> -->
                 </text:list-item>
             </xsl:for-each>
         </text:list>
