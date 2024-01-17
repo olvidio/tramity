@@ -267,19 +267,24 @@ class Etherpad extends Client
         // eliminar párrafos vacíos: <p></p>
         $txt4_2 = str_replace("<p></p>", "", $txt4_1);
 
+        // acabar bien los <ul>
+        $pattern = "/(?<!<\/li>)<\/ul>/";
+        $txt5 = preg_replace($pattern, "</li>$1", $txt4_2);
+
+
         // salto de página (4 o más ':' entre dos saltos de línea
         /* $txt7 = str_replace("/<br( *\/)?>:{4,}<br( *\/)?>/", "<div style=\"page-break-after: always;\"></div>", $txt6); */
-        $txt5 = preg_replace("/:{4,}/", "<div class='salta_pag'></div>", $txt4_2);
+        $txt6 = preg_replace("/:{4,}/", "<div class='salta_pag'></div>", $txt5);
 
         // eliminar dobles lineas: <br><br>
         //$txt3_5 = str_replace("<br><br>", "<br>", $txt3_4);
         // eliminar todos los <br>
-        $txt6 = str_replace("<br>", "", $txt5);
+        $txt7 = str_replace("<br>", "", $txt6);
         //$txt4 = str_replace("</p><br>", "</p>", $txt3_5);
         //$txt5 = str_replace("</table><br>", "</table>", $txt4);
 
 
-        return str_replace("</tbody></table><table><tbody>", "", $txt6);
+        return str_replace("</tbody></table><table><tbody>", "", $txt7);
     }
 
     public function getHHtml()
