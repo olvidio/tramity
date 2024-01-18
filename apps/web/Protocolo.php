@@ -156,11 +156,11 @@ class Protocolo
 
                 $gesLugar = new GestorLugar();
                 // region de la sigla del protocolo (puede ser un ctr o dl)
-                $cLugares = $gesLugar->getLugares(['sigla' => $origen, 'anulado' => 'f']);
+                $cLugares = $gesLugar->getLugares(['sigla' => $origen]);
                 $oLugar = $cLugares[0];
                 $region_1 = $oLugar->getRegion();
                 // region de la sigla a añadir
-                $cLugares = $gesLugar->getLugares(['sigla' => $segundaRegion, 'anulado' => 'f']);
+                $cLugares = $gesLugar->getLugares(['sigla' => $segundaRegion]);
                 $oLugar = $cLugares[0];
                 $region_2 = $oLugar->getRegion();
                 if ($region_1 !== $region_2) {
