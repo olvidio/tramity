@@ -3,6 +3,7 @@
 use core\ViewTwig;
 use escritos\model\Escrito;
 use etherpad\model\Etherpad;
+use usuarios\model\Visibilidad;
 use web\Protocolo;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -61,6 +62,14 @@ if (!empty($Q_id_escrito)) {
     foreach ($a_escritos as $id_escrito) {
         $oEscrito = new Escrito($id_escrito);
 
+        $visibilidad_txt = '';
+        $visibilidad = $oEscrito->getVisibilidad();
+        if (!empty($visibilidad) && $visibilidad != Visibilidad::V_CTR_TODOS) {
+            $oVisibilidad = new Visibilidad();
+            $a_visibilidad = $oVisibilidad->getArrayVisibilidad();
+            $visibilidad_txt = "(".$a_visibilidad[$visibilidad].")";
+        }
+
         $destinos = $oEscrito->cabeceraIzquierda();
         $origen_txt = $oEscrito->cabeceraDerecha();
 
@@ -81,6 +90,7 @@ if (!empty($Q_id_escrito)) {
             $a_campos = [
                 'id_escrito' => $id_escrito,
                 //'oHash' => $oHash,
+                'visibilidad_txt' => $visibilidad_txt,
                 'destinos' => $destinos,
                 'origen_txt' => $origen_txt,
                 //'oArrayProtDestino' => $oArrayProtDestino,
@@ -101,6 +111,7 @@ if (!empty($Q_id_escrito)) {
                 'primero' => $primero,
                 'id_escrito' => $id_escrito,
                 //'oHash' => $oHash,
+                'visibilidad_txt' => $visibilidad_txt,
                 'destinos' => $destinos,
                 'origen_txt' => $origen_txt,
                 //'oArrayProtDestino' => $oArrayProtDestino,

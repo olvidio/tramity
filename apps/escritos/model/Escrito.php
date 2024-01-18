@@ -354,8 +354,6 @@ class Escrito extends EscritoDB
      */
     public function cabeceraIzquierda($id_lugar_de_grupo = ''): string
     {
-        $oVisibilidad = new Visibilidad();
-        $a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
         $destinos_txt = '';
         $id_dst = '';
 
@@ -405,12 +403,6 @@ class Escrito extends EscritoDB
                 // segunda región, para escrito cabecera izquierda es: mi_dl
                 $segundaRegion = $_SESSION['oConfig']->getSigla();
                 $destinos_txt = $oArrayProtDestino->ListaTxtBr($segundaRegion);
-
-                $visibilidad_dst = $this->getVisibilidad_dst();
-                if (!empty($visibilidad_dst) && $visibilidad_dst != Visibilidad::V_CTR_TODOS) {
-                    $visibilidad_txt = $a_visibilidad_dst[$visibilidad_dst];
-                    $destinos_txt .= " ($visibilidad_txt)";
-                }
             }
         }
         // grupos personalizados...
