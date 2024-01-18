@@ -148,13 +148,6 @@ class Etherpad extends Client
         $pattern = "/(?<!<\/li>)(<\/[ou]l>)/";
         $contenido = preg_replace($pattern, "</li>$1", $contenido);
 
-        /*
-        // otra forma canbiar <br>xxx<br> por <p>xxx</p>
-        $pattern = "/(?:<p[^>]*>\s*)?([^<>\s][^<>]*)(?:<(?:br\s*\/?>\s*<br\s*\/?|\/p[^>]*)>(?:\s*\n)?|$)/";
-        $replace = "<p>$1</p>\n";
-        $contenido2 = preg_replace($pattern, $replace, $contenido);
-*/
-
         $dom = new DOMDocument;
         /* la '@' sirve para evita los errores:  Warning: DOMDocument::loadHTML()
          *
@@ -171,25 +164,25 @@ class Etherpad extends Client
          *
          */
         $domNodeList = $dom->getElementsByTagname('span');
-        foreach ($domNodeList as $domElement) {
+        foreach ($domNodeList as $tag) {
             // mirar si es: class="comment
-            $class = $domElement->getAttribute('class');
+            $class = $tag->getAttribute('class');
             if (strpos($class, 'comment') !== false) {
-                $domNodeListChilds = $domElement->childNodes;
+                $domNodeListChilds = $tag->childNodes;
                 foreach ($domNodeListChilds as $domElementChild) {
                     // borrar los child: <sup></sup>
                     $nodeName = $domElementChild->nodeName;
                     if ($nodeName === 'sup') {
-                        $domElement->removeChild($domElementChild);
+                        $tag->removeChild($domElementChild);
                     }
                 }
                 // Move all span tag content to its parent node just before it.
-                while ($domElement->hasChildNodes()) {
-                    $child = $domElement->removeChild($domElement->firstChild);
-                    $domElement->parentNode->insertBefore($child, $domElement);
+                while ($tag->hasChildNodes()) {
+                    $child = $tag->removeChild($tag->firstChild);
+                    $tag->parentNode->insertBefore($child, $tag);
                 }
                 // Remove the span tag.
-                $domElement->parentNode->removeChild($domElement);
+                $tag->parentNode->removeChild($tag);
             }
         }
         $dom->normalizeDocument();
@@ -211,7 +204,7 @@ class Etherpad extends Client
         }
 
         /*
-         * Quitar los tag sin contenido. Tipico:
+         * Quitar los tag sin contenido. Típico:
          *  <p style="text-ailgn:justify"></p>
          */
         // Selects tags to be processed.
@@ -239,13 +232,15 @@ class Etherpad extends Client
         }
 
         // Quitar los tags <p> dentro de los <li>
-        $paragraphs = $dom->getElementsByTagName('p');
-        $paragraphsLength = $paragraphs->length;
-        for ($i = 0; $i < $paragraphsLength; $i++) {
-            $p = $paragraphs->item(0); // See https://www.php.net/manual/en/domdocument.getelementsbytagname.php#99716
-            if ($p->parentNode->tagName === 'li') {
-                $p->parentNode->textContent = $p->textContent;
+        $tags_list = $xpath->query("//p");
+        foreach ($tags_list as $tag) {
+            // Move all tag content to its parent node just before it.
+            while ($tag->hasChildNodes()) {
+                $child = $tag->removeChild($tag->firstChild);
+                $tag->parentNode->insertBefore($child, $tag);
             }
+            // Remove the span tag.
+            $tag->parentNode->removeChild($tag);
         }
 
         // lista de los tagg 'body'
@@ -667,6 +662,7 @@ class Etherpad extends Client
      * @param array $a_header ['left', 'center', 'right']
      * @return Mpdf
      */
+    /*
     public function generarMPDF(array $a_header = [], string $fecha = ''): Mpdf
     {
         $stylesheet = "<style>
@@ -740,14 +736,15 @@ class Etherpad extends Client
         $rta = $this->getText($padID);
         if ($rta->getCode() == 0) {
             $data = $rta->getData();
-            /* returns: {code: 0, message:"ok", data: {text:"Welcome Text"}}
-             * {code: 1, message:"padID does not exist", data: null}
-             */
+            // returns: {code: 0, message:"ok", data: {text:"Welcome Text"}}
+            //  {code: 1, message:"padID does not exist", data: null}
+            //
             return $data['text'];
         } else {
             $this->mostrar_error($rta);
         }
     }
+    */
 
     public function eliminarPad()
     {

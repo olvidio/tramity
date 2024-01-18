@@ -477,14 +477,13 @@
     </xsl:template>
 
     <xsl:template match="ul">
-
         <xsl:choose>
             <xsl:when test="@class='number'">
                 <text:list text:style-name="L2">
                     <xsl:for-each select="li">
                         <text:list-item>
                             <text:p text:style-name="subApartado">
-                                <xsl:call-template name="text_applyer"/>
+                                <xsl:apply-templates select="node()"/>
                             </text:p>
                         </text:list-item>
                     </xsl:for-each>
@@ -495,7 +494,7 @@
                     <xsl:for-each select="li">
                         <text:list-item>
                             <text:p text:style-name="subApartado">
-                                <xsl:call-template name="text_applyer"/>
+                                <xsl:apply-templates select="node()"/>
                             </text:p>
                         </text:list-item>
                     </xsl:for-each>
@@ -504,7 +503,7 @@
             <xsl:when test="@class='indent'">
                 <xsl:for-each select="li">
                         <text:p text:style-name="subApartado">
-                            <xsl:call-template name="text_applyer"/>
+                            <xsl:apply-templates select="node()"/>
                         </text:p>
                 </xsl:for-each>
             </xsl:when>
