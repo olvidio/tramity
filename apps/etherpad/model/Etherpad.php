@@ -234,6 +234,16 @@ class Etherpad extends Client
             $tag->parentNode->removeChild($tag);
         }
 
+        // Quitar los tags <p> dentro de los <li>
+        $paragraphs = $dom->getElementsByTagName('p');
+        $paragraphsLength = $paragraphs->length;
+        for ($i = 0; $i < $paragraphsLength; $i++) {
+            $p = $paragraphs->item(0); // See https://www.php.net/manual/en/domdocument.getelementsbytagname.php#99716
+            if ($p->parentNode->tagName === 'li') {
+                $p->parentNode->textContent = $p->textContent;
+            }
+        }
+
         // lista de los tagg 'body'
         $bodies = $dom->getElementsByTagName('body');
 
@@ -254,8 +264,8 @@ class Etherpad extends Client
         $txt3_4 = '<br>' . $txt3_2;
 
         // Añadir <br> delante del texto entre una etiqueta distinta de <br> y el siguiente <br>
-        $pattern = "/<.*?>(?<!<br>)([^<]+)(?=<br)/";
-        $txt3_5 = preg_replace($pattern, "<br>$1", $txt3_4);
+        $pattern = "/(?<!br)>([^>]+)(?=<br>)/";
+        $txt3_5 = preg_replace($pattern, "><br>$1", $txt3_4);
 
         // y después poner entre <p> el texto entre <br> (siempre que no esté ya encapsulado en algo '<xx>')
         $pattern = "/<br\ ?\/?>([^<].*?)<br\ ?\/?>/";
@@ -267,8 +277,8 @@ class Etherpad extends Client
         // eliminar párrafos vacíos: <p></p>
         $txt4_2 = str_replace("<p></p>", "", $txt4_1);
 
-        // acabar bien los <ul>
-        $pattern = "/(?<!<\/li>)<\/ul>/";
+        // acabar bien los <ul> o los <ol>
+        $pattern = "/(?<!<\/li>)(<\/[ou]l>)/";
         $txt5 = preg_replace($pattern, "</li>$1", $txt4_2);
 
 
@@ -648,7 +658,7 @@ class Etherpad extends Client
         $oDocConverter = new DocConverter();
         $file_pdf = $oDocConverter->convertOdt2($file_odt, 'pdf');
 
-        return  $file_pdf;
+        return $file_pdf;
     }
 
 
