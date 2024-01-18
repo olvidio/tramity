@@ -144,6 +144,10 @@ class Etherpad extends Client
     {
         $contenido = $this->getHHtml();
 
+        // acabar bien los <ul> o los <ol>
+        $pattern = "/(?<!<\/li>)(<\/[ou]l>)/";
+        $contenido = preg_replace($pattern, "</li>$1", $contenido);
+
         /*
         // otra forma canbiar <br>xxx<br> por <p>xxx</p>
         $pattern = "/(?:<p[^>]*>\s*)?([^<>\s][^<>]*)(?:<(?:br\s*\/?>\s*<br\s*\/?|\/p[^>]*)>(?:\s*\n)?|$)/";
@@ -277,14 +281,9 @@ class Etherpad extends Client
         // eliminar párrafos vacíos: <p></p>
         $txt4_2 = str_replace("<p></p>", "", $txt4_1);
 
-        // acabar bien los <ul> o los <ol>
-        $pattern = "/(?<!<\/li>)(<\/[ou]l>)/";
-        $txt5 = preg_replace($pattern, "</li>$1", $txt4_2);
-
-
         // salto de página (4 o más ':' entre dos saltos de línea
         /* $txt7 = str_replace("/<br( *\/)?>:{4,}<br( *\/)?>/", "<div style=\"page-break-after: always;\"></div>", $txt6); */
-        $txt6 = preg_replace("/:{4,}/", "<div class='salta_pag'></div>", $txt5);
+        $txt6 = preg_replace("/:{4,}/", "<div class='salta_pag'></div>", $txt4_2);
 
         // eliminar dobles lineas: <br><br>
         //$txt3_5 = str_replace("<br><br>", "<br>", $txt3_4);
