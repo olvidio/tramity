@@ -168,7 +168,7 @@ class Protocolo
                     if (empty($origen_prot)) {
                         $protocolo_rta = '<br>';
                     } else {
-                        $protocolo_rta = "$ref $origen-$segundaRegion $origen_prot".$mas;
+                        $protocolo_rta = "ref. $origen-$segundaRegion $origen_prot".$mas;
                     }
                 }
             }
