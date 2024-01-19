@@ -142,6 +142,10 @@ class Etherpad extends Client
     {
         $contenido = $this->getHHtml();
 
+        $contenido = <<<HTML
+<html><body><meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/><cabecera><cabecera_end>dlb</cabecera_end></cabecera><separacion></separacion><p style="text-align:center"><strong><span class="font-size:15">CONSULTIU</span></strong></p><p style="text-align:center"><strong><span class="font-size:15">(cfr. <em>Statuta</em>, n. 17; Decr. Gen. 1/99 art. 2; Decr. Gen. 2/2021)</span></strong></p><strong>Concessió de l'Admissió</strong><p>Amb data d'avui, el Vicari de la Delegació de Barcelona, escoltat el Consell de la Delegació, ha concedit l’Admissió com Supernumerari a Pere Pau Joan.</p><p>Delegació</p><span class="font-size:15">Delegació</span><p><div class='salta_pag'></div></p><p>Conforme:</p><ul class="indent"><li>Jordi Pérez (16/1/2024)</li><li>José Luis de Prada (16/1/2024)</li><li>Lluís Ferreiro (16/1/2024)</li></ul><p style="text-align:right">El vicari de la Delegació</p><p>(sense numerar (E12))</p><p style="text-align:right">Barcelona, 16 de gener de 2024</p><fecha>16.1.2024</fecha></body></html>
+HTML;
+
         // acabar bien los <ul> o los <ol>
         $pattern = "/(?<!<\/li>)(<\/[ou]l>)/";
         $contenido = preg_replace($pattern, "</li>$1", $contenido);
@@ -250,17 +254,11 @@ class Etherpad extends Client
         $body = $bodies->item(0);
         $childNodes = $body->childNodes;
 
-        // Itera sobre los nodos de texto
+        // Itera sobre todos los nodos
         foreach ($childNodes as $node) {
-            // Obtiene el texto del nodo
+            // Solamente interesa los nodos de texto
             if ($node->nodeType === XML_TEXT_NODE) {
                 $texto = $node->nodeValue;
-
-                // Verifica si el texto no contiene ninguna etiqueta HTML
-                if ($texto !== strip_tags($texto)) {
-                    // Si contiene etiquetas, sigue al siguiente nodo de texto
-                    continue;
-                }
 
                 // Crea un nuevo nodo de párrafo
                 $parrafoNode = $dom->createElement('p');
@@ -273,12 +271,6 @@ class Etherpad extends Client
             }
         }
 
-
-        // lista de los tagg 'body'
-        $bodies = $dom->getElementsByTagName('body');
-
-        // cojo el primero de la lista: sólo debería haber uno.
-        $body = $bodies->item(0);
         //$txt = $body->C14N(); //innerhtml convierte <br> a <br></br>. Se usa lo de abajo:
         $txt = $body->ownerDocument->saveHTML($body);
         $txt2 = substr($txt, 6); // Quitar el tag <body> inicial

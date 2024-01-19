@@ -70,6 +70,21 @@
                     <style:paragraph-properties fo:break-before="page"/>
                 </style:style>
 
+                <style:style style:name="P2" style:family="paragraph" style:parent-style-name="Standard">
+                    <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm"
+                                                fo:margin-bottom="1cm" fo:text-align="center"
+                                                style:justify-single-word="false" fo:orphans="2" fo:widows="2"
+                                                fo:hyphenation-ladder-count="no-limit" fo:text-indent="0cm"
+                                                style:auto-text-indent="false"/>
+                    <style:text-properties fo:font-size="13pt" fo:language="es" fo:country="ES"
+                                           style:letter-kerning="false" style:font-size-asian="13pt"
+                                           style:language-asian="en" style:country-asian="US"
+                                           style:font-size-complex="13pt" style:language-complex="ar"
+                                           style:country-complex="SA" fo:hyphenate="true"
+                                           fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2"
+                                           loext:hyphenation-no-caps="false"/>
+                </style:style>
+
                 <style:style style:name="P3" style:family="paragraph" style:parent-style-name="Standard">
                     <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="end"
                                                 style:justify-single-word="false" fo:orphans="2" fo:widows="2"
@@ -576,17 +591,24 @@
             <xsl:when test="@class='sortarrow'">
             </xsl:when>
             <xsl:otherwise>
-                <!--	<xsl:apply-templates select="node()"/> -->
+                <xsl:apply-templates select="node()"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
     <xsl:template match="p">
         <xsl:choose>
+            <xsl:when test="@style='text-align:center'">
+                <text:p text:style-name="P2">
+                    <text:span text:style-name="T2">
+                        <xsl:apply-templates select="node()"/>
+                    </text:span>
+                </text:p>
+            </xsl:when>
             <xsl:when test="@style='text-align:right'">
                 <text:p text:style-name="fecha">
                     <text:span text:style-name="T2">
-                        <xsl:value-of select="node()"/>
+                        <xsl:apply-templates select="node()"/>
                     </text:span>
                 </text:p>
             </xsl:when>
