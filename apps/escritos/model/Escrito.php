@@ -386,7 +386,7 @@ class Escrito extends EscritoDB
                         $destinos_txt = $oProtDestino->ver_txt();
                         // segunda región, para escrito cabecera izquierda es: mi_dl
                         $segundaRegion = $_SESSION['oConfig']->getSigla();
-                        $destinos_txt = $oProtDestino->addSegundaRegion($destinos_txt, $segundaRegion);
+                        $destinos_txt = $oProtDestino->addSegundaRegion($destinos_txt, $segundaRegion, TRUE);
                     }
                 }
             } else {
@@ -402,7 +402,7 @@ class Escrito extends EscritoDB
                 $oArrayProtDestino = new ProtocoloArray($a_json_prot_dst, '', 'destinos');
                 // segunda región, para escrito cabecera izquierda es: mi_dl
                 $segundaRegion = $_SESSION['oConfig']->getSigla();
-                $destinos_txt = $oArrayProtDestino->ListaTxtBr($segundaRegion);
+                $destinos_txt = $oArrayProtDestino->ListaTxtBr($segundaRegion, TRUE);
             }
         }
         // grupos personalizados...

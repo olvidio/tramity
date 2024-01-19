@@ -140,7 +140,10 @@ class Protocolo
         return $anewRef;
     }
 
-    public function addSegundaRegion($protocolo, $segundaRegion)
+    /**
+     * @param $izquierda FALSE. Si es true se añade 'ref.' siempre.
+     */
+    public function addSegundaRegion(string $protocolo, string $segundaRegion, bool $izquierda=FALSE): string
     {
         $protocolo_rta = $protocolo;
         // solamente para las delegaciones/regiones
@@ -168,7 +171,14 @@ class Protocolo
                     if (empty($origen_prot)) {
                         $protocolo_rta = '<br>';
                     } else {
-                        $protocolo_rta = "ref. $origen-$segundaRegion $origen_prot".$mas;
+                        $protocolo_rta = '';
+                        if ($izquierda) {
+                            $ref = 'ref.';
+                        }
+                        if (!empty($ref)) {
+                            $protocolo_rta .= "$ref "; // añadir espacio
+                        }
+                        $protocolo_rta .= "$origen-$segundaRegion $origen_prot" . $mas;
                     }
                 }
             }

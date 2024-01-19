@@ -80,7 +80,7 @@ class Entrada extends EntradaDB
             $oLugar = new Lugar($id_org);
             $segundaRegion = $oLugar->getSigla();
             $oProtocolo = new Protocolo();
-            $destinos_txt = $oProtocolo->addSegundaRegion($destinos_txt, $segundaRegion);
+            $destinos_txt = $oProtocolo->addSegundaRegion($destinos_txt, $segundaRegion, TRUE);
         }
         // excepción para bypass
         if (!is_true($this->getBypass())) {
