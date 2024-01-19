@@ -7,9 +7,7 @@ use core\ConfigGlobal;
 use core\ServerConf;
 use DOMDocument;
 use DOMXPath;
-use Mpdf\HTMLParserMode;
 use Mpdf\Mpdf;
-use Mpdf\MpdfException;
 use web\StringLocal;
 
 /**
@@ -234,14 +232,47 @@ class Etherpad extends Client
         // Quitar los tags <p> dentro de los <li>
         $tags_list = $xpath->query("//p");
         foreach ($tags_list as $tag) {
-            // Move all tag content to its parent node just before it.
-            while ($tag->hasChildNodes()) {
-                $child = $tag->removeChild($tag->firstChild);
-                $tag->parentNode->insertBefore($child, $tag);
+            $aa = $tag->parentNode->tagName;
+            if ($tag->parentNode->tagName === 'li') {
+                // Move all tag content to its parent node just before it.
+                while ($tag->hasChildNodes()) {
+                    $child = $tag->removeChild($tag->firstChild);
+                    $tag->parentNode->insertBefore($child, $tag);
+                }
+                // Remove the span tag.
+                $tag->parentNode->removeChild($tag);
             }
-            // Remove the span tag.
-            $tag->parentNode->removeChild($tag);
         }
+
+        // nodos de texto sin estar dentro de <algo></algo>
+        // Selecciona todos los nodos de texto dentro del objeto DOMDocument
+        $bodies = $dom->getElementsByTagName('body');
+        $body = $bodies->item(0);
+        $childNodes = $body->childNodes;
+
+        // Itera sobre los nodos de texto
+        foreach ($childNodes as $node) {
+            // Obtiene el texto del nodo
+            if ($node->nodeType === XML_TEXT_NODE) {
+                $texto = $node->nodeValue;
+
+                // Verifica si el texto no contiene ninguna etiqueta HTML
+                if ($texto !== strip_tags($texto)) {
+                    // Si contiene etiquetas, sigue al siguiente nodo de texto
+                    continue;
+                }
+
+                // Crea un nuevo nodo de párrafo
+                $parrafoNode = $dom->createElement('p');
+
+                // Añade el texto original como hijo del nodo de párrafo
+                $parrafoNode->appendChild($dom->createTextNode($texto));
+
+                // Reemplaza el nodo de texto original con el nuevo nodo de párrafo
+                $node->parentNode->replaceChild($parrafoNode, $node);
+            }
+        }
+
 
         // lista de los tagg 'body'
         $bodies = $dom->getElementsByTagName('body');
@@ -274,7 +305,7 @@ class Etherpad extends Client
         $pattern = "/<br\ ?\/?>([^<].*?)<p\ ?\/?>/";
         $txt4_1 = preg_replace($pattern, "<p>$1</p><p>", $txt4);
         // eliminar párrafos vacíos: <p></p>
-        $txt4_2 = str_replace("<p></p>", "", $txt4_1);
+        $txt4_2 = str_replace("<p>\s*</p>", "", $txt4_1);
 
         // salto de página (4 o más ':' entre dos saltos de línea
         /* $txt7 = str_replace("/<br( *\/)?>:{4,}<br( *\/)?>/", "<div style=\"page-break-after: always;\"></div>", $txt6); */
