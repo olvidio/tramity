@@ -438,7 +438,7 @@ class Escrito extends EscritoDB
         }
 
         if (!empty($aRef['dst_org'])) {
-            $destinos_txt .= '<br>';
+            $destinos_txt .= ($destinos_txt !== '<br>')? '<br>' : '';
             $destinos_txt .= $aRef['dst_org'];
         }
         return $destinos_txt;

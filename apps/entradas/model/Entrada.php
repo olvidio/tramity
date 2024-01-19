@@ -68,9 +68,7 @@ class Entrada extends EntradaDB
      */
     public function cabeceraIzquierda(): string
     {
-        // sigla +(visibilidad) + ref
-        $oVisibilidad = new Visibilidad();
-
+        // sigla + ref
         $sigla = $_SESSION['oConfig']->getSigla();
         $destinos_txt = $sigla;
         // segunda región, para entrada cabecera izquierda es la región origen
@@ -82,24 +80,7 @@ class Entrada extends EntradaDB
             $oProtocolo = new Protocolo();
             $destinos_txt = $oProtocolo->addSegundaRegion($destinos_txt, $segundaRegion, TRUE);
         }
-        // excepción para bypass
-        if (!is_true($this->getBypass())) {
-            $visibilidad = $this->getVisibilidad();
-            // si soy dl o ctr
-            if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
-                if ($visibilidad !== NULL && $visibilidad !== Visibilidad::V_CTR_TODOS) {
-                    $a_visibilidad_dl = $oVisibilidad->getArrayVisibilidadDl();
-                    $visibilidad_txt = $a_visibilidad_dl[$visibilidad];
-                    $destinos_txt .= " ($visibilidad_txt)";
-                }
-            } else {
-                if ($visibilidad !== NULL && $visibilidad !== Visibilidad::V_CTR_TODOS) {
-                    $a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
-                    $visibilidad_txt = $a_visibilidad_dst[$visibilidad];
-                    $destinos_txt .= " ($visibilidad_txt)";
-                }
-            }
-        }
+
 
         $gesLugares = new GestorLugar();
         $cLugares = $gesLugares->getLugares(['sigla' => $sigla]);
@@ -120,7 +101,7 @@ class Entrada extends EntradaDB
         }
 
         if (!empty($aRef['dst_org'])) {
-            $destinos_txt .= '<br>';
+            $destinos_txt .= ($destinos_txt !== '<br>')? '<br>' : '';
             $destinos_txt .= $aRef['dst_org'];
         }
         return $destinos_txt;
