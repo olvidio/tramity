@@ -54,6 +54,7 @@ if (!empty($Qid_entrada)) {
 
 
     // excepción para bypass
+    $visibilidad_txt = '';
     if (!is_true($oEntrada->getBypass())) {
         $oVisibilidad = new Visibilidad();
         $visibilidad = $oEntrada->getVisibilidad();
