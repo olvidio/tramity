@@ -390,9 +390,16 @@
             </xsl:when>
             <xsl:when test="@class='indent'">
                 <xsl:for-each select="li">
-                    <text:p text:style-name="subApartado">
-                        <xsl:apply-templates select="node()"/>
-                    </text:p>
+                    <xsl:choose>
+                        <xsl:when test="ul//li">
+                            <xsl:apply-templates select="node()"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <text:p text:style-name="subApartado">
+                                <xsl:apply-templates select="node()"/>
+                            </text:p>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:for-each>
             </xsl:when>
             <xsl:otherwise>
