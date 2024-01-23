@@ -234,7 +234,7 @@
                 <text:list-style style:name="L2">
                     <text:list-level-style-number text:level="1" text:style-name="Numbering_20_Symbols"
                                                   loext:num-list-format="%1%)" style:num-suffix=")"
-                                                  style:num-format="a">
+                                                  style:num-format="1">
                         <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
                             <style:list-level-label-alignment text:label-followed-by="listtab"
                                                               text:list-tab-stop-position="3.27cm"
@@ -243,7 +243,7 @@
                     </text:list-level-style-number>
                     <text:list-level-style-number text:level="2" text:style-name="Numbering_20_Symbols"
                                                   loext:num-list-format="%2%." style:num-suffix="."
-                                                  style:num-format="1">
+                                                  style:num-format="a">
                         <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
                             <style:list-level-label-alignment text:label-followed-by="listtab"
                                                               text:list-tab-stop-position="3.905cm"
@@ -372,121 +372,6 @@
         </text:h>
     </xsl:template>
 
-    <xsl:template name="table_cols">
-        <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard">
-            <style:paragraph-properties>
-                <style:tab-stops>
-                    <xsl:for-each select="descendant::th">
-                        <xsl:variable name="colnum" select="position()"/>
-                        <xsl:if test="@tab-width">
-                            <xsl:variable name="ww" select="@tab-width * 2 div 100"/>
-                            <style:tab-stop style:position="{$ww}cm"/>
-                        </xsl:if>
-                    </xsl:for-each>
-                </style:tab-stops>
-            </style:paragraph-properties>
-        </style:style>
-    </xsl:template>
-
-    <xsl:template match="table">
-        <!-- <table:table-column table:style-name="Table1.A" table:number-columns-repeated="2"/> -->
-        <!-- FIXME: should not do this... instead simply apply on node() and have template matches for tr[th] -->
-        <xsl:if test="child::thead">
-            <xsl:apply-templates select="thead"/>
-        </xsl:if>
-        <xsl:if test="child::tbody">
-            <xsl:apply-templates select="tbody"/>
-        </xsl:if>
-        <xsl:if test="child::tr">
-            <xsl:apply-templates select="tr"/>
-        </xsl:if>
-    </xsl:template>
-
-
-    <xsl:template match="tbody|thead">
-        <xsl:apply-templates select="tr"/>
-    </xsl:template>
-
-
-    <xsl:template name="subtable">
-        <xsl:choose>
-            <xsl:when test="descendant::h3|descendant::h2">
-                <xsl:apply-templates select="node()"/>
-            </xsl:when>
-            <xsl:when test="child::td/h3|child::td/h2|child::td/b">
-                <xsl:apply-templates select="td"/>
-            </xsl:when>
-            <xsl:when test="child::td/h3|child::th/h2|child::th/b">
-                <xsl:apply-templates select="th"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <text:p text:style-name="P1">
-                    <xsl:apply-templates select="node()"/>
-                </text:p>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-
-    <xsl:template match="tr">
-        <xsl:call-template name="subtable"/>
-    </xsl:template>
-
-    <xsl:template match="td|th">
-        <xsl:choose>
-            <xsl:when test="child::table">
-                <xsl:for-each select="table/thead/tr|table/tr">
-                    <xsl:call-template name="subtable"/>
-                </xsl:for-each>
-                <xsl:for-each select="table/tbody/tr|table/tr">
-                    <xsl:call-template name="subtable"/>
-                </xsl:for-each>
-            </xsl:when>
-            <xsl:when test="@class='alert'">
-                <text:tab/>
-                <text:span text:style-name="T2">
-                    <xsl:value-of select="node()"/>
-                </text:span>
-            </xsl:when>
-            <xsl:when test="@tipo='no_print'">
-            </xsl:when>
-            <xsl:when test="@tipo='notext'">
-            </xsl:when>
-            <xsl:when test="@tipo='sel'">
-            </xsl:when>
-            <xsl:when test="./p">
-                <text:tab/>
-                <xsl:value-of select="normalize-space(string(./p))"/>
-            </xsl:when>
-            <xsl:when test="descendant::h3|descendant::h2">
-                <text:h text:style-name="Heading_20_3" text:outline-level="3">
-                    <xsl:value-of select="current()"/>
-                </text:h>
-            </xsl:when>
-            <xsl:when test="child::h3|child::h2|child::b">
-                <xsl:call-template name="text_applyer"/>
-            </xsl:when>
-
-            <xsl:otherwise>
-                <xsl:choose>
-                    <xsl:when test="preceding-sibling::td[@tipo='sel']">
-                        <!-- En la primera col no pongo tabulador (tampoco en el select) -->
-                        <xsl:if test="position() > 2">
-                            <text:tab/>
-                        </xsl:if>
-                        <xsl:call-template name="text_applyer"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <!-- En la primera col no pongo tabulador -->
-                        <xsl:if test="position() > 1">
-                            <text:tab/>
-                        </xsl:if>
-                        <xsl:call-template name="text_applyer"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-
     <xsl:template match="a">
         <xsl:call-template name="text_applyer"/>
     </xsl:template>
@@ -495,69 +380,57 @@
         <xsl:choose>
             <xsl:when test="@class='number'">
                 <text:list text:style-name="L2">
-                    <xsl:for-each select="li">
-                        <text:list-item>
-                            <text:p text:style-name="subApartado">
-                                <xsl:apply-templates select="node()"/>
-                            </text:p>
-                        </text:list-item>
-                    </xsl:for-each>
+                    <xsl:apply-templates select="node()"/>
                 </text:list>
             </xsl:when>
             <xsl:when test="@class='bullet'">
                 <text:list text:style-name="L1">
-                    <xsl:for-each select="li">
-                        <text:list-item>
-                            <text:p text:style-name="subApartado">
-                                <xsl:apply-templates select="node()"/>
-                            </text:p>
-                        </text:list-item>
-                    </xsl:for-each>
+                    <xsl:apply-templates select="node()"/>
                 </text:list>
             </xsl:when>
             <xsl:when test="@class='indent'">
                 <xsl:for-each select="li">
-                        <text:p text:style-name="subApartado">
-                            <xsl:apply-templates select="node()"/>
-                        </text:p>
+                    <text:p text:style-name="subApartado">
+                        <xsl:apply-templates select="node()"/>
+                    </text:p>
                 </xsl:for-each>
             </xsl:when>
             <xsl:otherwise>
                 <!--	<xsl:apply-templates select="node()"/> -->
             </xsl:otherwise>
         </xsl:choose>
-
     </xsl:template>
 
     <xsl:template match="ol">
         <text:list text:style-name="L2">
-            <!-- FIXME: should not do this... instead simply apply on node() and have template matches for li -->
-            <xsl:for-each select="li">
-                <text:list-item>
-                    <text:p text:style-name="subApartado">
-                        <xsl:call-template name="text_applyer"/>
-                    </text:p>
-                </text:list-item>
-            </xsl:for-each>
+            <xsl:apply-templates select="node()"/>
         </text:list>
     </xsl:template>
 
-    <xsl:template match="td/p">
-        <!-- la primera p la pongo en la misma linea -->
+    <xsl:template match="li">
         <xsl:choose>
-            <xsl:when test="position() > 1">
-                <text:p text:style-name="P1">
-                    <xsl:for-each select="../../td">
-                        <!-- En la primera col no pongo tabulador -->
-                        <xsl:if test="position() > 2">
-                            <text:tab/>
-                        </xsl:if>
-                    </xsl:for-each>
-                    <xsl:value-of select="normalize-space(string(.))"/>
-                </text:p>
+            <xsl:when test="ol">
+                <text:list-item>
+                    <text:p text:style-name="subApartado">
+                        <xsl:apply-templates select="node()"/>
+                    </text:p>
+                    <xsl:apply-templates select="ol"/>
+                </text:list-item>
+            </xsl:when>
+            <xsl:when test="ul">
+                <text:list-item>
+                    <text:p text:style-name="subApartado">
+                        <xsl:apply-templates select="node()"/>
+                    </text:p>
+                    <xsl:apply-templates select="ul"/>
+                </text:list-item>
             </xsl:when>
             <xsl:otherwise>
-                <!-- <xsl:value-of select="."/> -->
+                <text:list-item>
+                    <text:p text:style-name="subApartado">
+                        <xsl:apply-templates select="node()"/>
+                    </text:p>
+                </text:list-item>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>

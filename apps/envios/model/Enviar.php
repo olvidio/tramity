@@ -135,7 +135,7 @@ class Enviar
         $file_pdf = $this->oEtherpad->generarLOPDF($filename_uniq, $a_header, $this->f_salida);
         $this->contentFile = file_get_contents($file_pdf);
         // borrar los archivos temporales
-        borrar_tmp($filename_uniq);
+        //borrar_tmp($filename_uniq);
 
         return ['content' => $this->contentFile,
             'name' => $this->filename,

@@ -143,8 +143,28 @@ class Etherpad extends Client
         $contenido = $this->getHHtml();
 
         // acabar bien los <ul> o los <ol>
-        $pattern = "/(?<!<\/li>)(<\/[ou]l>)/";
-        $contenido = preg_replace($pattern, "</li>$1", $contenido);
+        //$pattern = "/(?<!<\/li>)(<\/[ou]l>)/";
+        //$contenido = preg_replace($pattern, "</li>$1", $contenido);
+
+        // Unificar posibles <br />  a <br> simple>
+        $pattern = "/<br.*?\/?>/";
+        $contenido_1 = preg_replace($pattern, "<br>", $contenido);
+        //<br value="tblBreak">
+        $contenido_2 = str_replace("<br value=\"tblBreak\">", "", $contenido_1);
+
+        // añadir tag <br> al inicio
+        //$txt3_4 = '<br>' . $txt3_2;
+        $contenido_3 = str_replace("<body>", "<body><br>", $contenido_2);
+
+        // y después poner entre <p> el texto entre <br> (siempre que no esté ya encapsulado en algo '<xx>')
+        $pattern = "/<br\ ?\/?>([^<].*?)<br\ ?\/?>/";
+        $contenido_4 = preg_replace($pattern, "<p>$1</p><br>", $contenido_3);
+
+        // También poner entre <p> el texto entre <br> y <p>
+        $pattern = "/<br\ ?\/?>([^<].*?)<p\ ?\/?>/";
+        $contenido_4_1 = preg_replace($pattern, "<p>$1</p><p>", $contenido_4);
+        // eliminar párrafos vacíos: <p></p>
+        $contenido_4_2 = str_replace("<p>\s*</p>", "", $contenido_4_1);
 
         $dom = new DOMDocument;
         /* la '@' sirve para evita los errores:  Warning: DOMDocument::loadHTML()
@@ -153,7 +173,7 @@ class Etherpad extends Client
          * You can alter the code to suppress markup errors:-
          *      $file = @$doc->loadHTML($remote);
          */
-        @$dom->loadHTML($contenido);
+        @$dom->loadHTML($contenido_4_2);
 
         /* Quitar las marcas de comentarios:
          *
@@ -250,6 +270,7 @@ class Etherpad extends Client
         $body = $bodies->item(0);
         $childNodes = $body->childNodes;
 
+        $txta = $body->ownerDocument->saveHTML($body);
         // Itera sobre todos los nodos
         foreach ($childNodes as $node) {
             // Solamente interesa los nodos de texto
@@ -272,18 +293,11 @@ class Etherpad extends Client
         $txt2 = substr($txt, 6); // Quitar el tag <body> inicial
         $txt3 = substr($txt2, 0, -7); // Quitar el tag </body> final
 
-        // Unificar posibles <br />  a <br> simple>
-        $pattern = "/<br.*?\/?>/";
-        $txt3_1 = preg_replace($pattern, "<br>", $txt3);
-        //<br value="tblBreak">
-        $txt3_2 = str_replace("<br value=\"tblBreak\">", "", $txt3_1);
 
-        // añadir tag <br> al inicio
-        $txt3_4 = '<br>' . $txt3_2;
-
+        /*
         // Añadir <br> delante del texto entre una etiqueta distinta de <br> y el siguiente <br>
         $pattern = "/(?<!br)>([^>]+)(?=<br>)/";
-        $txt3_5 = preg_replace($pattern, "><br>$1", $txt3_4);
+        $txt3_5 = preg_replace($pattern, "><br>$1", $txt3_2);
 
         // y después poner entre <p> el texto entre <br> (siempre que no esté ya encapsulado en algo '<xx>')
         $pattern = "/<br\ ?\/?>([^<].*?)<br\ ?\/?>/";
@@ -292,12 +306,14 @@ class Etherpad extends Client
         // También poner entre <p> el texto entre <br> y <p>
         $pattern = "/<br\ ?\/?>([^<].*?)<p\ ?\/?>/";
         $txt4_1 = preg_replace($pattern, "<p>$1</p><p>", $txt4);
+
         // eliminar párrafos vacíos: <p></p>
         $txt4_2 = str_replace("<p>\s*</p>", "", $txt4_1);
+        */
 
         // salto de página (4 o más ':' entre dos saltos de línea
         /* $txt7 = str_replace("/<br( *\/)?>:{4,}<br( *\/)?>/", "<div style=\"page-break-after: always;\"></div>", $txt6); */
-        $txt6 = preg_replace("/:{4,}/", "<div class='salta_pag'></div>", $txt4_2);
+        $txt6 = preg_replace("/:{4,}/", "<div class='salta_pag'></div>", $txt3);
 
         // eliminar dobles lineas: <br><br>
         //$txt3_5 = str_replace("<br><br>", "<br>", $txt3_4);
