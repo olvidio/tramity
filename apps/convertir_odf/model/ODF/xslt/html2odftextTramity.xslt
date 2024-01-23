@@ -376,10 +376,12 @@
         <xsl:call-template name="text_applyer"/>
     </xsl:template>
 
+
+
     <xsl:template match="ul">
         <xsl:choose>
             <xsl:when test="@class='number'">
-                <text:list text:style-name="L2">
+                <text:list  text:style-name="Numbering_20_123">
                     <xsl:apply-templates select="node()"/>
                 </text:list>
             </xsl:when>
@@ -409,7 +411,13 @@
     </xsl:template>
 
     <xsl:template match="ol">
-        <text:list text:style-name="L2">
+        <text:list  text:style-name="Numbering_20_123">
+            <xsl:apply-templates select="node()"/>
+        </text:list>
+    </xsl:template>
+
+    <xsl:template match="ol//ol">
+        <text:list text:style-name="Numbering_20_abc">
             <xsl:apply-templates select="node()"/>
         </text:list>
     </xsl:template>
@@ -418,23 +426,24 @@
         <xsl:choose>
             <xsl:when test="ol">
                 <text:list-item>
-                    <text:p text:style-name="subApartado">
-                        <xsl:apply-templates select="node()"/>
+                    <text:p text:style-name="Lista1">
+                        <!-- <xsl:apply-templates select="node() except ol"/> -->
+                        <xsl:apply-templates select="node()[not(self::ol)]"/>
                     </text:p>
-                    <xsl:apply-templates select="ol"/>
+                    <xsl:apply-templates select="ol" />
                 </text:list-item>
             </xsl:when>
             <xsl:when test="ul">
                 <text:list-item>
-                    <text:p text:style-name="subApartado">
-                        <xsl:apply-templates select="node()"/>
+                    <text:p text:style-name="Lista1">
+                        <xsl:apply-templates select="text()"/>
                     </text:p>
                     <xsl:apply-templates select="ul"/>
                 </text:list-item>
             </xsl:when>
             <xsl:otherwise>
                 <text:list-item>
-                    <text:p text:style-name="subApartado">
+                    <text:p text:style-name="Lista1">
                         <xsl:apply-templates select="node()"/>
                     </text:p>
                 </text:list-item>
@@ -449,11 +458,23 @@
                     <xsl:value-of select="node()"/>
                 </text:h>
             </xsl:when>
+            <xsl:when test="span">
+                <xsl:value-of select="span"/>
+            </xsl:when>
+            <xsl:when test="strong">
+                <xsl:value-of select="strong"/>
+            </xsl:when>
+            <xsl:when test="u">
+                <xsl:value-of select="u"/>
+            </xsl:when>
+            <xsl:when test="em">
+                <xsl:value-of select="em"/>
+            </xsl:when>
             <xsl:when test="text()">
                 <xsl:value-of select="normalize-space(string(.))"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:apply-templates select="node()"/>
+                rrr<!-- <xsl:apply-templates select="node()"/> -->
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>

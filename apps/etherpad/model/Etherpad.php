@@ -138,7 +138,7 @@ class Etherpad extends Client
      *
      * @return string html
      */
-    private function cleanHtml()
+    private function cleanHtml($fecha = '')
     {
         $contenido = $this->getHHtml();
 
@@ -313,7 +313,7 @@ class Etherpad extends Client
 
         // salto de página (4 o más ':' entre dos saltos de línea
         /* $txt7 = str_replace("/<br( *\/)?>:{4,}<br( *\/)?>/", "<div style=\"page-break-after: always;\"></div>", $txt6); */
-        $txt6 = preg_replace("/:{4,}/", "<div class='salta_pag'></div>", $txt3);
+        $txt6 = preg_replace("#<p>:{4,}</p>#", "<fecha>$fecha</fecha><div class='salta_pag'></div>", $txt3);
 
         // eliminar dobles lineas: <br><br>
         //$txt3_5 = str_replace("<br><br>", "<br>", $txt3_4);
@@ -669,7 +669,7 @@ class Etherpad extends Client
      */
     public function generarODT(string $filename_sin_ext, array $a_header = [], string $fecha = ''): string
     {
-        $html = $this->cleanHtml();
+        $html = $this->cleanHtml($fecha);
 
         return (new Etherpad2ODF())->crearFicheroOdt($filename_sin_ext, $html, $a_header, $fecha);
     }
