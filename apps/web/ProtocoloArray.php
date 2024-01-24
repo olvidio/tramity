@@ -104,6 +104,9 @@ class ProtocoloArray extends Protocolo
                 }
             }
         }
+        if (empty($aRef['dst_org']) && empty($aRef['local'])) {
+            $aRef = [];
+        }
         return $aRef;
     }
 
