@@ -163,8 +163,11 @@ class Etherpad extends Client
         // También poner entre <p> el texto entre <br> y <p>
         $pattern = "/<br\ ?\/?>([^<].*?)<p\ ?\/?>/";
         $contenido_4_1 = preg_replace($pattern, "<p>$1</p><p>", $contenido_4);
+        // También añadir <p> después de <ul> s hay texto sin marca
+        $pattern = "/(<\/[ou]l>)([^<].*?)<\/p>/";
+        $contenido_4_2 = preg_replace($pattern, "$1<p>$2</p>", $contenido_4_1);
         // eliminar párrafos vacíos: <p></p>
-        $contenido_4_2 = str_replace("<p>\s*</p>", "", $contenido_4_1);
+        $contenido_4_3 = str_replace("<p>\s*</p>", "", $contenido_4_2);
 
         $dom = new DOMDocument;
         /* la '@' sirve para evita los errores:  Warning: DOMDocument::loadHTML()
@@ -173,7 +176,7 @@ class Etherpad extends Client
          * You can alter the code to suppress markup errors:-
          *      $file = @$doc->loadHTML($remote);
          */
-        @$dom->loadHTML($contenido_4_2);
+        @$dom->loadHTML($contenido_4_3);
 
         /* Quitar las marcas de comentarios:
          *

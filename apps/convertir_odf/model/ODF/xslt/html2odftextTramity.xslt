@@ -355,19 +355,19 @@
     </xsl:template>
 
     <xsl:template match="h2">
-        <text:h text:style-name="Heading_20_2" text:outline-level="1">
+        <text:h text:style-name="Heading_20_2" text:outline-level="2">
             <xsl:apply-templates select="node()"/>
         </text:h>
     </xsl:template>
 
     <xsl:template match="h3">
-        <text:h text:style-name="Heading_20_3" text:outline-level="1">
+        <text:h text:style-name="Heading_20_3" text:outline-level="3">
             <xsl:apply-templates select="node()"/>
         </text:h>
     </xsl:template>
 
     <xsl:template match="h4">
-        <text:h text:style-name="Heading_20_4" text:outline-level="1">
+        <text:h text:style-name="Heading_20_4" text:outline-level="4">
             <xsl:apply-templates select="node()"/>
         </text:h>
     </xsl:template>
@@ -377,11 +377,42 @@
     </xsl:template>
 
 
-
+    <!--
+        <xsl:template match="ul">
+            <xsl:choose>
+                <xsl:when test="@class='number'">
+                    <text:list  text:style-name="Numbering_20_123">
+                        <xsl:apply-templates select="node()"/>
+                    </text:list>
+                </xsl:when>
+                <xsl:when test="@class='bullet'">
+                    <text:list text:style-name="L1">
+                        <xsl:apply-templates select="node()"/>
+                    </text:list>
+                </xsl:when>
+                <xsl:when test="@class='indent'">
+                    <xsl:for-each select="li">
+                        <xsl:choose>
+                            <xsl:when test="ul//li">
+                                <xsl:apply-templates select="node()"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <text:p text:style-name="subApartado">
+                                    <xsl:apply-templates select="node()"/>
+                                </text:p>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:for-each>
+                </xsl:when>
+                <xsl:otherwise>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:template>
+    -->
     <xsl:template match="ul">
         <xsl:choose>
             <xsl:when test="@class='number'">
-                <text:list  text:style-name="Numbering_20_123">
+                <text:list text:style-name="Numbering_20_123">
                     <xsl:apply-templates select="node()"/>
                 </text:list>
             </xsl:when>
@@ -391,27 +422,35 @@
                 </text:list>
             </xsl:when>
             <xsl:when test="@class='indent'">
-                <xsl:for-each select="li">
-                    <xsl:choose>
-                        <xsl:when test="ul//li">
-                            <xsl:apply-templates select="node()"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <text:p text:style-name="subApartado">
-                                <xsl:apply-templates select="node()"/>
-                            </text:p>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:for-each>
+                <xsl:apply-templates select="node()"/>
             </xsl:when>
             <xsl:otherwise>
-                <!--	<xsl:apply-templates select="node()"/> -->
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template match="ul//ul">
+        <xsl:choose>
+            <xsl:when test="@class='number'">
+                <text:list text:style-name="Numbering_20_123">
+                    <xsl:apply-templates select="node()"/>
+                </text:list>
+            </xsl:when>
+            <xsl:when test="@class='bullet'">
+                <text:list text:style-name="L1">
+                    <xsl:apply-templates select="node()"/>
+                </text:list>
+            </xsl:when>
+            <xsl:when test="@class='indent'">
+                <xsl:apply-templates select="node()"/>
+            </xsl:when>
+            <xsl:otherwise>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
     <xsl:template match="ol">
-        <text:list  text:style-name="Numbering_20_123">
+        <text:list text:style-name="Numbering_20_123">
             <xsl:apply-templates select="node()"/>
         </text:list>
     </xsl:template>
@@ -430,24 +469,95 @@
                         <!-- <xsl:apply-templates select="node() except ol"/> -->
                         <xsl:apply-templates select="node()[not(self::ol)]"/>
                     </text:p>
-                    <xsl:apply-templates select="ol" />
+                    <xsl:apply-templates select="ol"/>
                 </text:list-item>
             </xsl:when>
             <xsl:when test="ul">
-                <text:list-item>
-                    <text:p text:style-name="Lista1">
-                        <xsl:apply-templates select="text()"/>
-                    </text:p>
-                    <xsl:apply-templates select="ul"/>
-                </text:list-item>
+                <xsl:choose>
+                    <xsl:when test="@class='number'">
+                        <text:list-item>
+                            <text:list text:style-name="Numbering_20_123">
+                                <xsl:apply-templates select="node()[not(self::ul)]"/>
+                            </text:list>
+                        </text:list-item>
+                    </xsl:when>
+                    <xsl:when test="parent::ul[@class='bullet']">
+                        <text:list-item>
+                            <xsl:call-template name="bullet_applyer"/>
+                            <xsl:apply-templates select="ul"/>
+                        </text:list-item>
+                    </xsl:when>
+                    <xsl:when test="parent::ul[@class='indent']">
+                        <xsl:call-template name="tabs_applyer"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:apply-templates select="node()[not(self::ul)]"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:apply-templates select="ul"/>
             </xsl:when>
             <xsl:otherwise>
-                <text:list-item>
-                    <text:p text:style-name="Lista1">
-                        <xsl:apply-templates select="node()"/>
-                    </text:p>
-                </text:list-item>
+                <xsl:choose>
+                    <xsl:when test="parent::ul[@class='indent']">
+                        <xsl:call-template name="tabs_applyer"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <text:list-item>
+                            <xsl:call-template name="bullet_applyer"/>
+                        </text:list-item>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template name="bullet_applyer">
+        <xsl:variable name="nodes" select="ancestor::ul"/>
+        <xsl:choose>
+            <xsl:when test="count($nodes) = 1">
+                <text:p text:style-name="Lista2Bullet">
+                    <xsl:apply-templates select="node()[not(self::ul)]"/>
+                </text:p>
+            </xsl:when>
+            <xsl:when test="count($nodes) = 2">
+                <text:p text:style-name="subApartado2">
+                    <xsl:apply-templates select="node()[not(self::ul)]"/>
+                </text:p>
+            </xsl:when>
+            <xsl:when test="count($nodes) = 3">
+                <text:p text:style-name="subApartado3">
+                    <xsl:apply-templates select="node()[not(self::ul)]"/>
+                </text:p>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template name="tabs_applyer">
+        <!-- para la versión de poner tabuladores
+        <text:p text:style-name="P3">
+        <xsl:for-each select="ancestor::ul">
+            <text:tab/>
+        </xsl:for-each>
+            <xsl:apply-templates select="node()[not(self::ul)]"/>
+        </text:p>
+        -->
+        <xsl:variable name="nodes" select="ancestor::ul"/>
+        <xsl:choose>
+            <xsl:when test="count($nodes) = 1">
+                <text:p text:style-name="Lista2Sin">
+                    <xsl:apply-templates select="node()[not(self::ul)]"/>
+                </text:p>
+            </xsl:when>
+            <xsl:when test="count($nodes) = 2">
+                <text:p text:style-name="subApartado2">
+                    <xsl:apply-templates select="node()[not(self::ul)]"/>
+                </text:p>
+            </xsl:when>
+            <xsl:when test="count($nodes) = 3">
+                <text:p text:style-name="subApartado3">
+                    <xsl:apply-templates select="node()[not(self::ul)]"/>
+                </text:p>
+            </xsl:when>
         </xsl:choose>
     </xsl:template>
 
