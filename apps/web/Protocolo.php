@@ -149,13 +149,13 @@ class Protocolo
         // solamente para las delegaciones/regiones
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
             //Eso 8/23
-            $pattern = '/^\s*(ref.)?\s*(\P{N}+)(\s+\d+\/\d{2})?,?(\s*\w*\s*)$/u';
+            $pattern = '/^\s*(ref.)?\s*(\P{N}*?)(\s+\d+\/\d{2})?(,[^\/]*)?$/u';
             $coincide = preg_match($pattern, $protocolo, $matches);
             if ($coincide === 1) {
                 $ref = trim($matches[1]);
                 $origen = trim($matches[2]);
                 $origen_prot = empty($matches[3]) ? '' : $matches[3];
-                $mas = empty($matches[4]) ? '' : ', '.trim($matches[4]);
+                $mas = empty($matches[4]) ? '' : trim($matches[4]);
 
                 $gesLugar = new GestorLugar();
                 // region de la sigla del protocolo (puede ser un ctr o dl)
