@@ -161,7 +161,7 @@ class Protocolo
                 // region de la sigla del protocolo (puede ser un ctr o dl)
                 $cLugares = $gesLugar->getLugares(['sigla' => $origen]);
                 if (empty($cLugares[0])) {
-                    echo sprintf(_("No encuentro el lugar para la sigla: %s"),$origen);
+                    echo sprintf(_("No encuentro el lugar para la sigla: %s en protocolo: %s"),$origen,$protocolo);
                     return $protocolo;
                 }
                 $oLugar = $cLugares[0];
