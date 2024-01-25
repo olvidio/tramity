@@ -147,7 +147,7 @@ class Protocolo
     {
         $protocolo_rta = $protocolo;
         // solamente para las delegaciones/regiones
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL && !empty($protocolo)) {
             //Eso 8/23
             $pattern = '/^\s*(ref.)?\s*(\P{N}*?)(\s+\d+\/\d{2})?(,[^\/]*)?$/u';
             $coincide = preg_match($pattern, $protocolo, $matches);
