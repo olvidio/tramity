@@ -509,6 +509,8 @@ class Enviar
         $DIR_CORREO = '/home/correodlp';
         $err_mail = '';
         $fecha_hora = date('ymd');
+        $asunto = '';
+        $filename = '';
 
         // generar un nuevo content, con la cabecera al ctr concreto.
         $this->getDocumento();
@@ -529,7 +531,8 @@ class Enviar
             $filename = preg_replace('/(.*)\(.*\)(.*)/', '$1(varios)$2', $filename);
         }
 
-        $filename_utf8 = $fecha_hora . '-' . $filename . '-' . trim($asunto);
+        $asunto_saneado = preg_replace('/[.<>:"\'\/\\|?*]/', '', $asunto);
+        $filename_utf8 = $fecha_hora . '-' . $filename . '-' . trim($asunto_saneado);
         $this->filename = $filename_utf8;
         $this->filename_iso = mb_convert_encoding($filename_utf8, 'ISO-8859-1', 'UTF-8');
         // escribir en el directorio para bonita
