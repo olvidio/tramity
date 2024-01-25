@@ -160,6 +160,10 @@ class Protocolo
                 $gesLugar = new GestorLugar();
                 // region de la sigla del protocolo (puede ser un ctr o dl)
                 $cLugares = $gesLugar->getLugares(['sigla' => $origen]);
+                if (empty($cLugares[0])) {
+                    echo sprintf(_("No encuentro el lugar para la sigla: %s"),$origen);
+                    return $protocolo;
+                }
                 $oLugar = $cLugares[0];
                 $region_1 = $oLugar->getRegion();
                 // region de la sigla a añadir
