@@ -40,7 +40,7 @@
     /* intentar explotar el protocolo en lugar, num y año */
     fnjs_protocolo = function (nom_lugar, num, any, siguiente) {
         var protocolo = $('#protocolo').val();
-        var expresion_regular = new RegExp('\\s*((\\w*\\s*)*)\\s+([0-9]+)\/([0-9]+)', 'g');
+        var expresion_regular = new RegExp('\\s*((\\p{L}*\\s*)*)\\s+([0-9]+)\/([0-9]+)', 'gu');
         var resultado = expresion_regular.exec(protocolo);
 
         if (resultado) {
