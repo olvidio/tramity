@@ -409,6 +409,7 @@
             </xsl:choose>
         </xsl:template>
     -->
+
     <xsl:template match="ul">
         <xsl:choose>
             <xsl:when test="@class='number'">
@@ -451,6 +452,7 @@
 
     <xsl:template match="ol">
         <text:list text:style-name="Numbering_20_123">
+            a
             <xsl:apply-templates select="node()"/>
         </text:list>
     </xsl:template>
@@ -463,12 +465,9 @@
 
     <xsl:template match="li">
         <xsl:choose>
-            <xsl:when test="ol">
+            <xsl:when test="parent::ol">
                 <text:list-item>
-                    <text:p text:style-name="Lista1">
-                        <!-- <xsl:apply-templates select="node() except ol"/> -->
-                        <xsl:apply-templates select="node()[not(self::ol)]"/>
-                    </text:p>
+                    <xsl:call-template name="nums_applyer"/>
                     <xsl:apply-templates select="ol"/>
                 </text:list-item>
             </xsl:when>
@@ -502,12 +501,34 @@
                         <xsl:call-template name="tabs_applyer"/>
                     </xsl:when>
                     <xsl:otherwise>
+                        e
                         <text:list-item>
                             <xsl:call-template name="bullet_applyer"/>
                         </text:list-item>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template name="nums_applyer">
+        <xsl:variable name="nodes" select="ancestor::ol"/>
+        <xsl:choose>
+            <xsl:when test="count($nodes) = 1">
+                <text:p text:style-name="Lista1">
+                    <xsl:apply-templates select="node()[not(self::ol)]"/>
+                </text:p>
+            </xsl:when>
+            <xsl:when test="count($nodes) = 2">
+                <text:p text:style-name="Lista2Num">
+                    <xsl:apply-templates select="node()[not(self::ol)]"/>
+                </text:p>
+            </xsl:when>
+            <xsl:when test="count($nodes) = 3">
+                <text:p text:style-name="subApartado3">
+                    <xsl:apply-templates select="node()[not(self::ol)]"/>
+                </text:p>
+            </xsl:when>
         </xsl:choose>
     </xsl:template>
 
