@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $Qcompartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
 }
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $QQid_entrada = rawurldecode( (string)filter_input(INPUT_GET, 'id_entrada'));
+    $QQid_entrada = rawurldecode((string)filter_input(INPUT_GET, 'id_entrada'));
     $a_entrada = explode('#', $QQid_entrada);
     $Qid_entrada = (int)$a_entrada[0];
     $Qcompartida = !empty($a_entrada[1]) && is_true($a_entrada[1]);
@@ -53,22 +53,19 @@ if (!empty($Qid_entrada)) {
     $f_entrada = $oEntrada->getF_entrada()->getFromLocal();
 
 
-    // excepción para bypass
     $visibilidad_txt = '';
-    if (!is_true($oEntrada->getBypass())) {
-        $oVisibilidad = new Visibilidad();
-        $visibilidad = $oEntrada->getVisibilidad();
-        // si soy dl o ctr
-        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
-            if ($visibilidad !== NULL && $visibilidad !== Visibilidad::V_CTR_TODOS) {
-                $a_visibilidad_dl = $oVisibilidad->getArrayVisibilidadDl();
-                $visibilidad_txt = "(".$a_visibilidad_dl[$visibilidad].")";
-            }
-        } else {
-            if ($visibilidad !== NULL && $visibilidad !== Visibilidad::V_CTR_TODOS) {
-                $a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
-                $visibilidad_txt = "(".$a_visibilidad_dst[$visibilidad].")";
-            }
+    $oVisibilidad = new Visibilidad();
+    $visibilidad = $oEntrada->getVisibilidad();
+    // si soy dl o ctr
+    if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
+        if ($visibilidad !== NULL && $visibilidad !== Visibilidad::V_CTR_TODOS) {
+            $a_visibilidad_dl = $oVisibilidad->getArrayVisibilidadDl();
+            $visibilidad_txt = "(" . $a_visibilidad_dl[$visibilidad] . ")";
+        }
+    } else {
+        if ($visibilidad !== NULL && $visibilidad !== Visibilidad::V_CTR_TODOS) {
+            $a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
+            $visibilidad_txt = "(" . $a_visibilidad_dst[$visibilidad] . ")";
         }
     }
 
