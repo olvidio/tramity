@@ -54,18 +54,20 @@ if (!empty($Qid_entrada)) {
 
 
     $visibilidad_txt = '';
-    $oVisibilidad = new Visibilidad();
-    $visibilidad = $oEntrada->getVisibilidad();
-    // si soy dl o ctr
-    if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
-        if ($visibilidad !== NULL && $visibilidad !== Visibilidad::V_CTR_TODOS) {
-            $a_visibilidad_dl = $oVisibilidad->getArrayVisibilidadDl();
-            $visibilidad_txt = "(" . $a_visibilidad_dl[$visibilidad] . ")";
-        }
-    } else {
-        if ($visibilidad !== NULL && $visibilidad !== Visibilidad::V_CTR_TODOS) {
-            $a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
-            $visibilidad_txt = "(" . $a_visibilidad_dst[$visibilidad] . ")";
+    if (empty($id_entrada_compartida)) {
+        $oVisibilidad = new Visibilidad();
+        $visibilidad = $oEntrada->getVisibilidad();
+        // si soy dl o ctr
+        if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_DL) {
+            if ($visibilidad !== NULL && $visibilidad !== Visibilidad::V_CTR_TODOS) {
+                $a_visibilidad_dl = $oVisibilidad->getArrayVisibilidadDl();
+                $visibilidad_txt = "(" . $a_visibilidad_dl[$visibilidad] . ")";
+            }
+        } else {
+            if ($visibilidad !== NULL && $visibilidad !== Visibilidad::V_CTR_TODOS) {
+                $a_visibilidad_dst = $oVisibilidad->getArrayVisibilidadCtr();
+                $visibilidad_txt = "(" . $a_visibilidad_dst[$visibilidad] . ")";
+            }
         }
     }
 
