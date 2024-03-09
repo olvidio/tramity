@@ -22,6 +22,7 @@ use stdClass;
 use usuarios\model\Categoria;
 use usuarios\model\entity\Cargo;
 use web\Protocolo;
+use web\ProtocoloArray;
 use function core\borrar_tmp;
 use function core\is_true;
 
@@ -634,7 +635,7 @@ class Enviar
         $oMail->addBCC($email);
         // generar el mail, Uno para cada destino (para poder poner bien la cabecera) en cco (bcc):
         try {
-            $subject = "$this->filename ($this->asunto)";
+            $subject = $this->generarSubjectCr();
             // Attachments
             ////$oMail->addAttachment($File, $filename);    // Optional name
             $oMail->addStringAttachment($this->contentFile, $this->filename_ext);    // Optional name
@@ -834,6 +835,91 @@ class Enviar
         }
 
         return $err_mail;
+    }
+
+    /**
+     *  COMPOSICIÓN DEL SUBJECT (15 de enero de 2024)
+     *
+     *  PROTOCOLO; ASUNTO (INFO); REFERENCIA
+     *
+     *  Siendo:
+     *    PROTOCOLO: contiene origen, destino (en los casos que corresponde: entre cr o dl de r distintas), número y año.
+     *      Después del origen se pone un espacio en blanco, y entre número y año una barra (/).
+     *    ASUNTO: asunto del aviso explicado en pocas palabras, y evitando añadir información delicada.
+     *      No podrá contener ni paréntesis ni punto y coma, para evitar errores.
+     *    (INFO): información adicional, si existe. De momento, se podrá rellenar con las siguientes opciones:
+     *       (vc), (vcr), (vcdl) si el envío es para los vc.
+     *       (der), (dre) si son asuntos referidos a cartas al Padre.
+     *       (dg) si es correo del Delegado Regional.
+     *       (Ref) si lo que se envía no es un aviso con número de protocolo original, sino una referencia a un aviso ya existente.
+     *    REFERENCIA: protocolo al que se contesta, si existe. Es un campo opcional.
+     *
+     *  El separador entre cada uno de las partes será el punto y coma (;).
+     *  No es necesario que haya un espacio después del punto y coma.
+     *  Cada correo electrónico contendrá únicamente un aviso, con sus anexos.
+     */
+    private function generarSubjectCr()
+    {
+        // Protocolo. Copiado de $this->oEscrito->cabeceraDerecha();
+        $oEscrito = $this->oEscrito;
+        $id_dst = '';
+        $a_json_prot_dst = $oEscrito->getJson_prot_destino();
+        if (!empty((array)$a_json_prot_dst)) {
+            $json_prot_dst = $a_json_prot_dst[0];
+            if (!empty((array)$json_prot_dst)) {
+                $id_dst = $json_prot_dst->id_lugar;
+            }
+        }
+
+        // referencias
+        $a_json_prot_ref = $oEscrito->getJson_prot_ref();
+        $oArrayProtRef = new ProtocoloArray($a_json_prot_ref, '', 'referencias');
+        $oArrayProtRef->setRef(TRUE);
+        $aRef = $oArrayProtRef->ArrayListaTxtBr($id_dst);
+        // segunda región, para escrito cabecera derecha es la región destino
+        if (!empty($id_dst) && !empty($aRef)) {
+            $oLugar = new Lugar($id_dst);
+            $segundaRegion = $oLugar->getSigla();
+            $aRef = $oArrayProtRef->addSegundaRegionEnArray($aRef, $segundaRegion);
+        }
+
+        $json_prot_local = $oEscrito->getJson_prot_local();
+        if (count(get_object_vars($json_prot_local)) === 0){
+            $is_plantilla = $oEscrito->getAccion() === Escrito::ACCION_PLANTILLA;
+            $is_anulado = $oEscrito->getAnulado();
+            if(!$is_plantilla && !$is_anulado) {
+                $err_txt = "No hay protocolo local";
+                // sacar mas info para ver de donde sale el error
+                $json_prot_dst = json_encode($oEscrito->getJson_prot_destino(FALSE));
+                $mas_info = $oEscrito->iid_escrito . ':::' . $json_prot_dst;
+                $_SESSION['oGestorErrores']->addError($err_txt, "generar cabecera derecha: $mas_info", __LINE__, __FILE__);
+                $_SESSION['oGestorErrores']->recordar($err_txt);
+            }
+            $origen_txt = $_SESSION['oConfig']->getSigla();
+        } else {
+            $oProtOrigen = new Protocolo();
+            $oProtOrigen->setLugar($json_prot_local->id_lugar);
+            $oProtOrigen->setProt_num($json_prot_local->num);
+            $oProtOrigen->setProt_any($json_prot_local->any);
+            $oProtOrigen->setMas($json_prot_local->mas);
+
+            $origen_txt = $oProtOrigen->ver_txt();
+            // segunda región, para escrito cabecera derecha es la región destino
+            if (!empty($id_dst)) {
+                $oLugar = new Lugar($id_dst);
+                $segundaRegion = $oLugar->getSigla();
+                $origen_txt = $oProtOrigen->addSegundaRegion($origen_txt, $segundaRegion);
+            }
+        }
+
+        $protocolo = $origen_txt;
+        $ref = '';
+        if (!empty($aRef['local'])) {
+            $ref = ";".$aRef['local'];
+        }
+        $asunto = str_replace([';','(',')'], "*", $this->asunto);
+
+        return "$protocolo;$asunto$ref";
     }
 
 }
