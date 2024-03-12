@@ -686,9 +686,21 @@
     </xsl:template>
 
     <xsl:template match="strong">
-        <text:span text:style-name="T4">
-            <xsl:apply-templates select="node()"/>
-        </text:span>
+        <xsl:variable name="nodes" select="ancestor::p"/>
+        <xsl:choose>
+            <xsl:when test="count($nodes) = 0">
+                <text:p text:style-name="parrafo">
+                    <text:span text:style-name="T4">
+                        <xsl:apply-templates select="node()"/>
+                    </text:span>
+                </text:p>
+            </xsl:when>
+            <xsl:otherwise>
+                <text:span text:style-name="T4">
+                    <xsl:apply-templates select="node()"/>
+                </text:span>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="u">
