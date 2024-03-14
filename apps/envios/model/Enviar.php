@@ -916,6 +916,9 @@ class Enviar
         $ref = '';
         if (!empty($aRef['local'])) {
             $ref = ";".$aRef['local'];
+        } else {
+            // si la ref está vacía, pongo el destino
+            $ref = ";".$this->sigla_destino;
         }
         $asunto = str_replace([';','(',')'], "*", $this->asunto);
 
