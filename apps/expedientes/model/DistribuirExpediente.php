@@ -12,6 +12,7 @@ use tramites\model\entity\Firma;
 use tramites\model\entity\GestorFirma;
 use usuarios\model\Categoria;
 use usuarios\model\entity\Cargo;
+use web\Protocolo;
 use function core\is_true;
 
 class DistribuirExpediente
@@ -65,9 +66,15 @@ class DistribuirExpediente
             if ($tipo_accion === Escrito::ACCION_ESCRITO) {
                 $proto = TRUE;
                 $oEscrito = new Escrito($id_escrito);
-                // si es un e12, no hay que numerar.
+                // si es un e12, no hay que numerar. [Si pongo el id_lugar origen, para poder hacer búsquedas]
                 if ($oEscrito->getCategoria() === Categoria::CAT_E12) {
                     $proto = FALSE;
+                    $id_lugar_local = $gesLugares->getId_sigla_local();
+                    $oProtLocal = new Protocolo($id_lugar_local, 0, '', '');
+                    $prot_local = $oProtLocal->getProt();
+                    $oEscrito->DBCargar();
+                    $oEscrito->setJson_prot_local($prot_local);
+                    $oEscrito->DBGuardar();
                 }
                 // comprobar que no está anulado:
                 if (is_true($oEscrito->getAnulado()) || $estado_original === Expediente::ESTADO_DILATA) {
