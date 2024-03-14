@@ -11,6 +11,7 @@ use envios\model\MIMEContainer;
 use escritos\model\entity\EscritoAdjunto;
 use etherpad\model\Etherpad;
 use lugares\model\entity\GestorLugar;
+use stdClass;
 use usuarios\model\Visibilidad;
 use function core\borrar_tmp;
 use function core\is_true;
@@ -77,14 +78,32 @@ class Payload
         }
     }
 
+    /**
+     * @throws \JsonException
+     */
     private function setPayloadEscrito($oEscrito): void
     {
         $this->json_prot_local = $oEscrito->getJson_prot_local();
+        // Si es "sin numerar", por lo menos pongo la sigla
+        if (empty((array)$this->json_prot_local)) {
+            // Busco el id_lugar de la dl.
+            $gesLugares = new GestorLugar();
+            $id_siga_local = $gesLugares->getId_sigla_local();
+            $this->json_prot_local = new stdClass;
+            $this->json_prot_local->id_lugar = $id_siga_local;
+            $this->json_prot_local->num = '';
+            $this->json_prot_local->any = '';
+            $this->json_prot_local->mas = '';
+        }
+
         // OJO hay que coger el destino que se tiene al enviar,
         // no el del escrito, que puede ser a varios o un grupo.
         //$this->json_prot_dst = $oEscrito->getJson_prot_destino();
 
         $this->json_prot_ref = $oEscrito->getJson_prot_ref();
+
+        $this->setProt_org($this->json_prot_local);
+        $this->setProt_ref($oEscrito->getJson_prot_ref());
 
         $this->setF_entrada($oEscrito->getF_escrito());
         $this->setF_escrito($oEscrito->getF_escrito());
