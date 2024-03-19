@@ -50,6 +50,9 @@
             <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-indent="0cm" style:auto-text-indent="false"/>
             <style:text-properties officeooo:paragraph-rsid="002d4d2b"/>
             </style:style>
+           <style:style style:name="PsaltoPagina" style:family="paragraph" style:parent-style-name="Sandard">
+                <style:paragraph-properties fo:break-before="page"/>
+            </style:style>
             <style:style style:name="P2" style:family="paragraph" style:parent-style-name="parrafo">
             <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-indent="0cm" style:auto-text-indent="false"/>
             <style:text-properties style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color" officeooo:rsid="002d4d2b" officeooo:paragraph-rsid="002d4d2b"/>
@@ -61,10 +64,11 @@
             <style:style style:name="P4" style:family="paragraph" style:parent-style-name="parrafo" style:list-style-name="Numbering_20_123">
             <style:text-properties officeooo:paragraph-rsid="002e11ff"/>
             </style:style>
-            <style:style style:name="P5" style:family="paragraph" style:parent-style-name="parrafo" style:list-style-name="Numbering_20_123">
-            <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-indent="0cm" style:auto-text-indent="false"/>
-            <style:text-properties style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color" officeooo:rsid="002e11ff" officeooo:paragraph-rsid="0030ef33"/>
+
+            <style:style style:name="P5" style:family="paragraph" style:parent-style-name="subApartado" style:list-style-name="L1">
+                <style:text-properties officeooo:paragraph-rsid="002191fd"/>
             </style:style>
+
             <style:style style:name="P6" style:family="paragraph" style:parent-style-name="parrafo" style:list-style-name="L1">
             <style:text-properties officeooo:paragraph-rsid="0030ef33"/>
             </style:style>
@@ -80,21 +84,36 @@
             <style:style style:name="P10" style:family="paragraph" style:parent-style-name="subApartado2" style:list-style-name="L1">
             <style:text-properties officeooo:paragraph-rsid="0030ef33"/>
             </style:style>
+
             <style:style style:name="T1" style:family="text">
-            <style:text-properties fo:font-size="13pt" style:font-size-asian="13pt" style:font-size-complex="13pt"/>
+                <style:text-properties fo:font-size="13pt" style:font-size-asian="13pt" style:font-size-complex="13pt"/>
             </style:style>
             <style:style style:name="T2" style:family="text">
-            <style:text-properties officeooo:rsid="002d4d2b"/>
+                    <style:text-properties fo:font-size="13pt" fo:language="es" fo:country="ES"
+                                           style:letter-kerning="false" style:font-size-asian="13pt"
+                                           style:language-asian="en" style:country-asian="US"
+                                           style:font-size-complex="13pt" style:language-complex="ar"
+                                           style:country-complex="SA"/>
             </style:style>
             <style:style style:name="T3" style:family="text">
-            <style:text-properties style:font-name="DejaVu Serif" fo:font-size="13pt" fo:language="es" fo:country="ES" officeooo:rsid="002d4d2b"/>
+                <style:text-properties fo:language="es" fo:country="ES" fo:font-weight="bold"
+                                           style:language-asian="en" style:country-asian="US"
+                                           style:font-weight-asian="bold" style:language-complex="ar"
+                                           style:country-complex="SA" style:font-weight-complex="bold"/>
             </style:style>
             <style:style style:name="T4" style:family="text">
-            <style:text-properties style:font-name="DejaVu Serif" fo:font-size="13pt" fo:language="es" fo:country="ES" officeooo:rsid="002e11ff"/>
+                <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold"
+                                           style:font-weight-complex="bold"/>
             </style:style>
             <style:style style:name="T5" style:family="text">
-            <style:text-properties officeooo:rsid="0030ef33"/>
+                    <style:text-properties style:text-underline-style="solid" style:text-underline-width="auto"
+                                           style:text-underline-color="font-color"/>
             </style:style>
+            <style:style style:name="T6" style:family="text">
+                <style:text-properties fo:font-style="italic" style:font-style-asian="italic"
+                                           style:font-style-complex="italic"/>
+            </style:style>
+
             <text:list-style style:name="L1">
             <text:list-level-style-bullet text:level="1" text:style-name="Bullet_20_Symbols" loext:num-list-format="%1%." style:num-suffix="." text:bullet-char="•">
             <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
