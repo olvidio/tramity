@@ -86,13 +86,13 @@
             </style:style>
 
             <style:style style:name="T1" style:family="text">
-                <style:text-properties fo:font-size="13pt" style:font-size-asian="13pt" style:font-size-complex="13pt"/>
+                <style:text-properties fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
             </style:style>
             <style:style style:name="T2" style:family="text">
-                    <style:text-properties fo:font-size="13pt" fo:language="es" fo:country="ES"
-                                           style:letter-kerning="false" style:font-size-asian="13pt"
+                    <style:text-properties fo:font-size="10pt" fo:language="es" fo:country="ES"
+                                           style:letter-kerning="false" style:font-size-asian="10pt"
                                            style:language-asian="en" style:country-asian="US"
-                                           style:font-size-complex="13pt" style:language-complex="ar"
+                                           style:font-size-complex="10pt" style:language-complex="ar"
                                            style:country-complex="SA"/>
             </style:style>
             <style:style style:name="T3" style:family="text">
