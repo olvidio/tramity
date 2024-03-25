@@ -270,7 +270,7 @@ class EntradaLista
 
 
         $txt_btn_dock = _("revisar dock");
-        $pagina_cargar_dock = Hash::link('apps/entradas/controller/entrada_dock_cli.php?' . http_build_query(['filtro' => $filtro]));
+        $pagina_cargar_dock = Hash::link('apps/entradas/controller/entrada_dock.php?' . http_build_query(['filtro' => $filtro]));
 
         $pagina_importar = Hash::link('apps/entradas/controller/entrada_importar.php?' . http_build_query(['filtro' => $filtro, 'importar' => TRUE]));
         $pagina_revisar = Hash::link('apps/entradas/controller/entrada_lista.php?' . http_build_query(['filtro' => $filtro, 'importar' => TRUE]));

@@ -8,6 +8,9 @@
  * Posteriormente al volver a ejecutar se crea el correcto, pero el vacío, al no tener fecha no se puede eliminar
  */
 
+/* En la máquina
+    /usr/bin/php /var/www/tramity/apps/entradas/controller/entrada_dock_cli.php /var/www/tramity /home/tramity/conf /opt/holodeckb2b/holodeckb2b-6.1.0/data/msg_in tramity.ctr.local montagut dserrabou Quatre321!
+*/
 
 // >/usr/bin/php /var/www/tramity/apps/entradas/controller/entrada_dock_cli.php /var/www/tramity /var/www/conf /opt/holodeckb2b/data/msg_in docker_ctr.tramity.local montagut toni system
 
