@@ -587,7 +587,11 @@ class As4Entregar extends As4CollaborationInfo
                     // comprobar que existe destino (sigla)
                     if (in_array($this->getSiglaDestino(), $this->getEntidadesPlataforma(), true)) {
                         // introducir los datos del mensaje en el tramity
-                        $this->nuevo();
+                        $err_txt = $this->nuevo();
+                        if (!empty($err_txt)) {
+                            $this->msg .= $err_txt;
+                            $success = FALSE;
+                        }
                     } else {
                         $success = FALSE;
                     }
@@ -660,22 +664,30 @@ class As4Entregar extends As4CollaborationInfo
         return $this->aEntidadesNombre;
     }
 
-    private function nuevo(): void
+    private function nuevo(): string
     {
+        $error_txt = '';
         // hay que conectar con la nombre_entidad destino:
         $siglaDestino = $this->getSiglaDestino();
         $id_entrada = $this->nuevaEntrada($siglaDestino);
 
         if (!empty($this->content)) {
-            $this->cargarContenido($id_entrada, $siglaDestino);
+            $error_txt = $this->cargarContenido($id_entrada, $siglaDestino);
+            // Creo que habría que borrar la entrada si no se ha podido cargar el contenido
+            if (!empty($error_txt)) {
+                $oEntrada = new Entrada($id_entrada);
+                if ($oEntrada->DBEliminar() === FALSE) {
+                    $error_txt .= $oEntrada->getErrorTxt();
+                }
+            }
         }
         // cargar los adjuntos una vez se ha creado la entrada y se tiene el id:
-        if (!empty($this->a_adjuntos)) {
+        if (!empty($this->a_adjuntos) && empty($error_txt)) {
             $this->cargarAdjunto($this->a_adjuntos, $id_entrada);
         }
 
         // Compruebo si hay que generar un pendiente
-        if (!empty($this->oF_contestar)
+        if (!empty($this->oF_contestar) && empty($error_txt)
             && ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
                 || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO)
             )
@@ -683,6 +695,7 @@ class As4Entregar extends As4CollaborationInfo
 
             $this->nuevoPendiente($id_entrada, $siglaDestino);
         }
+        return $error_txt;
     }
 
     private function nuevaEntrada($siglaDestino, $id_entrada_compartida = null): int
@@ -736,8 +749,9 @@ class As4Entregar extends As4CollaborationInfo
         return $oEntrada->getId_entrada();
     }
 
-    private function cargarContenido($id_entrada, $siglaDestino = '', $compartido = FALSE): void
+    private function cargarContenido($id_entrada, $siglaDestino = '', $compartido = FALSE): string
     {
+        $error_txt = '';
         $oHoy = new DateTimeLocal();
         switch ($this->type) {
             case Payload::TYPE_ETHERAD_TXT:
@@ -761,7 +775,9 @@ class As4Entregar extends As4CollaborationInfo
                         $oEntradaDocDB->setF_doc($oHoy);
                     }
                     $oEntradaDocDB->setTipo_doc(EntradaDocDB::TIPO_ETHERPAD);
-                    $oEntradaDocDB->DBGuardar();
+                    if ($oEntradaDocDB->DBGuardar() === FALSE) {
+                         $error_txt .= $oEntradaDocDB->getErrorTxt();
+                    }
                 }
                 break;
             case Payload::TYPE_ETHERAD_HTML:
@@ -786,14 +802,16 @@ class As4Entregar extends As4CollaborationInfo
                         $oEntradaDocDB->setF_doc($oHoy);
                     }
                     $oEntradaDocDB->setTipo_doc(EntradaDocDB::TIPO_ETHERPAD);
-                    $oEntradaDocDB->DBGuardar();
+                    if ($oEntradaDocDB->DBGuardar() === FALSE) {
+                        $error_txt .= $oEntradaDocDB->getErrorTxt();
+                    }
                 }
                 break;
             default:
                 $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_switch);
         }
-
+        return $error_txt;
     }
 
     private function cargarAdjunto($a_adjuntos, $id_entrada): void

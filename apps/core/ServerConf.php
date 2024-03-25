@@ -4,8 +4,11 @@ namespace core;
 
 /*
  * poner en el include de php.ini: "/var/www/conf"
+ * de momento para ejecutar desde la linea de comandos (entrada_dock_cli.php) no hace falta.
  */
-include "enviorement.conf";
+if (PHP_SAPI !== 'cli') {
+    require_once "enviorement.conf";
+}
 
 class ServerConf
 {
