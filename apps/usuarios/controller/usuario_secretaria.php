@@ -113,7 +113,10 @@ if (ConfigGlobal::mi_usuario_cargo() === 'scdl' || $perm_distribuir) {
 // se envían escritos, no expedientes
 $filtro = 'enviar';
 $active = ($filtro === $Q_filtro) ? 'active' : '';
-$aQuery = ['filtro' => $filtro, 'modo' => 'mod'];
+$aQuery = ['filtro' => $filtro,
+    'modo' => 'mod',
+    'vista' => 'secretaria',
+    ];
 $pag_lst = web\Hash::link('apps/escritos/controller/escrito_lista.php?' . http_build_query($aQuery));
 $num_orden = 4;
 $text = _("enviar");

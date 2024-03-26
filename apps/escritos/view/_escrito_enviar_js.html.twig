@@ -4,7 +4,7 @@
     });
 
     fnjs_actualizar_lista = function () {
-        var url = '/apps/escritos/controller/escrito_lista.php?filtro={{ filtro }}&modo={{ modo }}';
+        var url = '/apps/escritos/controller/escrito_lista.php?filtro={{ filtro }}&modo={{ modo }}&vista={{ vista }}';
         fnjs_update_div('#main', url);
     };
     fnjs_actualizar_expediente = function () {
@@ -161,8 +161,9 @@
 
     fnjs_enviar_escrito_directo = function (id_escrito) {
         window.open('/apps/escritos/controller/escrito_enviar.php?id=' + id_escrito, "down");
+        debugger;
         {# para la dl #}
-        {% if vista == 'home' %}
+        {% if vista == 'secretaria' %}
             // Actualizar vista escritos para enviar
             fnjs_actualizar_lista();
         {% endif %}

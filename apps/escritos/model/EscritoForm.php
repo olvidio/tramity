@@ -351,6 +351,7 @@ class EscritoForm
             'filtro' => $this->Q_filtro,
             'modo' => $this->Q_modo,
             'volver_a' => $this->Q_volver_a,
+            'vista' => ConfigGlobal::getVista(),
         ];
 
         $explotar = FALSE;
