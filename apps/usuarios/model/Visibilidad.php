@@ -50,7 +50,7 @@ class Visibilidad
         return $a_visibilidad;
     }
 
-    public function getArrayVisibilidad($limitar_por_usuario=FALSE): array
+    public function getArrayVisibilidad($limitar_por_usuario = FALSE): array
     {
         $a_visibilidad = [];
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
@@ -64,9 +64,9 @@ class Visibilidad
         return $a_visibilidad;
     }
 
-    public function getArrayVisibilidadCtr($limitar_por_usuario=FALSE):array
+    public function getArrayVisibilidadCtr($limitar_por_usuario = FALSE): array
     {
-        $a_visibilidad[ self::V_CTR_TODOS] = _("todos");
+        $a_visibilidad[self::V_CTR_TODOS] = _("todos");
         if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
             || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
             if ($limitar_por_usuario) {
@@ -90,14 +90,18 @@ class Visibilidad
 
     public function getArrayVisibilidadDl()
     {
-        return [
+        $a_visibilidad = [
             self::V_TODOS => _("todos"),
             self::V_PERSONAL => _("personal"),
-            self::V_DIRECTORES => _("directores"),
-            self::V_RESERVADO => _("reservado"),
-            self::V_RESERVADO_VCD => _("vcd"),
         ];
+
+        if (ConfigGlobal::soy_dtor() === TRUE) {
+            $a_visibilidad[self::V_DIRECTORES] = _("directores");
+            $a_visibilidad[self::V_RESERVADO] = _("reservado");
+            $a_visibilidad[self::V_RESERVADO_VCD] = _("vcd");
+        }
+
+        return $a_visibilidad;
     }
 
 }
-    
