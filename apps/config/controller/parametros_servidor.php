@@ -18,11 +18,19 @@ require_once("apps/core/global_object.inc");
 $url = 'apps/config/controller/parametros_update.php';
 $a_campos = ['url' => $url];
 
-// ----------- size de los fcheros para poder hacer upload ------------------
-/* En /etc/php/7.4/fpm/php.ini
- * post_max_size = 25M
- * upload_max_filesize = 25M
- */
+// ----------- size de los ficheros para poder hacer upload ------------------
+/* En /etc/php/8.3/fpm/php.ini:
+             * post_max_size = 25M
+             * upload_max_filesize = 25M
+En /etc/nginx/nginx.conf;
+    http {
+        ...
+      client_max_body_size 25M;
+        ...
+reiniciar:
+    $service nginx restart
+    $service php8.3-fpm restart
+*/
 $parametro = 'max_filesize';
 $oConfigSchema = new ConfigSchema($parametro);
 $valor = $oConfigSchema->getValor();

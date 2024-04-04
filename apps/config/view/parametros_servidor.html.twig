@@ -1,8 +1,16 @@
 <h3>{{ "php + apache/nginx"|trans|raw }}:</h3>
-<pre>En /etc/php/7.4/fpm/php.ini
+<pre>En /etc/php/8.3/fpm/php.ini:
              * post_max_size = 25M
              * upload_max_filesize = 25M
-             </pre>
+En /etc/nginx/nginx.conf;
+    http {
+        ...
+      client_max_body_size 25M;
+        ...
+reiniciar:
+    $service nginx restart
+    $service php8.3-fpm restart
+</pre>
 <form id="frm_server_size" name="frm_server_size" action="">
     {{ oHashFS.getCamposHtml|raw }}
     {{ "tamaño máximo del fichero adjunto (en MB):"|trans|raw }}
