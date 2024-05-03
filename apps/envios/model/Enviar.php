@@ -635,7 +635,15 @@ class Enviar
         $oMail->addBCC($email);
         // generar el mail, Uno para cada destino (para poder poner bien la cabecera) en cco (bcc):
         try {
-            $subject = $this->generarSubjectCr();
+            if ($this->tipo === 'escrito') {
+                $subject = $this->generarSubjectCr();
+            } else {
+                if (is_true($this->is_Bypass)) {
+                    $subject = $this->oEntradaBypass->cabeceraDerecha();
+                } else {
+                    $subject = $this->oEntrada->cabeceraDerecha();
+                }
+            }
             // Attachments
             ////$oMail->addAttachment($File, $filename);    // Optional name
             $oMail->addStringAttachment($this->contentFile, $this->filename_ext);    // Optional name
@@ -668,7 +676,7 @@ class Enviar
     {
         $a_header = [];
         if ($this->tipo === 'entrada') {
-            // Puede que no sea bypass. Se uasa para descargar la entrada en local.
+            // Puede que no sea bypass. Se usa para descargar la entrada en local.
             if (is_true($this->is_Bypass)) {
                 $a_header = ['left' => $this->oEntradaBypass->cabeceraIzquierda(),
                     'center' => '',
