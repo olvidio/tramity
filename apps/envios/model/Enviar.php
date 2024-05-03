@@ -692,7 +692,7 @@ class Enviar
         if ($this->tipo === 'escrito') {
             $a_header = ['left' => $this->oEscrito->cabeceraIzquierda($id_lugar),
                 'center' => '',
-                'right' => $this->oEscrito->cabeceraDerecha(),
+                'right' => $this->oEscrito->cabeceraDerecha($id_lugar),
             ];
         }
 

@@ -444,17 +444,23 @@ class Escrito extends EscritoDB
         return $destinos_txt;
     }
 
-    public function cabeceraDerecha()
+    public function cabeceraDerecha($id_lugar_de_grupo = '')
     {
         // prot local + ref
         $id_dst = '';
         $a_json_prot_dst = $this->getJson_prot_destino();
-        if (!empty((array)$a_json_prot_dst)) {
-            $json_prot_dst = $a_json_prot_dst[0];
-            if (!empty((array)$json_prot_dst)) {
-                $id_dst = $json_prot_dst->id_lugar;
-            } else {
-                $id_dst = '';
+
+        if (!empty($id_lugar_de_grupo)) { // individual, con su protocolo.
+            $id_dst = $id_lugar_de_grupo;
+        } else {
+            //(según individuales)
+            if (!empty((array)$a_json_prot_dst)) {
+                $json_prot_dst = $a_json_prot_dst[0];
+                if (!empty((array)$json_prot_dst)) {
+                    $id_dst = $json_prot_dst->id_lugar;
+                } else {
+                    $id_dst = '';
+                }
             }
         }
 
