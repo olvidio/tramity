@@ -148,7 +148,7 @@ class EntradaProvisionalFromPdf
 
             if ($tramo_inicio && $linea_protocolo === 0) {
                 // agdmontagut 12/22      dlb 3/22
-                $pattern = "/^\s*([^\*\p{N}]+)*((\*|\s)+\d+\/\d{2})*(\*|\s)+(((\*\P{N}\*)|\P{N})+)(\s+\d+\/\d{2})*\s*$/u";
+                $pattern = "/^\s*([^\*\p{N}]+)*((\*|\s)+\d+\/\d{2})*(\*|\s)+(((\*\P{N}\*)|\P{N})+)(\s+\d+\/\d{2})*(\*|\s)*$/u";
                 $coincide = preg_match($pattern, $line, $matches);
                 if ($coincide === 1) {
                     // quitar los '*' si tiene
@@ -174,7 +174,7 @@ class EntradaProvisionalFromPdf
                 if ($coincide !== 1) {
                     // Ceb-r 3/22
                     //$pattern = '/^(\s*(\P{N}+)(\s+\d+\/\d{2})*\s*-\s*([^\s\p{N}]+)(\s+\d+\/\d{2})*\s*)*\s*(\P{N}+)(\s+\d+\/\d{2})*\s*-\s*(\P{N}+)(\s+\d+\/\d{2})*\s*$/u';
-                    $pattern = '/^(\s*(\P{N}+)\s*-\s*([^\s\p{N}]+)(\s+\d+\/\d{2})*\s*)*\s*(\P{N}+)\s*-\s*(\P{N}+)(\s+\d+\/\d{2})*\s*$/u';
+                    $pattern = '/^(\s*(\P{N}+)\s*-\s*([^\s\p{N}]+)(\s+\d+\/\d{2})*\s*)*\s*(\P{N}+)\s*-\s*(\P{N}+)(\s+\d+\/\d{2})*(\*|\s)*$/u';
                     $coincide = preg_match($pattern, $line, $matches);
                     if ($coincide === 1) {
                         // quitar los '*' si tiene
@@ -207,7 +207,7 @@ class EntradaProvisionalFromPdf
                 }
                 if ($coincide !== 1) {
                     //Cam-dlb 8/23
-                    $pattern = '/^\s*(\P{N}+)-(\P{N}+)(\s+\d+\/\d{2})*\s*$/u';
+                    $pattern = '/^\s*(\P{N}+)-(\P{N}+)(\s+\d+\/\d{2})*(\*|\s)*$/u';
                     $coincide = preg_match($pattern, $line, $matches);
                     if ($coincide === 1) {
                         $origen = trim($matches[1]);
@@ -234,7 +234,7 @@ class EntradaProvisionalFromPdf
                         $pos = mb_stripos($line, 'cfr');
                     }
                     if (empty($pos)) {
-                        $pattern = '/^\s*(((\*\P{N}\*)|\P{N})*\s*)(\d+\/\d{2})\s*$/i';
+                        $pattern = '/^\s*(((\*\P{N}\*)|\P{N})*\s*)(\d+\/\d{2})(\*|\s)*$/i';
                         $coincide = preg_match($pattern, $line, $matches);
                         if ($coincide === 1) {
                             // quitar los '*' si tiene
@@ -272,7 +272,7 @@ class EntradaProvisionalFromPdf
                     }
                 }
                 if ($coincide !== 1) {
-                    $pattern = '/(ref\.?)\s+(\P{N}+)-(\P{N}+)(\s+\d+\/\d{2})*\s*(ref\.?)\s+(\P{N}+)-(\P{N}+)(\s+\d+\/\d{2})*\s*$/ui';
+                    $pattern = '/(ref\.?)\s+(\P{N}+)-(\P{N}+)(\s+\d+\/\d{2})*\s*(ref\.?)\s+(\P{N}+)-(\P{N}+)(\s+\d+\/\d{2})*(\*|\s)*$/ui';
                     $coincide = preg_match($pattern, $line, $matches);
                     if ($coincide === 1) {
                         $a_ref[] = $matches[5];
