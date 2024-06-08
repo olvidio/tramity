@@ -121,6 +121,10 @@
             alert("{{ "Debe llenar el campo de fecha aprobación"|trans|raw }}");
             err = 1;
         }
+        if (!f_escrito) {
+            alert("{{ "Debe llenar el campo de fecha del escrito"|trans|raw }}");
+            err = 1;
+        }
 
         if (err != 1) {
             $('#que').val('guardar_manual');
