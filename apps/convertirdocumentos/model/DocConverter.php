@@ -46,6 +46,8 @@ final class DocConverter
         $filename_local_sin_extension = $path_temp . $this->nombreFicheroOriginalSinExtension;
         // con los espacios hay problemas, no bastan las comillas
         $filename_local_sin_espacios_sin_extension = str_replace(' ', '_', $filename_local_sin_extension);
+        // ojo también a los acentos
+        $filename_local_sin_espacios_sin_extension = preg_replace("/[^a-zA-Z0-9\_\-\.\/]/", "", $filename_local_sin_espacios_sin_extension);
         $filename_original_sin_espacios = $filename_local_sin_espacios_sin_extension . '.' .$this->file_extension_original;
 
         file_put_contents($filename_original_sin_espacios, $this->documento);
@@ -59,6 +61,7 @@ final class DocConverter
             $filename_nuevo_sin_extension = $path_temp . $this->nombreFicheroNuevoSinExtension;
         }
         $filename_nuevo_sin_espacios_sin_extension = str_replace(' ', '_', $filename_nuevo_sin_extension);
+        $filename_nuevo_sin_espacios_sin_extension = preg_replace("/[^a-zA-Z0-9\_\-\.\/]/", "", $filename_nuevo_sin_espacios_sin_extension);
         $filename_nuevo_con_extension = $filename_nuevo_sin_espacios_sin_extension . '.'. $nuevo_tipo;
         $doc_converted = file_get_contents($filename_nuevo_con_extension);
 
