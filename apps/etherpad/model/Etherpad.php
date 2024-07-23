@@ -134,7 +134,7 @@ class Etherpad extends Client
     }
 
     /**
-     * devuelve el escrito en html.
+     * devuelve el html quitando tags inservibles.
      *
      * @return string html
      */
@@ -301,11 +301,13 @@ class Etherpad extends Client
         // Añadir <br> delante del texto entre una etiqueta distinta de <br> y el siguiente <br>
         $pattern = "/(?<!br)>([^>]+)(?=<br>)/";
         $txt3_5 = preg_replace($pattern, "><br>$1", $txt3_2);
+        */
 
         // y después poner entre <p> el texto entre <br> (siempre que no esté ya encapsulado en algo '<xx>')
-        $pattern = "/<br\ ?\/?>([^<].*?)<br\ ?\/?>/";
-        $txt4 = preg_replace($pattern, "<p>$1</p><br>", $txt3_5);
+        $pattern = "/<br>(<(?!(p|\/p|br)).*?)<br>/";
+        $txt4 = preg_replace($pattern, "<p>$1</p><br>", $txt3);
 
+        /*
         // También poner entre <p> el texto entre <br> y <p>
         $pattern = "/<br\ ?\/?>([^<].*?)<p\ ?\/?>/";
         $txt4_1 = preg_replace($pattern, "<p>$1</p><p>", $txt4);
@@ -316,7 +318,7 @@ class Etherpad extends Client
 
         // salto de página (4 o más ':' entre dos saltos de línea
         /* $txt7 = str_replace("/<br( *\/)?>:{4,}<br( *\/)?>/", "<div style=\"page-break-after: always;\"></div>", $txt6); */
-        $txt6 = preg_replace("#<p>:{4,}</p>#", "<fecha>$fecha</fecha><div class='salta_pag'></div>", $txt3);
+        $txt6 = preg_replace("#<p>:{4,}</p>#", "<fecha>$fecha</fecha><div class='salta_pag'></div>", $txt4);
 
         // eliminar dobles lineas: <br><br>
         //$txt3_5 = str_replace("<br><br>", "<br>", $txt3_4);
