@@ -32,7 +32,6 @@
 
 namespace Smalot\PdfParser;
 
-use Exception;
 use Smalot\PdfParser\Element\ElementNumeric;
 use Smalot\PdfParser\Encoding\EncodingLocator;
 use Smalot\PdfParser\Encoding\PostScriptGlyphs;
@@ -146,6 +145,12 @@ class Encoding extends PDFObject
     {
         // Load reference table charset.
         $baseEncoding = preg_replace('/[^A-Z0-9]/is', '', $this->get('BaseEncoding')->getContent());
+
+        // Check for empty BaseEncoding field value
+        if (!\is_string($baseEncoding) || 0 == \strlen($baseEncoding)) {
+            $baseEncoding = 'StandardEncoding';
+        }
+
         $className = '\\Smalot\\PdfParser\\Encoding\\'.$baseEncoding;
 
         if (!class_exists($className)) {

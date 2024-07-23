@@ -152,7 +152,6 @@
       <path value="$PROJECT_DIR$/vendor/symfony/string" />
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-ctype" />
       <path value="$PROJECT_DIR$/vendor/phar-io/manifest" />
-      <path value="$PROJECT_DIR$/vendor/php-http/message-factory" />
       <path value="$PROJECT_DIR$/vendor/ralouphie/getallheaders" />
       <path value="$PROJECT_DIR$/vendor/phar-io/version" />
       <path value="$PROJECT_DIR$/vendor/paragonie/random_compat" />
@@ -175,9 +174,19 @@
       <path value="$PROJECT_DIR$/vendor/smalot/pdfparser" />
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php83" />
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php80" />
+      <path value="$PROJECT_DIR$/vendor/mpdf/psr-log-aware-trait" />
+      <path value="$PROJECT_DIR$/vendor/mpdf/psr-http-message-shim" />
+      <path value="$PROJECT_DIR$/vendor/olsgreen/wkhtmltopdf-amd64" />
+      <path value="$PROJECT_DIR$/vendor/symfony/process" />
+      <path value="$PROJECT_DIR$/vendor/knplabs/knp-snappy" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.2">
     <option name="suggestChangeDefaultLanguageLevel" value="false" />
+  </component>
+  <component name="PhpUnit">
+    <phpunit_settings>
+      <PhpUnitSettings custom_loader_path="$PROJECT_DIR$/vendor/autoload.php" />
+    </phpunit_settings>
   </component>
 </project>

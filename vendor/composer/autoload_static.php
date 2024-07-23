@@ -7,15 +7,19 @@ namespace Composer\Autoload;
 class ComposerStaticInit8db5ffd734a117187d87a5231ea88cb9
 {
     public static $files = array (
+        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
-        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
-        'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         '662a729f963d39afe703c9d9b7ab4a8c' => __DIR__ . '/..' . '/symfony/polyfill-php83/bootstrap.php',
+        '89efb1254ef2d1c5d80096acd12c4098' => __DIR__ . '/..' . '/twig/twig/src/Resources/core.php',
+        'ffecb95d45175fd40f75be8a23b34f90' => __DIR__ . '/..' . '/twig/twig/src/Resources/debug.php',
+        'c7baa00073ee9c61edf148c51917cfb4' => __DIR__ . '/..' . '/twig/twig/src/Resources/escaper.php',
+        'f844ccf1d25df8663951193c3fc307c8' => __DIR__ . '/..' . '/twig/twig/src/Resources/string_loader.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
+        'db356362850385d08a5381de2638b5fd' => __DIR__ . '/..' . '/mpdf/mpdf/src/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -49,11 +53,9 @@ class ComposerStaticInit8db5ffd734a117187d87a5231ea88cb9
         ),
         'M' => 
         array (
+            'Mpdf\\PsrLogAwareTrait\\' => 22,
+            'Mpdf\\PsrHttpMessageShim\\' => 24,
             'Mpdf\\' => 5,
-        ),
-        'H' => 
-        array (
-            'Http\\Message\\' => 13,
         ),
         'G' => 
         array (
@@ -102,7 +104,7 @@ class ComposerStaticInit8db5ffd734a117187d87a5231ea88cb9
         ),
         'Psr\\Log\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
+            0 => __DIR__ . '/..' . '/psr/log/src',
         ),
         'Psr\\Http\\Message\\' => 
         array (
@@ -121,13 +123,17 @@ class ComposerStaticInit8db5ffd734a117187d87a5231ea88cb9
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
         ),
+        'Mpdf\\PsrLogAwareTrait\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mpdf/psr-log-aware-trait/src',
+        ),
+        'Mpdf\\PsrHttpMessageShim\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mpdf/psr-http-message-shim/src',
+        ),
         'Mpdf\\' => 
         array (
             0 => __DIR__ . '/..' . '/mpdf/mpdf/src',
-        ),
-        'Http\\Message\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/php-http/message-factory/src',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (
@@ -171,6 +177,7 @@ class ComposerStaticInit8db5ffd734a117187d87a5231ea88cb9
         'DateRangeError' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateRangeError.php',
         'Override' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/Override.php',
         'PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
+        'SQLite3Exception' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/SQLite3Exception.php',
         'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
         'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
         'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',

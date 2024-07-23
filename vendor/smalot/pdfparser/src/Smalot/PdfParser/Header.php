@@ -43,14 +43,14 @@ use Smalot\PdfParser\Element\ElementXRef;
 class Header
 {
     /**
-     * @var Document
+     * @var Document|null
      */
-    protected $document = null;
+    protected $document;
 
     /**
      * @var Element[]
      */
-    protected $elements = null;
+    protected $elements;
 
     /**
      * @param Element[] $elements list of elements

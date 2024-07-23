@@ -23,10 +23,11 @@ jobs:
           - "8.0"
           - "8.1"
           - "8.2"
+          - "8.3"
 
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
@@ -38,7 +39,7 @@ jobs:
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "Install dependencies with Composer"
-        uses: "ramsey/composer-install@v1"
+        uses: "ramsey/composer-install@v2"
 
       - name: "Install dev tools"
         run: "make install-dev-tools"
@@ -57,7 +58,7 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
@@ -69,7 +70,7 @@ jobs:
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "Install dependencies with Composer"
-        uses: "ramsey/composer-install@v1"
+        uses: "ramsey/composer-install@v2"
 
       - name: "Install dev tools"
         run: "make install-dev-tools"
@@ -88,7 +89,7 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
 
       - name: "Install PHP with PCOV"
         uses: "shivammathur/setup-php@v2"
@@ -100,7 +101,7 @@ jobs:
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "Install dependencies with Composer"
-        uses: "ramsey/composer-install@v1"
+        uses: "ramsey/composer-install@v2"
 
       - name: "Install dev tools"
         run: "make install-dev-tools"
@@ -119,7 +120,7 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
@@ -131,7 +132,7 @@ jobs:
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "Install dependencies with Composer"
-        uses: "ramsey/composer-install@v1"
+        uses: "ramsey/composer-install@v2"
 
       - name: "Install dev tools"
         run: "make install-dev-tools"
@@ -153,10 +154,11 @@ jobs:
           - "8.0"
           - "8.1"
           - "8.2"
+          - "8.3"
 
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
@@ -165,7 +167,7 @@ jobs:
           coverage: "none"
 
       - name: "Test alt-autoload"
-        run: "php tests/AltAutoloadTest.php"
+        run: "php tests/AltAutoloading/AltAutoloadCheck.php"
 
   phpunit-lowest:
     name: "PHPUnit lowest deps (PHP ${{ matrix.php }})"
@@ -178,7 +180,7 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
@@ -190,7 +192,7 @@ jobs:
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "Install dependencies with Composer"
-        uses: "ramsey/composer-install@v1"
+        uses: "ramsey/composer-install@v2"
         with:
           dependency-versions: "lowest"
 
@@ -207,11 +209,11 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php-versions: ['7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2']
+        php-versions: ['7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3']
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install PHP
         uses: shivammathur/setup-php@v2

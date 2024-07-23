@@ -19,6 +19,7 @@ return array(
     'DateRangeError' => $vendorDir . '/symfony/polyfill-php83/Resources/stubs/DateRangeError.php',
     'Override' => $vendorDir . '/symfony/polyfill-php83/Resources/stubs/Override.php',
     'PhpToken' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
+    'SQLite3Exception' => $vendorDir . '/symfony/polyfill-php83/Resources/stubs/SQLite3Exception.php',
     'Stringable' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
     'UnhandledMatchError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
     'ValueError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',

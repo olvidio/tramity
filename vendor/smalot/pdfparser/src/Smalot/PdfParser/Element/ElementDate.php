@@ -40,7 +40,7 @@ use Smalot\PdfParser\Document;
 class ElementDate extends ElementString
 {
     /**
-     * @var array
+     * @var array<int,string>
      */
     protected static $formats = [
         4 => 'Y',

@@ -256,7 +256,7 @@ class HeaderUtils
     private static function groupParts(array $matches, string $separators, bool $first = true): array
     {
         $separator = $separators[0];
-        $separators = substr($separators, 1);
+        $separators = substr($separators, 1) ?: '';
         $i = 0;
 
         if ('' === $separators && !$first) {
@@ -286,7 +286,11 @@ class HeaderUtils
         }
 
         foreach ($partMatches as $matches) {
-            $parts[] = '' === $separators ? self::unquote($matches[0][0]) : self::groupParts($matches, $separators, false);
+            if ('' === $separators && '' !== $unquoted = self::unquote($matches[0][0])) {
+                $parts[] = $unquoted;
+            } elseif ($groupedParts = self::groupParts($matches, $separators, false)) {
+                $parts[] = $groupedParts;
+            }
         }
 
         return $parts;

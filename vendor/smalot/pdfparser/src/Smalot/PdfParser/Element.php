@@ -49,11 +49,11 @@ use Smalot\PdfParser\Element\ElementXRef;
 class Element
 {
     /**
-     * @var Document
+     * @var Document|null
      */
-    protected $document = null;
+    protected $document;
 
-    protected $value = null;
+    protected $value;
 
     public function __construct($value, ?Document $document = null)
     {
@@ -107,10 +107,16 @@ class Element
             $old_position = $position;
 
             if (!$only_values) {
-                if (!preg_match('/^\s*(?P<name>\/[A-Z0-9\._]+)(?P<value>.*)/si', substr($content, $position), $match)) {
+                if (!preg_match('/\G\s*(?P<name>\/[A-Z#0-9\._]+)(?P<value>.*)/si', $content, $match, 0, $position)) {
                     break;
                 } else {
-                    $name = ltrim($match['name'], '/');
+                    $name = preg_replace_callback(
+                        '/#([0-9a-f]{2})/i',
+                        function ($m) {
+                            return \chr(base_convert($m[1], 16, 10));
+                        },
+                        ltrim($match['name'], '/')
+                    );
                     $value = $match['value'];
                     $position = strpos($content, $value, $position + \strlen($match['name']));
                 }
