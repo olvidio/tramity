@@ -489,8 +489,10 @@ class EntradaProvisionalFromPdf
     private function getOrigenDestino($a_txt)
     {
         $origen = '';
+        $origen_prot = '';
         $oFecha = '';
         $destino = '';
+        $destino_prot = '';
         $a_ref = [];
         $a_referencias = [];
         $a_ref_prot = [];
