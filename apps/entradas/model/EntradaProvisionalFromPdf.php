@@ -509,27 +509,64 @@ class EntradaProvisionalFromPdf
             }
 
             if ($tramo_inicio && $linea_protocolo === 0) {
-                // agdmontagut 12/22      dlb 3/22
-                $pattern = "/^\s*([^\*\p{N}]+)*((\*|\s)+\d+\/\d{2})*(\*|\s)+(((\*\P{N}\*)|\P{N})+)(\s+\d+\/\d{2})*(\*|\s)*$/u";
+                // e12 con ref tipo:
+                //  dlp                Ref. cr 11/20 y cr 12/20
+                $pattern = "/^\s*([^\*\p{N}]+)*((\*|\s)+\d+\/\d{2})*(\*|\s)+ref\.\s+(\P{N}*)\s+(\d+\/\d{2})+(\s+y\s+(\P{N}+)\s+(\d+\/\d{2}))*.*(\*|\s)*$/iu";
                 $coincide = preg_match($pattern, $line, $matches);
                 if ($coincide === 1) {
-                    // quitar los '*' si tiene
                     $destino = trim($matches[1]);
                     $destino_prot = empty($matches[2]) ? '' : $matches[2];
                     $destino_prot = str_replace('*', '', $destino_prot);
 
                     $origen = trim($matches[5]);
-                    $origen = str_replace('*', '', $origen);
-                    $origen_prot = empty($matches[8]) ? '' : $matches[8];
-                    $origen_prot = str_replace('*', '', $origen_prot);
+                    $origen_ref = trim($matches[5]);
+                    $origen_ref = str_replace('*', '', $origen_ref);
+                    $origen_ref_prot = empty($matches[6]) ? '' : $matches[6];
+                    $origen_ref_prot = str_replace('*', '', $origen_ref_prot);
 
-                    // si tiene un guión, puede ser de una región (Gal-dlb)
-                    if (strpos($destino, '-')) {
-                        $a_sigla = explode('-', $destino);
-                        $origen1 = $a_sigla[0];
-                        $destino1 = $a_sigla[1];
-                        if ($destino1 !== 'sr' && $destino1 !== 'sr' && $origen1 !== 'sm' && $origen1 !== 'sr') {
-                            $coincide = 0;
+                    if (!empty($origen_ref)) {
+                        $a_ref[] = 'ref';
+                        $a_referencias[] = $origen_ref;
+                        $a_ref_prot[] = $origen_ref_prot;
+                    }
+
+                    if (!empty($matches[8])) {
+                        $origen_ref = trim($matches[8]);
+                        $origen_ref = str_replace('*', '', $origen_ref);
+                        $origen_ref_prot = empty($matches[9]) ? '' : $matches[9];
+                        $origen_ref_prot = str_replace('*', '', $origen_ref_prot);
+
+                        if (!empty($origen_ref)) {
+                            $a_ref[] = 'ref';
+                            $a_referencias[] = $origen_ref;
+                            $a_ref_prot[] = $origen_ref_prot;
+                        }
+                    }
+                }
+                if ($coincide !== 1) {
+                    // dlp................cr
+                    // agdmontagut 12/22      dlb 3/22
+                    $pattern = "/^\s*([^\*\p{N}]+)*((\*|\s)+\d+\/\d{2})*(\*|\s)+(((\*\P{N}\*)|\P{N})+)(\s+\d+\/\d{2})*(\*|\s)*$/u";
+                    $coincide = preg_match($pattern, $line, $matches);
+                    if ($coincide === 1) {
+                        // quitar los '*' si tiene
+                        $destino = trim($matches[1]);
+                        $destino_prot = empty($matches[2]) ? '' : $matches[2];
+                        $destino_prot = str_replace('*', '', $destino_prot);
+
+                        $origen = trim($matches[5]);
+                        $origen = str_replace('*', '', $origen);
+                        $origen_prot = empty($matches[8]) ? '' : $matches[8];
+                        $origen_prot = str_replace('*', '', $origen_prot);
+
+                        // si tiene un guión, puede ser de una región (Gal-dlb)
+                        if (strpos($destino, '-')) {
+                            $a_sigla = explode('-', $destino);
+                            $origen1 = $a_sigla[0];
+                            $destino1 = $a_sigla[1];
+                            if ($destino1 !== 'sr' && $destino1 !== 'sr' && $origen1 !== 'sm' && $origen1 !== 'sr') {
+                                $coincide = 0;
+                            }
                         }
                     }
                 }
@@ -544,8 +581,6 @@ class EntradaProvisionalFromPdf
                         $origen_ref = str_replace('*', '', $origen_ref);
                         $origen_ref_prot = empty($matches[4]) ? '' : $matches[4];
                         $origen_ref_prot = str_replace('*', '', $origen_ref_prot);
-
-                        $destino_ref = trim($matches[3]);
 
                         if (!empty($origen_ref)) {
                             $a_ref[] = 'ref';
