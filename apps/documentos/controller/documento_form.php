@@ -2,6 +2,7 @@
 
 use core\ViewTwig;
 use documentos\model\Documento;
+use escritos\model\TextoDelEscrito;
 use etiquetas\model\entity\GestorEtiqueta;
 use web\Desplegable;
 
@@ -77,7 +78,7 @@ if (!empty($Q_id_doc)) {
             'caption' => $nombre_fichero,
             'url' => 'apps/documentos/controller/adjunto_delete.php', // server api to delete the file based on key
         ];
-        $tipo_doc = Documento::DOC_UPLOAD;
+        $tipo_doc = TextoDelEscrito::TIPO_UPLOAD;
     }
 
 } else {

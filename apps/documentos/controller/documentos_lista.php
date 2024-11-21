@@ -31,7 +31,7 @@ $aWhere = [];
 $aOperador = [];
 
 $cDocumentos = [];
-if ($Q_que == 'todos') {
+if ($Q_que === 'todos') {
     $gesEtiquetasDocumento = new GestorEtiquetaDocumento();
     $cDocumentos = $gesEtiquetasDocumento->getArrayDocumentosTodos();
     // borro las etiquetas seleccionadas
@@ -42,9 +42,9 @@ if ($Q_que == 'todos') {
     $cDocumentos = $gesEtiquetasDocumento->getArrayDocumentos($a_etiquetas_filtered, $Q_andOr);
 }
 
-$chk_or = ($Q_andOr == 'OR') ? 'checked' : '';
+$chk_or = ($Q_andOr === 'OR') ? 'checked' : '';
 // por defecto 'AND':
-$chk_and = (($Q_andOr == 'AND') || empty($Q_andOr)) ? 'checked' : '';
+$chk_and = (($Q_andOr === 'AND') || empty($Q_andOr)) ? 'checked' : '';
 
 if (!empty($cDocumentos)) {
     $aWhere['id_doc'] = implode(',', $cDocumentos);

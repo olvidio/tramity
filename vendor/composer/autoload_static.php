@@ -57,6 +57,10 @@ class ComposerStaticInit8db5ffd734a117187d87a5231ea88cb9
             'Mpdf\\PsrHttpMessageShim\\' => 24,
             'Mpdf\\' => 5,
         ),
+        'K' => 
+        array (
+            'Kazio73\\SynologyApiClient\\' => 26,
+        ),
         'G' => 
         array (
             'GuzzleHttp\\Psr7\\' => 16,
@@ -134,6 +138,10 @@ class ComposerStaticInit8db5ffd734a117187d87a5231ea88cb9
         'Mpdf\\' => 
         array (
             0 => __DIR__ . '/..' . '/mpdf/mpdf/src',
+        ),
+        'Kazio73\\SynologyApiClient\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kazio73/synology-api-client/src',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (

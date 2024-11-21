@@ -7,8 +7,10 @@ use core\ConfigGlobal;
 use core\ServerConf;
 use DOMDocument;
 use DOMXPath;
-use Mpdf\Mpdf;
+use escritos\model\TextoDelEscrito;
+use escritos\model\TextoDelEscritoInterface;
 use web\StringLocal;
+use function core\borrar_tmp;
 
 /**
  * INFO EN:
@@ -16,24 +18,26 @@ use web\StringLocal;
  * https://etherpad.org/doc/v1.7.0/
  *
  */
-class Etherpad extends Client
+/*
+Sessions can be created between a group and an author. This allows an author to access more than one group.
+The sessionID will be set as a cookie to the client and is valid until a certain date. The session cookie
+can also contain multiple comma-seperated sessionIDs, allowing a user to edit pads in different groups at
+the same time. Only users with a valid session for this group, can access group pads. You can create a
+session after you authenticated the user at your web application, to give them access to the pads.
+You should save the sessionID of this session and delete it after the user logged out.
+*/
+class Etherpad extends Client implements TextoDelEscritoInterface
 {
-
-    // Tipos de id
-    public const ID_COMPARTIDO = 'compartido';
-    public const ID_ADJUNTO = 'adjunto';
-    public const ID_DOCUMENTO = 'documento';
-    public const ID_ENTRADA = 'entrada';
-    public const ID_ESCRITO = 'escrito';
-    public const ID_EXPEDIENTE = 'expediente';
-    public const ID_PLANTILLA = 'plantilla';
-
     private $id_usuario = null;
     private $nom_usuario = null;
 
     private $id_escrito = null;
     private $textContent = null;
     private $multiple = FALSE;
+
+    private $padId;
+    private $a_header = [];
+    private $fecha = '';
 
     /**
      */
@@ -42,7 +46,7 @@ class Etherpad extends Client
         if (empty($url)) {
             $url = $_SESSION['oConfig']->getServerEtherpad();
         }
-        $this->url = $url;
+        $this->server_url = $url;
 
         if (empty($id_usuario)) {
             $id_usuario = ConfigGlobal::mi_id_usuario();
@@ -67,15 +71,15 @@ class Etherpad extends Client
             $this->api_version = $this->api_version_dlp;
         }
 
-        parent::__construct($this->apikey, $this->url);
+        parent::__construct($this->apikey, $this->server_url);
     }
 
-    public function setId($tipo_id, $id, $sigla = '')
+    public function setId($tipo_id, $id_escrito, $sigla = ''): string
     {
         // excepción para las entradas compartidas:
-        if ($tipo_id === self::ID_COMPARTIDO) {
+        if ($tipo_id === TextoDelEscrito::ID_COMPARTIDO) {
             $prefix = 'com';
-            $this->id_escrito = $prefix . $id;
+            $this->id_escrito = $prefix . $id_escrito;
         } else {
             // Añado el nombre del centro. De forma normalizada, pues a saber que puede tener el nombre:
             if (empty($sigla)) {
@@ -84,31 +88,89 @@ class Etherpad extends Client
             $nom_ctr = StringLocal::toRFC952($sigla);
 
             switch ($tipo_id) {
-                case self::ID_ADJUNTO:
+                case TextoDelEscrito::ID_ADJUNTO:
                     $prefix = 'adj';
                     break;
-                case self::ID_DOCUMENTO:
+                case TextoDelEscrito::ID_DOCUMENTO:
                     $prefix = 'doc';
                     break;
-                case self::ID_ENTRADA:
+                case TextoDelEscrito::ID_ENTRADA:
                     $prefix = 'ent';
                     break;
-                case self::ID_ESCRITO:
+                case TextoDelEscrito::ID_ESCRITO:
                     $prefix = 'esc';
                     break;
-                case self::ID_EXPEDIENTE:
+                case TextoDelEscrito::ID_EXPEDIENTE:
                     $prefix = 'exp';
                     break;
-                case self::ID_PLANTILLA:
+                case TextoDelEscrito::ID_PLANTILLA:
                     $prefix = 'plt';
                     break;
                 default:
                     $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
                     exit ($err_switch);
             }
-            $this->id_escrito = $nom_ctr . "*" . $prefix . $id;
+            $this->id_escrito = $nom_ctr . "*" . $prefix . $id_escrito;
         }
         return $this->id_escrito;
+    }
+
+    public function getJsonEditorUrl(): array
+    {
+        //para obtener o crear el pad_id
+        $this->crearTexto();
+        $padID = $this->padId;
+        $server_url = $this->getServerUrl();
+
+        $showChat = '';
+        if ($_SESSION['oConfig']->getChat() === 'TRUE') {
+            $showChat = '&showChat=true';
+        }
+        if ($_SESSION['oConfig']->getChat() === 'FALSE') {
+            $showChat = '&showChat=false';
+        }
+        $url = "$server_url/p/$padID?showLineNumbers=false$showChat";
+        $id = ''; // para la cookie si fuera necesario.
+        return ['url' => $url, 'id' => $id];
+    }
+
+    public function copyTo($newId_escrito)
+    {
+        //para obtener o crear el pad_id
+        $this->crearTexto();
+        $sourceID = $this->padId;
+        // cambiar el id, y clonar el etherpad con el nuevo id
+        $oNewEtherpad = new Etherpad();
+        $oNewEtherpad->setId(TextoDelEscrito::ID_ESCRITO, $newId_escrito);
+        $oNewEtherpad->crearTexto(); // Aquí crea el pad
+        $destinationID = $oNewEtherpad->getPadId();
+        /* con el Html, (setHtml) no hace bien los centrados (quizá más)
+         * con el Text  (setText) no coge los formatos.
+         */
+        $this->copyPad($sourceID, $destinationID, 'true');
+    }
+
+    public function eliminar(): void
+    {
+        $sourceID = $this->crearTextSinPermisos();
+
+        $rta = $this->deletePad($sourceID);
+        if ($rta->getCode() === 0) {
+            /* Example returns:
+             * {code: 0, message:"ok", data: null}
+             * {code: 1, message:"padID does not exist", data: null}
+             */
+        } else {
+            echo $this->mostrar_error($rta);
+        }
+    }
+
+    public function setHTML($html): void
+    {
+        //para obtener o crear el pad_id
+        $this->crearTexto();
+        $padID = $this->padId;
+        parent::setHTML($padID, $html);
     }
 
     /**
@@ -116,7 +178,7 @@ class Etherpad extends Client
      *
      * @return string html
      */
-    public function generarHtml()
+    public function generarHtml(): string
     {
         $html = '';
         $contenido = $this->cleanHtml();
@@ -138,9 +200,9 @@ class Etherpad extends Client
      *
      * @return string html
      */
-    private function cleanHtml($fecha = '')
+    private function cleanHtml($fecha = ''): string
     {
-        $contenido = $this->getHHtml();
+        $contenido = $this->getHtmlSinLimpiar();
 
         // acabar bien los <ul> o los <ol>
         //$pattern = "/(?<!<\/li>)(<\/[ou]l>)/";
@@ -328,22 +390,23 @@ class Etherpad extends Client
         // eliminar dobles lineas: <br><br>
         //$txt3_5 = str_replace("<br><br>", "<br>", $txt3_4);
         // eliminar todos los <br>
-        $txt7 = str_replace("<br>", "", $txt6);
         //$txt4 = str_replace("</p><br>", "</p>", $txt3_5);
         //$txt5 = str_replace("</table><br>", "</table>", $txt4);
 
 
-        return str_replace("</tbody></table><table><tbody>", "", $txt7);
+        return str_replace(array("<br>", "</tbody></table><table><tbody>"), "", $txt6);
     }
 
-    public function getHHtml()
+    public function getHtmlSinLimpiar(): string
     {
-        $padId = $this->getPadID();
+        //para obtener o crear el pad_id
+        $this->crearTexto();
+        $padID = $this->padId;
 
         // comprobar que no existe:
         // returns all pads of this group
         $rev = null;
-        $rta = $this->getHTML($padId, $rev);
+        $rta = $this->getHTML($padID, $rev);
         $code = $rta->getCode();
         if ($code == 0) {
             $data = $rta->getData();
@@ -354,24 +417,27 @@ class Etherpad extends Client
             $html = $data['html'];
             return $html;
         } else {
-            $this->mostrar_error($rta);
+            return $this->mostrar_error($rta);
         }
     }
 
-    public function getPadID()
+    public function crearTexto(): void
     {
         if (empty($this->id_escrito)) {
             die (_("Debe indicar el id con setId"));
         }
         // obtener o crear el pad
-        $PadID = $this->getId_pad();
+        $this->crearTextSinPermisos();
         // Conceder permisos (crear sesión)
         $this->addPerm();
-
-        return $PadID;
     }
 
-    public function getId_pad()
+    public function getPadId(): string
+    {
+        return $this->padId;
+    }
+
+    private function crearTextSinPermisos(): string
     {
         $groupID = $this->getGroupId();
         $padId = $groupID . "$" . $this->id_escrito;
@@ -387,19 +453,19 @@ class Etherpad extends Client
              * {code: 1, message:"groupID does not exist", data: null}
              */
             $padsOfGroup = $data['padIDs'];
-            if (in_array($padId, $padsOfGroup)) {
-                return $padId;
-            } else {
-                return $this->crearPad();
+            if (!in_array($padId, $padsOfGroup)) {
+                $padId = $this->crearPad();
             }
         } elseif ($code == 1) {
-            return $this->crearPad();
+            $padId = $this->crearPad();
         } else {
             $this->mostrar_error($rta);
         }
+        $this->padId = $padId;
+        return $padId;
     }
 
-    public function getGroupId()
+    private function getGroupId()
     {
         // Crear grupo id_escrito
         $groupID = '';
@@ -414,7 +480,7 @@ class Etherpad extends Client
         return $groupID;
     }
 
-    public function crearPad()
+    private function crearPad()
     {
         $groupID = $this->getGroupId();
         $padName = $this->id_escrito;
@@ -434,7 +500,7 @@ class Etherpad extends Client
         }
     }
 
-    public function addPerm()
+    private function addPerm()
     {
         $groupID = $this->getGroupId();
         $authorID = $this->getAuthorId();
@@ -443,7 +509,7 @@ class Etherpad extends Client
 
     }
 
-    public function getAuthorId()
+    private function getAuthorId()
     {
         // Crear usuario dani (7)
         $authorID = '';
@@ -458,7 +524,7 @@ class Etherpad extends Client
         return $authorID;
     }
 
-    public function crearSession($groupID, $authorID, $validUntil)
+    private function crearSession($groupID, $authorID, $validUntil)
     {
         // comprobar si ya está la session:
         /* Example returns:
@@ -555,7 +621,7 @@ class Etherpad extends Client
 
     // Crear o abrir Pad
 
-    public function addSessionCookie($sessionID)
+    private function addSessionCookie($sessionID)
     {
         $authorID = $this->getAuthorId();
 
@@ -612,42 +678,24 @@ class Etherpad extends Client
         }
     }
 
-    public function grabarMD($txt)
-    {
-        $padId = $this->getPadID();
-
-        $rta = $this->setText($padId, $txt);
-        /* Example returns:
-         *  {code: 0, message:"ok", data: null}
-         *  {code: 1, message:"padID does not exist", data: null}
-         *  {code: 1, message:"text too long", data: null}
-         */
-        $code = $rta->getCode();
-        if ($code == 1) {
-            $this->mostrar_error($rta);
-        }
-    }
-
     /**
      * @param string $text_content
      */
-    public function setTextContent($text_content)
+    public function setTextContent($text_content): void
     {
         $this->textContent = $text_content;
     }
 
-    /* Crear session (link usuario-grupo)
-     * creates a new session. validUntil is an unix timestamp in seconds
-     */
-
-    public function generarMD()
+    public function generarMD(): string
     {
-        $padId = $this->getPadID();
+        //para obtener o crear el pad_id
+        $this->crearTexto();
+        $padID = $this->padId;
 
         // comprobar que no existe:
         // returns all pads of this group
         $rev = null;
-        $rta = $this->getText($padId, $rev);
+        $rta = $this->getText($padID, $rev);
         $code = $rta->getCode();
         if ($code == 0) {
             $data = $rta->getData();
@@ -658,155 +706,56 @@ class Etherpad extends Client
             $text = $data['text'];
             return $text;
         } else {
-            $this->mostrar_error($rta);
+            return $this->mostrar_error($rta);
         }
     }
 
-    /*
-    Sessions can be created between a group and an author. This allows an author to access more than one group. 
-    The sessionID will be set as a cookie to the client and is valid until a certain date. The session cookie 
-    can also contain multiple comma-seperated sessionIDs, allowing a user to edit pads in different groups at 
-    the same time. Only users with a valid session for this group, can access group pads. You can create a 
-    session after you authenticated the user at your web application, to give them access to the pads. 
-    You should save the sessionID of this session and delete it after the user logged out. 
-    */
+    /**
+     * @param array $a_header ['left', 'center', 'right']
+     * @param string $fecha
+     * @return void
+     */
+    public function addHeaders(array $a_header = [], string $fecha = ''): void
+    {
+        $this->a_header = $a_header;
+        $this->fecha = $fecha;
+    }
+
+    // generar el odt y luego convertirlo:
+    public function getContentFormatODT(): string
+    {
+        $file_odt = $this->generarODT();
+        return file_get_contents($file_odt);
+    }
+
+    public function getContentFormatPDF(): string
+    {
+        $file_odt = $this->generarODT();
+        return (new DocConverter())->convertOdt2($file_odt, 'pdf');
+    }
+
+    public function getContentFormatDOCX(): string
+    {
+        $file_odt = $this->generarODT();
+        return (new DocConverter())->convertOdt2($file_odt, 'docx');
+    }
 
     /**
      * devuelve la ruta del fichero odt creado a partir del Etherpad.
      *
-     * @param array $a_header ['left', 'center', 'right']
      * @return string ruta del fichero odt que se ha creado
      */
-    public function generarODT(string $filename_sin_ext, array $a_header = [], string $fecha = ''): string
+    private function generarODT(): string
     {
-        $html = $this->cleanHtml($fecha);
+        $filename_uniq = uniqid('enviar_', true);
+        $html = $this->cleanHtml($this->fecha);
 
-        return (new Etherpad2ODF())->crearFicheroOdt($filename_sin_ext, $html, $a_header, $fecha);
+        $file_odt = (new Etherpad2ODF())->crearFicheroOdt($filename_uniq, $html, $this->a_header, $this->fecha);
+        // borrar los archivos temporales
+        borrar_tmp($filename_uniq);
+
+        return $file_odt;
     }
-
-    /**
-     * devuelve la ruta del fichero en formato PDF. USANDO EL LIBREOFFICE
-     *
-     * @param array $a_header ['left', 'center', 'right']
-     * @return string $nombre_del_fichero
-     */
-    public function generarLOPDF(string $filename_sin_ext, array $a_header = [], string $fecha = '')
-    {
-        $file_odt = $this->generarODT($filename_sin_ext, $a_header, $fecha);
-
-        $oDocConverter = new DocConverter();
-        $file_pdf = $oDocConverter->convertOdt2($file_odt, 'pdf');
-
-        return $file_pdf;
-    }
-
-
-    /**
-     * devuelve el escrito en formato PDF. Usando la librería MPDF
-     *
-     * @param array $a_header ['left', 'center', 'right']
-     * @return Mpdf
-     */
-    /*
-    public function generarMPDF(array $a_header = [], string $fecha = ''): Mpdf
-    {
-        $stylesheet = "<style>
-                TABLE { border: 1px solid black; border-collapse: collapse; }
-                TD { padding: 2mm; border: 1px solid black; vertical-align: middle;}
-                TD.header { padding: 1mm; border: 0px; vertical-align: bottom;}
-                 </style>
-                ";
-
-
-        $txt = $this->cleanHtml();
-        $txt2 = str_replace("<tbody>", "", $txt);
-        $html = str_replace("</tbody>", "", $txt2);
-
-        // convert to PDF
-        require_once(ConfigGlobal::dir_libs() . '/vendor/autoload.php');
-
-        if (!empty($a_header)) {
-            $header_html = '<table class="header" width="100%">';
-            $header_html .= '<tr>';
-            $header_html .= '<td class="header" width="33%">';
-            $header_html .= $a_header['left'];
-            $header_html .= '</td><td class="header" width="33%" align="center">';
-            $header_html .= $a_header['center'];
-            $header_html .= '</td><td class="header" width="33%" style="text-align: right;">';
-            $header_html .= $a_header['right'];
-            $header_html .= '</td></tr>';
-            $header_html .= '</table>';
-            $header_html .= '<hr>';
-        } else {
-            $header_html = '';
-        }
-
-        $footer = '{PAGENO}/{nbpg}';
-
-        if (!empty($fecha)) {
-            $html .= '<div id="fecha" style="margin-top: 2em; margin-right:  0em; text-align: right; " >';
-            $html .= $fecha;
-            $html .= '</div>';
-        }
-
-        try {
-            $config = ['mode' => 'utf-8',
-                'format' => 'A4-P',
-                'margin_header' => 10,
-                'margin_top' => 40,
-
-            ];
-            $mpdf = new Mpdf($config);
-            $mpdf->SetDisplayMode('fullpage');
-            $mpdf->list_indent_first_level = 0;    // 1 or 0 - whether to indent the first level of a list
-
-            if (!empty($header_html)) {
-                $mpdf->SetHTMLHeader($header_html);
-            }
-            $mpdf->SetHTMLFooter($footer);
-
-            $mpdf->WriteHTML($stylesheet, HTMLParserMode::HEADER_CSS);
-            $mpdf->WriteHTML($html);
-
-            // Other code
-            return $mpdf;
-        } catch (MpdfException $e) { // Note: safer fully qualified exception name used for catch
-            // Process the exception, log, print etc.
-            echo $e->getMessage();
-        }
-    }
-
-    public function getTexto($padID)
-    {
-        $rta = $this->getText($padID);
-        if ($rta->getCode() == 0) {
-            $data = $rta->getData();
-            // returns: {code: 0, message:"ok", data: {text:"Welcome Text"}}
-            //  {code: 1, message:"padID does not exist", data: null}
-            //
-            return $data['text'];
-        } else {
-            $this->mostrar_error($rta);
-        }
-    }
-    */
-
-    public function eliminarPad()
-    {
-        $padID = $this->getPadID();
-        /*
-         *Example returns:
-         *
-         * {code: 0, message:"ok", data: null}
-         * {code: 1, message:"padID does not exist", data: null}
-         */
-        $rta = $this->deletePad($padID);
-        if ($rta->getCode() == 1) {
-            $this->mostrar_error($rta);
-        }
-
-    }
-
     /*----------------------------------------------------------------------------------------*/
 
     public function getApiVersion(): string
@@ -817,112 +766,34 @@ class Etherpad extends Client
     /**
      * @return string $url
      */
-    public function getUrl()
+    public function getServerUrl(): string
     {
-        return $this->url;
+        return $this->server_url;
     }
 
-    /**
-     * @param string $url
-     */
-    public function setUrl($url)
-    {
-        $this->url = $url;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getId_usuario()
-    {
-        return $this->id_usuario;
-    }
 
     /**
      * @param mixed $id_usuario
      */
-    public function setId_usuario($id_usuario)
+    private function setId_usuario($id_usuario)
     {
         $this->id_usuario = $id_usuario;
     }
 
     /**
-     * @return mixed
-     */
-    public function getNom_usuario()
-    {
-        return $this->nom_usuario;
-    }
-
-    /**
      * @param mixed $nom_usuario
      */
-    public function setNom_usuario($nom_usuario)
+    private function setNom_usuario($nom_usuario)
     {
         $this->nom_usuario = $nom_usuario;
     }
 
     /**
-     * @return boolean
-     */
-    public function getMultiple()
-    {
-        return $this->multiple;
-    }
-
-    /**
      * @param boolean $multiple
      */
-    public function setMultiple($multiple)
+    public function setMultiple($multiple): void
     {
         $this->multiple = $multiple;
     }
-
-    /**
-     * Quitar todos los estilos etc de las tablas
-     *
-     */
-    private function quitarAtributosTabla($html)
-    {
-        $dom = new DOMDocument;
-        /* la '@' sirve para evita los errores:  Warning: DOMDocument::loadHTML()
-         *
-         * loadHTML expects valid markup, i’m afraid most page’s arn’t.
-         * You can alter the code to suppress markup errors:-
-         *      $file = @$doc->loadHTML($remote);
-         */
-        @$dom->loadHTML($html);
-
-        $xpath = new DOMXPath($dom);
-        // Quitar los atributos style
-        $tags_list = $xpath->query("//table|//tr|//td");
-        foreach ($tags_list as $tag) {
-            $tag->removeAttribute('style');
-            $tag->removeAttribute('name');
-            $tag->removeAttribute('class');
-        }
-
-        // Quitar los atributos label
-        $tags_list = $xpath->query("//label");
-        foreach ($tags_list as $tag) {
-            $tag->parentNode->removeChild($tag);
-        }
-
-        // save html
-        //$txt = $dom->saveHTML();
-
-        // lista de los tagg 'body'
-        $bodies = $dom->getElementsByTagName('body');
-
-        // cojo el primero de la lista: sólo debería haber uno.
-        $body = $bodies->item(0);
-        //$txt = $body->C14N(); //innerhtml convierte <br> a <br></br>. Se usa lo de abajo:
-        $txt = $body->ownerDocument->saveHTML($body);
-        $txt2 = substr($txt, 6); // Quitar el tag <body> inicial
-        $txt3 = substr($txt2, 0, -7); // Quitar el tag </body> final
-
-        return str_replace("</tbody></table><table><tbody>", "", $txt3);
-    }
-
 
 }

@@ -3,6 +3,7 @@
 use core\ConfigGlobal;
 use core\ViewTwig;
 use escritos\model\Escrito;
+use escritos\model\TextoDelEscrito;
 use etherpad\model\Etherpad;
 use lugares\model\entity\GestorLugar;
 use usuarios\model\Categoria;
@@ -148,20 +149,11 @@ if (!empty($Q_id_escrito)) {
             exit ($err_switch);
     }
 
+    $oTextoDelEscrito = new TextoDelEscrito($oEscrito->getTipo_doc(),TextoDelEscrito::ID_ESCRITO, $Q_id_escrito);
+    $json = $oTextoDelEscrito->getJsonEditorUrl();
+    $url = $json['url'];
 
-    $oEtherpad = new Etherpad();
-    $oEtherpad->setId(Etherpad::ID_ESCRITO, $Q_id_escrito);
-    $padID = $oEtherpad->getPadId();
-    $url = $oEtherpad->getUrl();
-
-    $showChat = '';
-    if ($_SESSION['oConfig']->getChat() === 'TRUE') {
-        $showChat = '&showChat=true';
-    }
-    if ($_SESSION['oConfig']->getChat() === 'FALSE') {
-        $showChat = '&showChat=false';
-    }
-    $iframe = "<iframe src='$url/p/$padID?showLineNumbers=false$showChat' width=1300 height=500></iframe>";
+    $iframe = "<iframe src='$url' width=1300 height=500></iframe>";
 
 } else {
     $asunto_detalle = '';

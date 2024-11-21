@@ -2,7 +2,7 @@
 
 use core\ConfigGlobal;
 use escritos\model\Escrito;
-use etherpad\model\Etherpad;
+use escritos\model\TextoDelEscrito;
 use expedientes\model\entity\Accion;
 use plantillas\model\entity\Plantilla;
 use web\DateTimeLocal;
@@ -33,7 +33,7 @@ switch ($Q_que) {
         $oEscrito = new Escrito();
         $oEscrito->setAccion(Escrito::ACCION_PLANTILLA);
         $oEscrito->setModo_envio(Escrito::MODO_MANUAL);
-        $oEscrito->setTipo_doc(Escrito::TIPO_ETHERPAD);
+        $oEscrito->setTipo_doc(TextoDelEscrito::TIPO_ETHERPAD);
 
         $oHoy = new DateTimeLocal();
         $f_escrito = $oHoy->getFromLocal();
@@ -43,7 +43,7 @@ switch ($Q_que) {
         $oEscrito->setCreador($id_ponente);
         $oEscrito->setOK(Escrito::OK_NO);
 
-        // El sunto no puede ser nulo (cojo el nombre de la plantilla)
+        // El asunto no puede ser nulo (cojo el nombre de la plantilla)
         $oEscrito->setAsunto($asunto);
 
         if ($oEscrito->DBGuardar() === FALSE) {
@@ -52,6 +52,7 @@ switch ($Q_que) {
         }
 
         $id_escrito = $oEscrito->getId_escrito();
+        $tipo_doc = $oEscrito->getTipo_doc();
 
         $oAccion = new Accion();
         $oAccion->setId_expediente($Q_id_expediente);
@@ -64,28 +65,21 @@ switch ($Q_que) {
 
 
         //clone:
-        $oEtherpad = new Etherpad();
-        $oEtherpad->setId(Etherpad::ID_PLANTILLA, $Q_id_plantilla);
-        $sourceID = $oEtherpad->getPadId();
-
-        $oNewEtherpad = new Etherpad();
-        $oNewEtherpad->setId(Etherpad::ID_ESCRITO, $id_escrito);
-        $destinationID = $oNewEtherpad->getPadID();
-
-        $rta = $oEtherpad->copyPad($sourceID, $destinationID, 'true');
+        $oTextoDelEscrito = new TextoDelEscrito($tipo_doc, TextoDelEscrito::ID_PLANTILLA, $Q_id_plantilla);
+        $oTextoDelEscrito->copyTo($id_escrito);
 
         /* con el Html, no hace bien los centrados (quizá más)
          * con el Text no coje los formatos.
         // copiar etherpad:
         $oEtherpad = new Etherpad();
-        $oEtherpad->setId(Etherpad::ID_PLANTILLA, $Q_id_plantilla);
+        $oEtherpad->setId(TextoDelEscrito::ID_PLANTILLA, $Q_id_plantilla);
         //$padID = $oEtherpad->getPadId();
         //$txtPad = $oEtherpad->getTexto($padID);
         $htmlPad = $oEtherpad->getHHtml();
         
         // canviar el id, y clonar el etherpad con el nuevo id
         $oNewEtherpad = new Etherpad();
-        $oNewEtherpad->setId(Etherpad::ID_ESCRITO, $id_escrito);
+        $oNewEtherpad->setId(TextoDelEscrito::ID_ESCRITO, $id_escrito);
         $padId = $oNewEtherpad->getPadID();
         //$oNewEtherpad->setText($txtPad);
         $oNewEtherpad->setHTML($padId,$htmlPad);
@@ -145,6 +139,7 @@ switch ($Q_que) {
     case "guardar":
         $Q_id_plantilla = (integer)filter_input(INPUT_POST, 'id_plantilla');
         $Q_nombre = (string)filter_input(INPUT_POST, 'nombre');
+        $Q_tipo_doc = (int)filter_input(INPUT_POST, 'tipo_doc');
 
         if (empty($Q_nombre)) {
             echo _("debe poner un nombre");
@@ -153,6 +148,7 @@ switch ($Q_que) {
         $oPlantilla = new Plantilla($Q_id_plantilla);
         $oPlantilla->DBCargar();
         $oPlantilla->setNombre($Q_nombre);
+        $oPlantilla->setTipo_doc($Q_tipo_doc);
         if ($oPlantilla->DBGuardar() === FALSE) {
             echo _("hay un error, no se ha guardado");
             echo "\n" . $oPlantilla->getErrorTxt();

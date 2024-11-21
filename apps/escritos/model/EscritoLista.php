@@ -86,6 +86,7 @@ class EscritoLista
             }
 
             $id_escrito = $oEscrito->getId_escrito();
+            $tipo_doc = $oEscrito->getTipo_doc();
             $f_salida = $oEscrito->getF_salida()->getFromLocal();
             $ponente = $oEscrito->getCreador();
             $ponente_txt = empty($a_cargos[$ponente]) ? '?' : $a_cargos[$ponente];
@@ -94,6 +95,7 @@ class EscritoLista
 
             $a_cosas = [
                 'id_escrito' => $id_escrito,
+                'tipo_doc' => $tipo_doc,
                 'filtro' => $this->filtro,
                 'modo' => $this->modo,
                 'accion' => $tipo_accion,
@@ -278,6 +280,7 @@ class EscritoLista
         $todos_escritos_enviados = TRUE;
         foreach ($cEscritos as $oEscrito) {
             $id_escrito = $oEscrito->getId_escrito();
+            $tipo_doc = $oEscrito->getTipo_doc();
             $f_salida = $oEscrito->getF_salida()->getFromLocal();
             $f_escrito = $oEscrito->getF_escrito()->getFromLocal();
             $tipo_accion = $oEscrito->getAccion();

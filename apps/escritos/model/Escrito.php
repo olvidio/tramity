@@ -20,7 +20,6 @@ use usuarios\model\PermRegistro;
 use usuarios\model\Visibilidad;
 use web\Protocolo;
 use web\ProtocoloArray;
-use const http\Client\Curl\PROXY_HTTP;
 
 
 class Escrito extends EscritoDB
@@ -182,13 +181,9 @@ class Escrito extends EscritoDB
     {
         $txt_err = '';
         // Tipo de texto:
-        if ($this->getTipo_doc() == self::TIPO_ETHERPAD) {
-            $oEtherpad = new Etherpad();
-            $oEtherpad->setId(Etherpad::ID_ESCRITO, $this->iid_escrito);
-            $rta = $oEtherpad->eliminarPad();
-            if (!empty($rta)) {
-                $txt_err .= $rta;
-            }
+        if ($this->getTipo_doc() != TextoDelEscrito::TIPO_UPLOAD) {
+            $oTextoDelEscrito = new TextoDelEscrito($this->getTipo_doc(),TextoDelEscrito::ID_ESCRITO, $this->iid_escrito);
+            $oTextoDelEscrito->eliminar();
         }
         // adjuntos:
         $gesAdjuntos = new GestorEscritoAdjunto();
@@ -234,7 +229,7 @@ class Escrito extends EscritoDB
     {
         // devolver la lista completa (para sobreescribir)
         $html = '';
-        $a_adjuntos = $this->getArrayIdAdjuntos(Documento::DOC_ETHERPAD);
+        $a_adjuntos = $this->getArrayIdAdjuntos(TextoDelEscrito::TIPO_ETHERPAD);
         if (!empty($a_adjuntos)) {
             $html = '<ol>';
             foreach ($a_adjuntos as $id_adjunto => $nom) {
@@ -515,9 +510,7 @@ class Escrito extends EscritoDB
 
     public function explotar(): bool
     {
-        $oEtherpad = new Etherpad();
-        $oEtherpad->setId(Etherpad::ID_ESCRITO, $this->iid_escrito);
-        $sourceID = $oEtherpad->getPadId();
+        $oTextoDelEscrito = new TextoDelEscrito($this->getTipo_doc(), TextoDelEscrito::ID_ESCRITO, $this->iid_escrito);
 
         // Si esta marcado como grupo de destinos, o destinos individuales.
         $aProtDst = $this->getJson_prot_destino(TRUE);
@@ -572,14 +565,7 @@ class Escrito extends EscritoDB
                 } else {
                     continue;
                 }
-                // cambiar el id, y clonar el etherpad con el nuevo id
-                $oNewEtherpad = new Etherpad();
-                $oNewEtherpad->setId(Etherpad::ID_ESCRITO, $newId_escrito);
-                $destinationID = $oNewEtherpad->getPadID(); // Aquí crea el pad
-                /* con el Html, (setHtml) no hace bien los centrados (quizá más)
-                 * con el Text  (setText) no coge los formatos.
-                 */
-                $oEtherpad->copyPad($sourceID, $destinationID, 'true');
+                $oTextoDelEscrito->copyTo($newId_escrito);
 
                 // copiar los adjuntos
                 $a_id_adjuntos = $this->getArrayIdAdjuntos();
@@ -656,15 +642,11 @@ class Escrito extends EscritoDB
 
         $html_conforme = $this->getConforme($id_expediente, $json_prot_local);
 
-        $oEtherpad = new Etherpad();
-        $oEtherpad->setId(Etherpad::ID_ESCRITO, $this->iid_escrito);
-        $padID = $oEtherpad->getPadId();
-
-        $html_1 = $oEtherpad->getHHtml();
-
+        $oTextoDelEscrito = new TextoDelEscrito($this->getTipo_doc(),TextoDelEscrito::ID_ESCRITO, $this->iid_escrito);
+        $html_1 = $oTextoDelEscrito->getHtmlSinLimpiar();
         $html = $html_1 . $html_conforme;
 
-        $oEtherpad->setHTML($padID, $html);
+        $oTextoDelEscrito->setHTML($html);
 
         return $html;
     }

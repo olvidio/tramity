@@ -7,8 +7,8 @@
         //var url = server+'/p/'+id_entrada;
         // get url
         var url;
-        var url_ajax = 'apps/ethercalc/controller/getUrlEscrito.php';
-        var param_json = {tipo_id: 'entrada', id: id_entrada};
+        var url_ajax = 'apps/escritos/controller/getUrlEscrito.php';
+        var param_json = {tipo_id: 'entrada', id: id_entrada, tipo_doc: 2};
 
         if (typeof event !== 'undefined') {
             event.preventDefault();
@@ -23,9 +23,8 @@
         });
 
         request.done(function (rta) {
-            // antes, dentro del ajax, hacia falta el responseText
-            //url=rta.responseText;
-            url = rta;
+            id = rta['id'];
+            url = rta['url'];
             w = window.open(url, "", winPrefs);
             w.focus();
         });
@@ -36,15 +35,15 @@
         return false;
     }
 
-    fnjs_ver_doc_ep = function () {
+    fnjs_ver_doc_ep = function (tipo_doc) {
         var id_entrada = $('#id_entrada').val();
         var winPrefs = "dependent=yes,width=1400,height=800,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
         //var server = 'http://127.0.0.1:8080'
         //var url = server+'/p/'+id_entrada;
         // get url
         var url;
-        var url_ajax = 'apps/etherpad/controller/getUrlEscrito.php';
-        var param_json = {tipo_id: 'entrada', id: id_entrada};
+        var url_ajax = 'apps/escritos/controller/getUrlEscrito.php';
+        var param_json = {tipo_id: 'entrada', id: id_entrada, tipo_doc: tipo_doc};
 
         if (typeof event !== 'undefined') {
             event.preventDefault();
@@ -59,9 +58,8 @@
         });
 
         request.done(function (rta) {
-            // antes, dentro del ajax, hacia falta el responseText
-            //url=rta.responseText;
-            url = rta;
+            id = rta['id'];
+            url = rta['url'];
             win = window.open(url, "", winPrefs);
             win.focus();
         });

@@ -1,8 +1,11 @@
 <?php
 
 use core\ViewTwig;
+use escritos\model\entity\EscritoDB;
 use escritos\model\Escrito;
+use escritos\model\TextoDelEscrito;
 use etherpad\model\Etherpad;
+use synology\model\SynoText;
 use usuarios\model\Visibilidad;
 use web\Protocolo;
 
@@ -56,9 +59,11 @@ if (!empty($Q_id_escrito)) {
     $primero = 1;
     $todosHtml = '';
     $oEtherpad = new Etherpad();
+    /*
     if (count($a_escritos) > 1) {
         $oEtherpad->setMultiple(TRUE);
     }
+    */
     foreach ($a_escritos as $id_escrito) {
         $oEscrito = new Escrito($id_escrito);
 
@@ -67,7 +72,7 @@ if (!empty($Q_id_escrito)) {
         if (!empty($visibilidad) && $visibilidad != Visibilidad::V_CTR_TODOS) {
             $oVisibilidad = new Visibilidad();
             $a_visibilidad = $oVisibilidad->getArrayVisibilidad();
-            $visibilidad_txt = "(".$a_visibilidad[$visibilidad].")";
+            $visibilidad_txt = "(" . $a_visibilidad[$visibilidad] . ")";
         }
 
         $destinos = $oEscrito->cabeceraIzquierda();
@@ -81,9 +86,8 @@ if (!empty($Q_id_escrito)) {
         $f_escrito = $oEscrito->getF_escrito()->getFromLocal();
         $tipo_doc = $oEscrito->getTipo_doc();
 
-        $oEtherpad->setId(Etherpad::ID_ESCRITO, $id_escrito);
-
-        $escrito_html = $oEtherpad->generarHtml();
+        $oTextDelEscrito = new TextoDelEscrito($tipo_doc, TextoDelEscrito::ID_ESCRITO, $id_escrito);
+        $escrito_html = $oTextDelEscrito->generarHtml();
 
         $oView = new ViewTwig('escritos/controller');
         if ($Q_Slide_mode === TRUE) {

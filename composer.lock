@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f3bd288e0a75d92b98e082e2f518b5b0",
+    "content-hash": "b0963629f8fea7cf8f3ec98ab619ebde",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -386,6 +386,65 @@
                 "source": "https://github.com/JBlond/twig-trans/tree/v1.1.0"
             },
             "time": "2022-03-30T12:35:37+00:00"
+        },
+        {
+            "name": "kazio73/synology-api-client",
+            "version": "0.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Kazio73/synology-api-client.git",
+                "reference": "a26a541bf6a0b1214e5574bc59c8c6b6072c83ff"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Kazio73/synology-api-client/zipball/a26a541bf6a0b1214e5574bc59c8c6b6072c83ff",
+                "reference": "a26a541bf6a0b1214e5574bc59c8c6b6072c83ff",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": ">=8.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Kazio73\\SynologyApiClient\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kazik Karczewski",
+                    "email": "kazio@kargraf.com.pl"
+                },
+                {
+                    "name": "Nicolas Cerveaux",
+                    "email": "nicolas.cerveaux@gmail.com"
+                },
+                {
+                    "name": "Victor Balssa",
+                    "email": "victor.balssa@gmail.com"
+                },
+                {
+                    "name": "Riccardo Bessone",
+                    "email": "riccardo@bess.one"
+                }
+            ],
+            "description": "Synology API client",
+            "homepage": "https://github.com/Kazio73/synology-api-client",
+            "keywords": [
+                "nas",
+                "synology"
+            ],
+            "support": {
+                "issues": "https://github.com/Kazio73/synology-api-client/issues",
+                "source": "https://github.com/Kazio73/synology-api-client/tree/0.3.8"
+            },
+            "time": "2024-09-06T10:18:24+00:00"
         },
         {
             "name": "mpdf/mpdf",

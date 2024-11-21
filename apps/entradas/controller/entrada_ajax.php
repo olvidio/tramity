@@ -9,8 +9,7 @@ use entradas\model\entity\GestorEntradaBypass;
 use entradas\model\Entrada;
 use entradas\model\GestorEntrada;
 use escritos\model\Escrito;
-use ethercalc\model\Ethercalc;
-use etherpad\model\Etherpad;
+use escritos\model\TextoDelEscrito;
 use lugares\model\entity\GestorLugar;
 use oasis_as4\model\As4;
 use oasis_as4\model\As4CollaborationInfo;
@@ -717,35 +716,9 @@ switch ($Q_que) {
         if ($error === TRUE) {
             $jsondata['error'] = TRUE;
         } else {
-            switch ($Qtipo_doc) {
-                case EntradaDocDB::TIPO_ETHERCALC :
-                    $oEthercalc = new Ethercalc();
-                    $oEthercalc->setId(Ethercalc::ID_ENTRADA, $Q_id_entrada);
-                    $padID = $oEthercalc->getPadId();
-                    $url = $oEthercalc->getUrl();
-
-                    $fullUrl = "$url/$padID";
-
-                    $jsondata['error'] = FALSE;
-                    $jsondata['url'] = $fullUrl;
-                    break;
-                case EntradaDocDB::TIPO_ETHERPAD :
-                    $oEtherpad = new Etherpad();
-                    $oEtherpad->setId(Etherpad::ID_ENTRADA, $Q_id_entrada);
-                    $padID = $oEtherpad->getPadId();
-                    // add user access to pad (Session)
-                    //$oEtherpad->addUserPerm($id_entrada);
-                    $url = $oEtherpad->getUrl();
-
-                    $fullUrl = "$url/p/$padID?showChat=false&showLineNumbers=false";
-
-                    $jsondata['error'] = FALSE;
-                    $jsondata['url'] = $fullUrl;
-                    break;
-                default:
-                    $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
-                    exit ($err_switch);
-            }
+            $oTextDelEscrito = new TextoDelEscrito($Qtipo_doc, TextoDelEscrito::ID_ENTRADA, $Q_id_entrada);
+            $jsondata = $oTextDelEscrito->getJsonEditorUrl();
+            $jsondata['error'] = FALSE;
         }
         //Aunque el content-type no sea un problema en la mayoría de casos, es recomendable especificarlo
         header('Content-type: application/json; charset=utf-8');

@@ -35,11 +35,6 @@ use function core\is_true;
 class EscritoDB extends core\ClasePropiedades
 {
 
-    // tipo documento (igual que entradadocdb)
-    public const TIPO_ETHERPAD = 1;
-    public const TIPO_ETHERCALC = 2;
-    public const TIPO_OTRO = 3;
-
     // ok
     public const OK_NO = 1;
     public const OK_OFICINA = 2;

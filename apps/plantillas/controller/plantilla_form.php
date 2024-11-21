@@ -1,7 +1,9 @@
 <?php
 
 use core\ViewTwig;
+use escritos\model\TextoDelEscrito;
 use plantillas\model\entity\Plantilla;
+use web\Desplegable;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -53,12 +55,20 @@ if (!empty($Q_id_plantilla)) {
     $oPlantilla = new Plantilla($Q_id_plantilla);
 
     $nombre = $oPlantilla->getNombre();
+    $tipo_doc = $oPlantilla->getTipo_doc();
 } else {
     $que = 'nuevo';
     $nombre = '';
+    $tipo_doc = 1;
 }
 
-$camposForm = 'que';
+$a_tipo_doc = TextoDelEscrito::getArrayTipos();
+$oDesplTipo_doc = new Desplegable();
+$oDesplTipo_doc->setNombre('tipo_doc');
+$oDesplTipo_doc->setOpciones($a_tipo_doc);
+
+
+$camposForm = 'que!nombre!tipo_doc';
 $oHash = new web\Hash();
 $oHash->setcamposForm($camposForm);
 $a_camposHidden = array(
@@ -75,6 +85,7 @@ $a_campos = [
     'id_plantilla' => $Q_id_plantilla,
     'oHash' => $oHash,
     'nombre' => $nombre,
+    'oDesplTipo_doc' => $oDesplTipo_doc,
     'base_url' => $base_url,
     'pagina_cancel' => $pagina_cancel,
 ];

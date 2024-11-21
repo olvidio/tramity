@@ -105,7 +105,7 @@ class CalDAVClient
                 $this->port = 80;
             }
             if ($matches[4] != '') {
-                $this->port = intval($matches[4]);
+                $this->port = (int)$matches[4];
             }
         } else {
             trigger_error("Invalid URL: '" . $base_url . "'", E_USER_ERROR);
@@ -249,7 +249,7 @@ class CalDAVClient
         }
         fclose($fip);
         //echo "<br>dani rta<br>".$response."\r\n\r\n"."<br>\n";
-        list($this->httpResponseHeaders, $this->httpResponseBody) = preg_split('{\r?\n\r?\n}s', $response, 2);
+        list($this->httpResponseHeaders, $this->httpResponseBody) = preg_split('{\r?\n\r?\n}', $response, 2);
         if (preg_match('{Transfer-Encoding: chunked}i', $this->httpResponseHeaders)) $this->Unchunk();
 
         $this->headers = array();  // reset the headers array for our next request
@@ -300,7 +300,7 @@ class CalDAVClient
         } else {
             $this->httpResponse = trim(substr($response, 0, $pos));
             $this->xmlResponse = trim(substr($response, $pos));
-            $this->xmlResponse = preg_replace('{>[^>]*$}s', '>', $this->xmlResponse);
+            $this->xmlResponse = preg_replace('{>[^>]*$}', '>', $this->xmlResponse);
             $parser = xml_parser_create_ns('UTF-8');
             xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 1);
             xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);

@@ -11,15 +11,25 @@
                        value="{{ nombre }}">
             </div>
 
+            <div class="mb-4 row">
+                <label for="tipo_doc" class="col-4">{{ "Tipo de Documento"|trans|raw }}</label>
+                <div class="col-4">
+                    {{ oDesplTipo_doc.desplegable|raw }}
+                </div>
+            </div>
 
-            <div class="row">
+            <div class="m-3 row col-12">
+                <div class="m-3 row col-4">
                 <button type="button" tabindex='91' class="btn btn-secondary" onClick="fnjs_cancelar();">
                     {{ "Cancelar"|trans|raw }}
                 </button>
+                </div>
+                <div class="m-3 row col-4">
                 <button id="btn_guardar" type="button" tabindex='90' class="btn btn-primary"
                         onClick="fnjs_guardar(this.form);">
                     {{ "Guardar"|trans|raw }}
                 </button>
+                </div>
             </div>
         </form>
     </div>

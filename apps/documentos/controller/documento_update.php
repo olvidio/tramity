@@ -85,8 +85,8 @@ switch ($Q_que) {
         $id_doc = $oDocumento->getId_doc();
         $tipo_doc = $oDocumento->getTipo_doc();
 
-        // las etiquetas despues de guardar el documento:
-        if (!empty($Q_a_etiquetas)) { // No puede haber un docuemento sin etiquetas
+        // las etiquetas después de guardar el documento:
+        if (!empty($Q_a_etiquetas)) { // No puede haber un documento sin etiquetas
             $oDocumento->setEtiquetas($Q_a_etiquetas);
         }
 

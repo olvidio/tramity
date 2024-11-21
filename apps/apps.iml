@@ -11,6 +11,7 @@
       <excludeFolder url="file://$MODULE_DIR$/../vendor/symfony/polyfill-php83" />
       <excludeFolder url="file://$MODULE_DIR$/../vendor/mpdf/psr-http-message-shim" />
       <excludeFolder url="file://$MODULE_DIR$/../vendor/mpdf/psr-log-aware-trait" />
+      <excludeFolder url="file://$MODULE_DIR$/../vendor/kazio73/synology-api-client" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

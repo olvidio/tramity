@@ -4,6 +4,7 @@ namespace documentos\model;
 
 use core\ConfigGlobal;
 use core\ViewTwig;
+use escritos\model\TextoDelEscrito;
 use usuarios\model\entity\GestorCargo;
 use web\Hash;
 
@@ -63,7 +64,7 @@ class DocumentoLista
         $a_documentos = [];
         $id_doc = '';
         if (!empty($this->aWhere)) {
-            $aTipoDoc = $oDocumentoGenerico->getArrayTipos();
+            $aTipoDoc = TextoDelEscrito::getArrayTipos();
             $gesDocumentos = new GestorDocumento();
             $cDocumentos = $gesDocumentos->getDocumentos($this->aWhere, $this->aOperador);
             foreach ($cDocumentos as $oDocumento) {
@@ -94,15 +95,15 @@ class DocumentoLista
                 $tipo_doc = $oDocumento->getTipo_doc();
                 $documento_txt = $oDocumento->getDocumento();
 
-                if ($tipo_doc == Documento::DOC_ETHERPAD) {
-                    $url_download = '';
-                    $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_revisar_documento('$id_doc');\" >" . _("editar") . "</span>";
-                } elseif ($tipo_doc == Documento::DOC_UPLOAD && !empty($documento_txt)) {
+                if ($tipo_doc == TextoDelEscrito::TIPO_UPLOAD && !empty($documento_txt)) {
                     $url_download = Hash::link('apps/documentos/controller/adjunto_download.php?' . http_build_query(['key' => $id_doc]));
                     $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"window.open('$url_download');\" >" . _("descargar") . "</span>";
+                } else {
+                    $url_download = '';
+                    $row['link_ver'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_revisar_documento('$id_doc',$tipo_doc);\" >" . _("editar") . "</span>";
                 }
-                $row['link_mod'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_mod');\" >" . _("datos") . "</span>";
 
+                $row['link_mod'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_update_div('#main','$link_mod');\" >" . _("datos") . "</span>";
                 $row['link_accion'] = "<span role=\"button\" class=\"btn-link\" onclick=\"fnjs_eliminar_documento('$id_doc');\" >" . _("eliminar") . "</span>";
 
                 $tipo_doc_txt = empty($aTipoDoc[$tipo_doc]) ? $tipo_doc : $aTipoDoc[$tipo_doc];
@@ -184,19 +185,6 @@ class DocumentoLista
     public function getId_doc()
     {
         return $this->id_doc;
-    }
-
-    public function getNumero()
-    {
-        $this->setCondicion();
-        if (!empty($this->aWhere)) {
-            $gesDocumentos = new GestorDocumento();
-            $cDocumentos = $gesDocumentos->getDocumentos($this->aWhere, $this->aOperador);
-            $num = count($cDocumentos);
-        } else {
-            $num = '';
-        }
-        return $num;
     }
 
     /**

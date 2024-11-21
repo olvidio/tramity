@@ -78,8 +78,10 @@ class Plantilla extends core\ClasePropiedades
      * @var string
      */
     private $snombre;
-    /* CONSTRUCTOR -------------------------------------------------------------- */
 
+    private int $itipo_doc;
+
+    /* CONSTRUCTOR -------------------------------------------------------------- */
     /**
      * Constructor de la classe.
      * Si només necessita un valor, se li pot passar un integer.
@@ -126,12 +128,14 @@ class Plantilla extends core\ClasePropiedades
         }
         $aDades = array();
         $aDades['nombre'] = $this->snombre;
+        $aDades['tipo_doc'] = $this->itipo_doc;
         array_walk($aDades, 'core\poner_null');
 
         if ($bInsert === FALSE) {
             //UPDATE
             $update = "
-					nombre                   = :nombre";
+					nombre                   = :nombre,
+                    tipo_doc                 = :tipo_doc";
             if (($oDblSt = $oDbl->prepare("UPDATE $nom_tabla SET $update WHERE id_plantilla='$this->iid_plantilla'")) === FALSE) {
                 $sClauError = 'Plantilla.update.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -149,8 +153,8 @@ class Plantilla extends core\ClasePropiedades
             }
         } else {
             // INSERT
-            $campos = "(nombre)";
-            $valores = "(:nombre)";
+            $campos = "(nombre, tipo_doc)";
+            $valores = "(:nombre, :tipo_doc)";
             if (($oDblSt = $oDbl->prepare("INSERT INTO $nom_tabla $campos VALUES $valores")) === FALSE) {
                 $sClauError = 'Plantilla.insertar.prepare';
                 $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
@@ -201,7 +205,7 @@ class Plantilla extends core\ClasePropiedades
                     if ($aDades === FALSE) {
                         return FALSE;
                     }
-                   $this->setAllAtributes($aDades);
+                    $this->setAllAtributes($aDades);
             }
             return TRUE;
         } else {
@@ -228,6 +232,9 @@ class Plantilla extends core\ClasePropiedades
         if (array_key_exists('nombre', $aDades)) {
             $this->setNombre($aDades['nombre']);
         }
+        if (array_key_exists('tipo_doc', $aDades)) {
+            $this->setTipo_doc($aDades['tipo_doc']);
+        }
     }
 
     /* OTOS MÉTODOS  ----------------------------------------------------------*/
@@ -249,9 +256,14 @@ class Plantilla extends core\ClasePropiedades
         $this->snombre = $snombre;
     }
 
+    function setTipo_doc($itipo_doc = '')
+    {
+        $this->itipo_doc = $itipo_doc;
+    }
+
     /* MÉTODOS GET y SET --------------------------------------------------------*/
 
-    
+
     /**
      * Recupera las claus primàries de Plantilla en un array
      *
@@ -326,6 +338,14 @@ class Plantilla extends core\ClasePropiedades
             $this->DBCargar();
         }
         return $this->snombre;
+    }
+
+    function getTipo_doc(): ?int
+    {
+        if (!isset($this->itipo_doc) && !$this->bLoaded) {
+            $this->DBCargar();
+        }
+        return $this->itipo_doc;
     }
 
     /**

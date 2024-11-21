@@ -1,7 +1,8 @@
 CREATE TABLE nombre_del_esquema.plantillas
 (
     id_plantilla SERIAL PRIMARY KEY,
-    nombre       text NOT NULL
+    nombre       text NOT NULL,
+    tipo_doc     smallint NOT NULL
 );
 
 

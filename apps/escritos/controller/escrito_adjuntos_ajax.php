@@ -7,6 +7,7 @@ use documentos\model\entity\GestorEtiquetaDocumento;
 use documentos\model\GestorDocumento;
 use escritos\model\entity\EscritoAdjunto;
 use escritos\model\Escrito;
+use escritos\model\TextoDelEscrito;
 use etherpad\model\Etherpad;
 use etherpad\model\GestorEtherpad;
 use etiquetas\model\entity\GestorEtiqueta;
@@ -62,7 +63,7 @@ switch ($Q_que) {
                 $err_cargar = sprintf(_("OJO! no existe el escrito en %s, linea %s"), __FILE__, __LINE__);
                 exit ($err_cargar);
             }
-            $oEscrito->setTipo_doc(Documento::DOC_ETHERPAD);
+            $oEscrito->setTipo_doc(TextoDelEscrito::TIPO_ETHERPAD);
             if ($oEscrito->DBGuardar() === FALSE) {
                 $error_txt .= ($oEscrito->getErrorTxt());
             }
@@ -90,19 +91,8 @@ switch ($Q_que) {
             $error_txt .= $oEscritoAdjunto->getErrorTxt();
         }
         // eliminar el pad:
-        $oEtherpad = new Etherpad();
-        $oEtherpad->setId(Etherpad::ID_ADJUNTO, $Q_id_adjunto);
-        $sourceID = $oEtherpad->getId_pad();
-
-        $rta = $oEtherpad->deletePad($sourceID);
-        if ($rta->getCode() === 0) {
-            /* Example returns:
-             * {code: 0, message:"ok", data: null}
-             * {code: 1, message:"padID does not exist", data: null}
-             */
-        } else {
-            echo $oEtherpad->mostrar_error($rta);
-        }
+        $oTextDelEscrito = new TextoDelEscrito($oEscritoAdjunto->getTipo_doc(), TextoDelEscrito::ID_ADJUNTO, $Q_id_adjunto);
+        $oTextDelEscrito->eliminar();
 
         $oEscrito = new Escrito($Q_id_escrito);
         echo $oEscrito->getHtmlAdjuntos();
@@ -124,14 +114,14 @@ switch ($Q_que) {
         }
         if (empty($error_txt)) {
             switch ($tipo_doc) {
-                case Documento::DOC_ETHERPAD:
+                case TextoDelEscrito::TIPO_ETHERPAD:
                     $fileName = $oDocumento->getNom();
                     // gravar en adjuntos escrito
                     // new
                     $oEscritoAdjunto = new EscritoAdjunto();
                     $oEscritoAdjunto->setId_escrito($Q_id_escrito);
                     $oEscritoAdjunto->setNom($fileName);
-                    $oEscritoAdjunto->setTipo_doc(Documento::DOC_ETHERPAD);
+                    $oEscritoAdjunto->setTipo_doc(TextoDelEscrito::TIPO_ETHERPAD);
 
                     if ($oEscritoAdjunto->DBGuardar() === FALSE) {
                         $error_txt .= $oEscritoAdjunto->getErrorTxt();
@@ -147,7 +137,7 @@ switch ($Q_que) {
                         $oDocumento->DBEliminar();
                     }
                     break;
-                case Documento::DOC_UPLOAD:
+                case TextoDelEscrito::TIPO_UPLOAD:
                     $nombre_fichero = $oDocumento->getNombre_fichero();
                     $contenido_doc = $oDocumento->getDocumento();
 
@@ -157,7 +147,7 @@ switch ($Q_que) {
                     $oEscritoAdjunto->setId_escrito($Q_id_escrito);
                     $oEscritoAdjunto->setNom($nombre_fichero);
                     $oEscritoAdjunto->setAdjunto($contenido_doc);
-                    $oEscritoAdjunto->setTipo_doc(Documento::DOC_UPLOAD);
+                    $oEscritoAdjunto->setTipo_doc(TextoDelEscrito::TIPO_UPLOAD);
 
                     if ($oEscritoAdjunto->DBGuardar() === FALSE) {
                         $error_txt .= $oEscritoAdjunto->getErrorTxt();
@@ -298,7 +288,7 @@ switch ($Q_que) {
         $a = 0;
         foreach ($cDocumentos as $oDocumento) {
             // Si sólo quiero los etherpad, quitar el resto:
-            if ($Q_tipo_n === 5 && $oDocumento->getTipo_doc() != Documento::DOC_ETHERPAD) {
+            if ($Q_tipo_n === 5 && $oDocumento->getTipo_doc() != TextoDelEscrito::TIPO_ETHERPAD) {
                 continue;
             }
             // mirar permisos...

@@ -170,7 +170,7 @@
                     <div class="mb-3">
                         <label>{{ "Ver escrito"|trans|raw }}:</label>
                         {% if tipo_documento == 1 %}
-                            <button type="button" tabindex='300' class="btn btn-info" onClick="fnjs_ver_doc_ep();">
+                            <button type="button" tabindex='300' class="btn btn-info" onClick="fnjs_ver_doc_ep({{ tipo_documento }});">
                                 {{ "Etherpad"|trans|raw }}
                             </button>
                         {% endif %}

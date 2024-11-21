@@ -5,6 +5,7 @@ namespace entradas\model;
 
 use core\ConfigGlobal;
 use entradas\model\entity\EntradaDocDB;
+use escritos\model\TextoDelEscrito;
 use lugares\model\entity\GestorLugar;
 use lugares\model\entity\Lugar;
 use Smalot\PdfParser\Config;
@@ -184,8 +185,8 @@ class EntradaProvisionalFromPdf
             $oEntrada->setDetalle($detalle);
         }
         $oEntrada->setModo_entrada(Entrada::MODO_PROVISIONAL);
-        // Por el momento solamente etherpad
-        $oEntrada->setTipo_documento(EntradaDocDB::TIPO_ETHERPAD);
+        // TODO: Por el momento solamente etherpad
+        $oEntrada->setTipo_documento(TextoDelEscrito::TIPO_ETHERPAD);
 
         if (!empty($origen)) {
             // al buscar sin acentos se usan las expresiones regulares.

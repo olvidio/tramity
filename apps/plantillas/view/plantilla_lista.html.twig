@@ -48,10 +48,10 @@
         fnjs_update_div('#main', url);
     }
 
-    fnjs_revisar_plantilla = function (id_plantilla) {
+    fnjs_revisar_plantilla = function (tipo_doc,id_plantilla) {
         var winPrefs = "dependent=yes,width=1400,height=800,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
-        var url_ajax = 'apps/etherpad/controller/getUrlEscrito.php';
-        var param_json = {tipo_id: 'plantilla', id: id_plantilla};
+        var url_ajax = 'apps/escritos/controller/getUrlEscrito.php';
+        var param_json = {tipo_id: 'plantilla', id: id_plantilla, tipo_doc: tipo_doc};
 
         if (typeof event !== 'undefined') {
             event.preventDefault();
@@ -66,9 +66,8 @@
         });
 
         request.done(function (rta) {
-            // antes, dentro del ajax, hacia falta el responseText
-            //url=rta.responseText;
-            url = rta;
+            id = rta['id'];
+            url = rta['url'];
             w = window.open(url, "", winPrefs);
             w.focus();
         });

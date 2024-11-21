@@ -1,6 +1,7 @@
 <?php
 
 use documentos\model\Documento;
+use escritos\model\TextoDelEscrito;
 use web\DateTimeLocal;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -58,7 +59,7 @@ function upload()
                     exit ($err_cargar);
                 }
                 $oDocumento->setNombre_fichero($fileName);
-                $oDocumento->setTipo_doc(Documento::DOC_UPLOAD);
+                $oDocumento->setTipo_doc(TextoDelEscrito::TIPO_UPLOAD);
                 $oDocumento->setDocumento($contenido_doc);
                 $oDocumento->setF_upload($hoy_iso, FALSE);
 

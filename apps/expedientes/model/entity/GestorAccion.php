@@ -41,28 +41,6 @@ class GestorAccion extends core\ClaseGestor
     /**
      * retorna l'array d'objectes de tipus Accion
      *
-     * @param string sQuery la query a executar.
-     * @return array Una col·lecció d'objectes de tipus Accion
-     */
-    function getAccionesQuery($sQuery = '')
-    {
-        $oDbl = $this->getoDbl();
-        $oAccionSet = new core\Set();
-        if (($oDbl->query($sQuery)) === FALSE) {
-            $sClauError = 'GestorAccion.query';
-            $_SESSION['oGestorErrores']->addErrorAppLastError($oDbl, $sClauError, __LINE__, __FILE__);
-            return FALSE;
-        }
-        foreach ($oDbl->query($sQuery) as $aDades) {
-            $oAccion = new Accion($aDades['id_item']);
-            $oAccionSet->add($oAccion);
-        }
-        return $oAccionSet->getTot();
-    }
-
-    /**
-     * retorna l'array d'objectes de tipus Accion
-     *
      * @param array aWhere associatiu amb els valors de les variables amb les quals farem la query
      * @param array aOperators associatiu amb els valors dels operadors que cal aplicar a cada variable
      * @return array Una col·lecció d'objectes de tipus Accion

@@ -1,7 +1,8 @@
 <?php
 
 use core\ViewTwig;
-use etherpad\model\Etherpad;
+use escritos\model\TextoDelEscrito;
+use plantillas\model\entity\Plantilla;
 
 // INICIO Cabecera global de URL de controlador *********************************
 
@@ -23,10 +24,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 }
 
 if (!empty($Q_id_plantilla)) {
-    $oEtherpad = new Etherpad();
-    $oEtherpad->setId(Etherpad::ID_PLANTILLA, $Q_id_plantilla);
+    $oPlantilla = new Plantilla($Q_id_plantilla);
+    $tipo_doc = $oPlantilla->getTipo_doc();
+    $oTextoDelEscrito = new TextoDelEscrito($tipo_doc, TextoDelEscrito::ID_PLANTILLA, $Q_id_plantilla);
 
-    $escrito_html = $oEtherpad->generarHtml();
+    $escrito_html = $oTextoDelEscrito->generarHtml();
 } else {
     $escrito_html = '';
 }

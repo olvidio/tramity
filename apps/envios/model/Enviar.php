@@ -10,7 +10,7 @@ use entradas\model\entity\EntradaCompartida;
 use entradas\model\Entrada;
 use escritos\model\entity\EscritoAdjunto;
 use escritos\model\Escrito;
-use etherpad\model\Etherpad;
+use escritos\model\TextoDelEscrito;
 use lugares\model\entity\GestorLugar;
 use lugares\model\entity\Grupo;
 use lugares\model\entity\Lugar;
@@ -38,7 +38,7 @@ class Enviar
      * @var EntradaBypass|Entrada
      */
     private $oEntradaBypass;
-    private Etherpad $oEtherpad;
+    private TextoDelEscrito $oTextDelEscrito;
     private bool $bLoaded = FALSE;
     private bool $is_Bypass;
     private int $iid;
@@ -124,19 +124,10 @@ class Enviar
             }
         }
         // formato pdf:
-        // old: con mPdf
-        /*
         $this->filename_ext = $this->filename . '.pdf';
-        $omPdf = $this->oEtherpad->generarPDF($a_header, $this->f_salida);
-        $this->contentFile = $omPdf->Output($this->filename_ext, 'S');
-        */
-        // new: con LibreOffice
-        $this->filename_ext = $this->filename . '.pdf';
-        $filename_uniq = uniqid('escrito_', true);
-        $file_pdf = $this->oEtherpad->generarLOPDF($filename_uniq, $a_header, $this->f_salida);
-        $this->contentFile = file_get_contents($file_pdf);
-        // borrar los archivos temporales
-        borrar_tmp($filename_uniq);
+
+        $this->oTextDelEscrito->addHeaders($a_header, $this->f_salida);
+        $this->contentFile = $this->oTextDelEscrito->getContentFormatPDF();
 
         return ['content' => $this->contentFile,
             'name' => $this->filename,
@@ -176,8 +167,7 @@ class Enviar
 
         $this->filename = $this->oEntrada->getNombreEscrito($this->sigla_destino);
 
-        $this->oEtherpad = new Etherpad();
-        $this->oEtherpad->setId(Etherpad::ID_COMPARTIDO, $this->iid);
+        $this->oTextDelEscrito = new TextoDelEscrito($this->oEntrada->getTipo_documento(),TextoDelEscrito::ID_COMPARTIDO, $this->iid);
     }
 
     private function getDatosEntradaByPass(): void
@@ -192,8 +182,7 @@ class Enviar
 
         $this->filename = $this->oEntradaBypass->getNombreEscrito($this->sigla_destino);
 
-        $this->oEtherpad = new Etherpad();
-        $this->oEtherpad->setId(Etherpad::ID_ENTRADA, $this->iid);
+        $this->oTextDelEscrito = new TextoDelEscrito($this->oEntradaBypass->getTipo_documento(),TextoDelEscrito::ID_ENTRADA, $this->iid);
 
         // Attachments
         $this->a_adjuntos = [];
@@ -218,8 +207,7 @@ class Enviar
 
         $this->filename = $this->oEntrada->getNombreEscrito($this->sigla_destino);
 
-        $this->oEtherpad = new Etherpad();
-        $this->oEtherpad->setId(Etherpad::ID_ENTRADA, $this->iid);
+        $this->oTextDelEscrito = new TextoDelEscrito($this->oEntrada->getTipo_documento(), TextoDelEscrito::ID_ENTRADA, $this->iid);
 
         // Attachments
         $this->a_adjuntos = [];
@@ -263,7 +251,7 @@ class Enviar
                 $oEscritoAdjunto = new EscritoAdjunto($item);
                 $tipo_doc = $oEscritoAdjunto->getTipo_doc();
                 switch ($tipo_doc) {
-                    case Documento::DOC_UPLOAD:
+                    case TextoDelEscrito::TIPO_UPLOAD:
                         if ($oEscritoAdjunto->getAdjunto() === FALSE) {
                             $err_adjunto = sprintf(_("No se puede enviar el adjunto \"%s\""), $adjunto_filename);
                             exit ($err_adjunto);
@@ -271,26 +259,18 @@ class Enviar
                         $escrito_txt = $oEscritoAdjunto->getAdjunto();
                         $this->a_adjuntos[$adjunto_filename] = $escrito_txt;
                         break;
-                    case Documento::DOC_ETHERPAD:
-                        $id_adjunto = $oEscritoAdjunto->getId_item();
-                        $oEtherpadAdj = new Etherpad();
-                        $oEtherpadAdj->setId(Etherpad::ID_ADJUNTO, $id_adjunto);
-                        $filename_uniq = uniqid('adj_', true);
-                        $file_pdf = $oEtherpadAdj->generarLOPDF($filename_uniq);
-                        $escrito_txt = file_get_contents($file_pdf);
-                        $this->a_adjuntos[$adjunto_filename] = $escrito_txt;
-                        // borrar los archivos temporales
-                        borrar_tmp($filename_uniq);
-                        break;
                     default:
-                        $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
-                        exit ($err_switch);
+                        $id_adjunto = $oEscritoAdjunto->getId_item();
+                        $oTextoDelEscritoAdj = new TextoDelEscrito($tipo_doc, TextoDelEscrito::ID_ADJUNTO, $id_adjunto);
+                        $escrito_txt = $oTextoDelEscritoAdj->getContentFormatPDF();
+                        $this->a_adjuntos[$adjunto_filename] = $escrito_txt;
+                        break;
                 }
             }
 
-            // etherpad
-            $this->oEtherpad = new Etherpad();
-            $this->oEtherpad->setId(Etherpad::ID_ESCRITO, $this->iid);
+            // El escrito propiamente
+            $tipo_doc = $this->oEscrito->getTipo_doc();
+            $this->oTextDelEscrito = new TextoDelEscrito($tipo_doc, TextoDelEscrito::ID_ESCRITO, $this->iid);
             $this->bLoaded = TRUE;
         }
         $this->filename = $this->oEscrito->getNombreEscrito($this->sigla_destino);
@@ -539,10 +519,8 @@ class Enviar
         // escribir en el directorio para bonita
         $filename_uniq = uniqid('escrito_rdp_', true);
         $a_header = $this->getHeader();
-        $file_uniq_pdf = $this->oEtherpad->generarLOPDF($filename_uniq, $a_header, $this->f_salida);
-        $contentText = file_get_contents($file_uniq_pdf);
-        // borrar los archivos temporales
-        borrar_tmp($filename_uniq);
+        $this->oTextDelEscrito->addHeaders($a_header, $this->f_salida);
+        $contentText =  $this->oTextDelEscrito->getContentFormatPDF();
 
         $filename_ext = $this->filename . '.pdf';
         $filename_iso_ext = $this->filename_iso . '.pdf';
@@ -588,29 +566,21 @@ class Enviar
             // generar un nuevo content, con la cabecera al ctr concreto.
             $this->getDocumento();
             $a_header = $this->getHeader($id_lugar);
-            // generar el odt y luego convertirlo:
-            $filename_uniq = uniqid('enviar_', true);
-            $file_odt = $this->oEtherpad->generarODT($filename_uniq, $a_header, $this->f_salida);
+            $this->oTextDelEscrito->addHeaders($a_header, $this->f_salida);
             switch ($modo_envio) {
                 case Lugar::MODO_ODT:
                     $this->filename_ext = $this->filename . '.odt';
-                    $this->contentFile = file_get_contents($file_odt);
+                    $this->contentFile = $this->oTextDelEscrito->getContentFormatODT();
                     break;
                 case Lugar::MODO_DOCX:
                     $this->filename_ext = $this->filename . '.docx';
-                    $oDocConverter = new DocConverter();
-                    $file_docx = $oDocConverter->convertOdt2($file_odt, 'docx');
-                    $this->contentFile = file_get_contents($file_docx);
+                    $this->contentFile = $this->oTextDelEscrito->getContentFormatDOCX();
                     break;
                 case Lugar::MODO_PDF:
                     $this->filename_ext = $this->filename . '.pdf';
-                    $oDocConverter = new DocConverter();
-                    $file_pdf = $oDocConverter->convertOdt2($file_odt, 'pdf');
-                    $this->contentFile = file_get_contents($file_pdf);
+                    $this->contentFile = $this->oTextDelEscrito->getContentFormatPDF();
                     break;
             }
-            // borrar los archivos temporales
-            borrar_tmp($filename_uniq);
 
             $err_mail .= $this->enviarContenido($email);
         } else {
@@ -892,10 +862,10 @@ class Enviar
         }
 
         $json_prot_local = $oEscrito->getJson_prot_local();
-        if (count(get_object_vars($json_prot_local)) === 0){
+        if (count(get_object_vars($json_prot_local)) === 0) {
             $is_plantilla = $oEscrito->getAccion() === Escrito::ACCION_PLANTILLA;
             $is_anulado = $oEscrito->getAnulado();
-            if(!$is_plantilla && !$is_anulado) {
+            if (!$is_plantilla && !$is_anulado) {
                 $err_txt = "No hay protocolo local";
                 // sacar mas info para ver de donde sale el error
                 $json_prot_dst = json_encode($oEscrito->getJson_prot_destino(FALSE));
@@ -923,12 +893,12 @@ class Enviar
         $protocolo = $origen_txt;
         $ref = '';
         if (!empty($aRef['local'])) {
-            $ref = ";".$aRef['local'];
+            $ref = ";" . $aRef['local'];
         } else {
             // si la ref está vacía, pongo el destino
-            $ref = ";".$this->sigla_destino;
+            $ref = ";" . $this->sigla_destino;
         }
-        $asunto = str_replace([';','(',')'], "*", $this->asunto);
+        $asunto = str_replace([';', '(', ')'], "*", $this->asunto);
 
         return "$protocolo;$asunto$ref";
     }

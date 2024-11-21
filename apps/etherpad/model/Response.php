@@ -21,7 +21,7 @@ class Response
     public function __construct(ResponseInterface $response)
     {
         if ($response->getStatusCode() === 200) {
-            $this->data = (array)\GuzzleHttp\json_decode($response->getBody(), true);
+            $this->data = (array)json_decode($response->getBody(), true);
         } else {
             $this->data = [];
         }

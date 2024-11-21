@@ -4,6 +4,7 @@ use core\ViewTwig;
 use entradas\model\entity\EntradaCompartida;
 use entradas\model\entity\GestorEntradaCompartidaAdjunto;
 use entradas\model\Entrada;
+use escritos\model\TextoDelEscrito;
 use etherpad\model\Etherpad;
 use usuarios\model\entity\Cargo;
 use usuarios\model\Visibilidad;
@@ -79,8 +80,8 @@ if (!empty($Qid_entrada)) {
         $gesEntradaAdjuntos = new GestorEntradaCompartidaAdjunto();
         $a_adjuntos = $gesEntradaAdjuntos->getArrayIdAdjuntos($id_entrada_compartida);
 
-        $oEtherpad = new Etherpad();
-        $oEtherpad->setId(Etherpad::ID_COMPARTIDO, $id_entrada_compartida);
+
+        $oTextDelEscrito = new TextoDelEscrito(TextoDelEscrito::TIPO_ETHERPAD, TextoDelEscrito::ID_COMPARTIDO, $id_entrada_compartida);
     } else {
         $bCompartida = FALSE;
         // En el caso de distribución cr, si ya está aceptado, el ver es ya para enviar
@@ -97,10 +98,9 @@ if (!empty($Qid_entrada)) {
 
         $a_adjuntos = $oEntrada->getArrayIdAdjuntos();
 
-        $oEtherpad = new Etherpad();
-        $oEtherpad->setId(Etherpad::ID_ENTRADA, $Qid_entrada);
+        $oTextDelEscrito = new TextoDelEscrito($oEntrada->getTipo_documento(),TextoDelEscrito::ID_ENTRADA, $Qid_entrada);
     }
-    $escrito_html = $oEtherpad->generarHtml();
+    $escrito_html = $oTextDelEscrito->generarHtml();
 } else {
     $bCompartida = FALSE;
     $cabeceraIzqd = '';

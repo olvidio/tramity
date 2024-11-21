@@ -3,6 +3,7 @@
 use core\ViewTwig;
 use entradas\model\Entrada;
 use entradas\model\GestorEntrada;
+use escritos\model\TextoDelEscrito;
 use etherpad\model\Etherpad;
 use web\DateTimeLocal;
 
@@ -88,10 +89,9 @@ if (!empty($Qid_entrada)) {
     $f_escrito = $oEntrada->getF_documento()->getFromLocal();
     $f_entrada = $oEntrada->getF_entrada()->getFromLocal();
 
-    $oEtherpad = new Etherpad();
-    $oEtherpad->setId(Etherpad::ID_ENTRADA, $Qid_entrada);
+    $oTextDelEscrito = new TextoDelEscrito($oEntrada->getTipo_documento(),TextoDelEscrito::ID_ENTRADA, $Qid_entrada);
 
-    $escrito_html = $oEtherpad->generarHtml();
+    $escrito_html = $oTextDelEscrito->generarHtml();
 } else {
     $cabeceraIzqd = '';
     $cabeceraDcha = '';
@@ -123,7 +123,7 @@ $pagina_cancel = web\Hash::link('apps/entradas/controller/entrada_lista.php?' . 
 // datepicker
 $oFecha = new DateTimeLocal();
 $format = $oFecha::getFormat();
-$yearStart = date('Y');
+$yearStart = (int) date('Y');
 $yearEnd = $yearStart + 2;
 
 $a_campos = [

@@ -143,7 +143,7 @@
         }
     }
 
-    fnjs_ver_doc_ep = function () {
+    fnjs_ver_doc_ep = function (tipo_doc) {
         if (typeof event !== 'undefined') {
             event.preventDefault();
             event.stopPropagation();
@@ -159,16 +159,16 @@
         var id_doc = $('#id_doc').val();
         // Guardar el tipo doc
         var url_ajax0 = 'apps/documentos/controller/documento_update.php';
-        var param_json0 = {que: 'tipo_doc', id_doc: id_doc, tipo_doc: '1'};
+        var param_json0 = {que: 'tipo_doc', id_doc: id_doc, tipo_doc: tipo_doc};
         request0 = $.ajax({
             data: param_json0,
             url: url_ajax0,
             method: 'POST'
         });
-        // abrir el etherpad:
+        // abrir el etherpad o synology:
         var winPrefs = "dependent=yes,width=1400,height=800,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
-        var url_ajax = 'apps/etherpad/controller/getUrlEscrito.php';
-        var param_json = {tipo_id: 'documento', id: id_doc};
+        var url_ajax = 'apps/escritos/controller/getUrlEscrito.php';
+        var param_json = {tipo_id: 'documento', id: id_doc, tipo_doc: tipo_doc};
 
         // si está en el modal de buscar documentos, al final hay que ponerolo como antecedente
         // si no está #id_expediente, da undefined.
@@ -180,7 +180,9 @@
             method: 'POST'
         });
 
-        request.done(function (url) {
+        request.done(function (rta) {
+            id = rta['id'];
+            url = rta['url'];
             win = window.open(url, "", winPrefs);
             if (win) {
                 // Para que al cerrar la ventana se actualize ésta.
@@ -237,6 +239,8 @@
         //n = 1 -> etherpad
         //n = 2 -> ethercalc
         //n = 3 -> otros
+        //n = 4 -> synoText
+        //n = 6 -> synoCalc
         var err = 0;
         if (!n) {
             alert("{{ "No se ha definido el tipo de escrito"|trans|raw }}");
@@ -248,7 +252,9 @@
             $.when(fnjs_guardar_datos()).pipe(fnjs_guardar_success).then(function () {
                     switch (n) {
                         case 1:
-                            fnjs_ver_doc_ep();
+                        case 4:
+                        case 5:
+                            fnjs_ver_doc_ep(n);
                             break;
                         case 2:
                             alert('hay que programar la función para ethercalc');

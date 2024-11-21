@@ -3,6 +3,8 @@
 namespace etherpad\model;
 
 
+use escritos\model\TextoDelEscrito;
+
 class GestorEtherpad
 {
 
@@ -16,8 +18,9 @@ class GestorEtherpad
         $this->copyDocToAdjunto($id_doc, $id_adjunto, $force);
         // borrar el Doc
         $oEtherpadSource = new Etherpad();
-        $oEtherpadSource->setId(Etherpad::ID_DOCUMENTO, $id_doc);
-        $sourceID = $oEtherpadSource->getId_pad();
+        $oEtherpadSource->setId(TextoDelEscrito::ID_DOCUMENTO, $id_doc);
+        $oEtherpadSource->crearTexto();
+        $sourceID = $oEtherpadSource->getPadId();
 
         $rta = $oEtherpadSource->deletePad($sourceID);
         if ($rta->getCode() == 0) {
@@ -36,12 +39,14 @@ class GestorEtherpad
     public function copyDocToAdjunto($id_doc, $id_adjunto, $force = 'false')
     {
         $oEtherpad = new Etherpad();
-        $oEtherpad->setId(Etherpad::ID_DOCUMENTO, $id_doc);
+        $oEtherpad->setId(TextoDelEscrito::ID_DOCUMENTO, $id_doc);
+        $oEtherpad->crearTexto();
         $sourceID = $oEtherpad->getPadId();
 
         $oNewEtherpad = new Etherpad();
-        $oNewEtherpad->setId(Etherpad::ID_ADJUNTO, $id_adjunto);
-        $destinationID = $oNewEtherpad->getPadID();
+        $oNewEtherpad->setId(TextoDelEscrito::ID_ADJUNTO, $id_adjunto);
+        $oNewEtherpad->crearTexto();
+        $destinationID = $oNewEtherpad->getPadId();
 
         $rta = $oEtherpad->copyPadWithoutHistory($sourceID, $destinationID, $force);
         if ($rta->getCode() == 0) {
@@ -64,8 +69,9 @@ class GestorEtherpad
         $this->copyDocToEscrito($id_doc, $id_escrito, $force);
         // borrar el Doc
         $oEtherpadSource = new Etherpad();
-        $oEtherpadSource->setId(Etherpad::ID_DOCUMENTO, $id_doc);
-        $sourceID = $oEtherpadSource->getId_pad();
+        $oEtherpadSource->setId(TextoDelEscrito::ID_DOCUMENTO, $id_doc);
+        $oEtherpadSource->crearTexto();
+        $sourceID = $oEtherpadSource->getPadId();
 
         $rta = $oEtherpadSource->deletePad($sourceID);
         if ($rta->getCode() == 0) {
@@ -84,15 +90,17 @@ class GestorEtherpad
     public function copyDocToEscrito($id_doc, $id_escrito, $force = 'false')
     {
         $oEtherpad = new Etherpad();
-        $oEtherpad->setId(Etherpad::ID_DOCUMENTO, $id_doc);
+        $oEtherpad->setId(TextoDelEscrito::ID_DOCUMENTO, $id_doc);
+        $oEtherpad->crearTexto();
         $sourceID = $oEtherpad->getPadId();
 
         $oNewEtherpad = new Etherpad();
-        $oNewEtherpad->setId(Etherpad::ID_ESCRITO, $id_escrito);
-        $destinationID = $oNewEtherpad->getPadID();
+        $oNewEtherpad->setId(TextoDelEscrito::ID_ESCRITO, $id_escrito);
+        $oNewEtherpad->crearTexto();
+        $destinationID = $oNewEtherpad->getPadId();
 
         // Por alguna razón el force no funciona. Hay que eliminarlo primero:
-        // Quizá porque no se le pasaba como string. Habria que probar si ahora funciona.
+        // Quizá porque no se le pasaba como string. Habría que probar si ahora funciona.
         $rta = $oNewEtherpad->deletePad($destinationID);
         if ($rta->getCode() == 0) {
             /* Example returns:

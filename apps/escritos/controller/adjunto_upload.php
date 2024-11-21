@@ -2,6 +2,7 @@
 
 use documentos\model\Documento;
 use escritos\model\entity\EscritoAdjunto;
+use escritos\model\TextoDelEscrito;
 
 // INICIO Cabecera global de URL de controlador *********************************
 require_once("apps/core/global_header.inc");
@@ -57,7 +58,7 @@ function upload()
             }
             $oEscritoAdjunto->setId_escrito($Q_id_escrito);
             $oEscritoAdjunto->setNom($fileName);
-            $oEscritoAdjunto->setTipo_doc(Documento::DOC_UPLOAD);
+            $oEscritoAdjunto->setTipo_doc(TextoDelEscrito::TIPO_UPLOAD);
             $oEscritoAdjunto->setAdjunto($contenido_doc);
 
             if ($oEscritoAdjunto->DBGuardar() !== FALSE) {

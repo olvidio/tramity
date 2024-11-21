@@ -9,8 +9,7 @@ use entradas\model\Entrada;
 use envios\model\Enviar;
 use escritos\model\entity\EscritoAdjunto;
 use escritos\model\Escrito;
-use etherpad\model\Etherpad;
-use function core\borrar_tmp;
+use escritos\model\TextoDelEscrito;
 
 class VerAntecedentes
 {
@@ -120,32 +119,7 @@ class VerAntecedentes
                     $tipo_doc = $oDocumento->getTipo_doc();
                     $nom = $oDocumento->getNom();
                     switch ($tipo_doc) {
-                        case Documento::DOC_ETHERPAD:
-                            $oEtherpad = new Etherpad();
-                            $oEtherpad->setId(Etherpad::ID_DOCUMENTO, $id);
-
-                            // propiamente no tiene cabeceras ni fecha salida
-                            $a_header = ['left' => 'doc',
-                                'center' => '',
-                                'right' => 'algo',
-                            ];
-                            $f_salida = '';
-                            // formato pdf:
-                            $file_name = $this->path_temp . $nom;
-                            $filename_local_con_extension = $file_name . '.pdf';
-                            $filename_uniq = uniqid('escrito_', true);
-                            $file_pdf = $oEtherpad->generarLOPDF($filename_uniq, $a_header, $f_salida);
-                            $file_content = file_get_contents($file_pdf);
-                            // borrar los archivos temporales
-                            borrar_tmp($filename_uniq);
-
-                            // con los espacios hay problemas, no bastan las comillas
-                            $filename_local_sin_espacios_con_extension = str_replace(' ', '_', $filename_local_con_extension);
-                            file_put_contents($filename_local_sin_espacios_con_extension, $file_content);
-
-                            $aFiles[] = $filename_local_sin_espacios_con_extension;
-                            break;
-                        case Documento::DOC_UPLOAD:
+                        case TextoDelEscrito::TIPO_UPLOAD:
                             $doc = $oDocumento->getDocumento();
                             $nombre_fichero = $oDocumento->getNombre_fichero();
                             $path_parts = pathinfo($nombre_fichero);
@@ -156,9 +130,30 @@ class VerAntecedentes
                             if ($file_extension !== 'pdf') {
                                 $nombre_fichero_pdf = $this->convertirDocEnPdf($nombre_fichero, $doc);
                             } else {
-                               file_put_contents($nombre_fichero_pdf, $doc);
+                                file_put_contents($nombre_fichero_pdf, $doc);
                             }
                             $aFiles[] = $nombre_fichero_pdf;
+                            break;
+                        default:
+                            $oTextoDelEscrito = new TextoDelEscrito($tipo_doc,TextoDelEscrito::ID_DOCUMENTO, $id);
+
+                            // propiamente no tiene cabeceras ni fecha salida
+                            $a_header = ['left' => 'doc',
+                                'center' => '',
+                                'right' => 'algo',
+                            ];
+                            $f_salida = '';
+                            $oTextoDelEscrito->addHeaders($a_header, $f_salida);
+                            // formato pdf:
+                            $file_name = $this->path_temp . $nom;
+                            $filename_local_con_extension = $file_name . '.pdf';
+                            $file_content = $oTextoDelEscrito->getContentFormatPDF();
+
+                            // con los espacios hay problemas, no bastan las comillas
+                            $filename_local_sin_espacios_con_extension = str_replace(' ', '_', $filename_local_con_extension);
+                            file_put_contents($filename_local_sin_espacios_con_extension, $file_content);
+
+                            $aFiles[] = $filename_local_sin_espacios_con_extension;
                             break;
                     }
                     break;

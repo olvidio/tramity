@@ -87,16 +87,16 @@ class Client
     /**
      * @var string|null
      */
-    protected $url = null;
+    protected $server_url = null;
 
     /**
      * @param string $apikey
-     * @param string $url
+     * @param string $server_url
      */
-    public function __construct(string $apikey, string $url)
+    public function __construct(string $apikey, string $server_url)
     {
         $this->apikey = $apikey;
-        $this->url = $url;
+        $this->server_url = $server_url;
     }
 
     /**
@@ -111,7 +111,7 @@ class Client
             throw new UnsupportedMethodException();
         }
 
-        $request = new Request($this->url, $this->apikey, $method, $args);
+        $request = new Request($this->server_url, $this->apikey, $method, $args);
 
         return new Response($request->send());
     }

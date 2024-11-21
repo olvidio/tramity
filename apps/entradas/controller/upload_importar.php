@@ -6,6 +6,7 @@ use core\ConfigGlobal;
 use entradas\model\entity\EntradaAdjunto;
 use entradas\model\entity\EntradaDocDB;
 use entradas\model\EntradaProvisionalFromPdf;
+use escritos\model\TextoDelEscrito;
 use etherpad\model\Etherpad;
 use web\DateTimeLocal;
 
@@ -84,10 +85,11 @@ function upload(): array
             $id_entrada = $EntradaProvisional->crear_entrada_provisional($fileName);
 
             // añadir el contenido convertido en html en el etherpad
-            $oEtherpad = new Etherpad();
-            $oEtherpad->setId(Etherpad::ID_ENTRADA, $id_entrada);
-            $pad_id = $oEtherpad->getPadId(); // Aquí crea el pad
-            $oEtherpad->setHTML($pad_id, $contenido_en_html);
+            // TODO: cambiar la opción por defecto de guardar entradas como synotext en vez de etherpad
+            $oTextDelEscrito = new TextoDelEscrito(TextoDelEscrito::TIPO_ETHERPAD, TextoDelEscrito::ID_ENTRADA, $id_entrada);
+            $oTextDelEscrito->crearTexto();
+            $oTextDelEscrito->setHTML($contenido_en_html);
+
             // la relación con la entrada y la fecha
             $oEntradaDocDB = new EntradaDocDB($id_entrada);
             $oFecha = $oEntradaDocDB->getF_doc();
@@ -96,7 +98,7 @@ function upload(): array
                 $oHoy = new DateTimeLocal();
                 $oEntradaDocDB->setF_doc($oHoy);
             }
-            $oEntradaDocDB->setTipo_doc(EntradaDocDB::TIPO_ETHERPAD);
+            $oEntradaDocDB->setTipo_doc(TextoDelEscrito::TIPO_ETHERPAD);
             $oEntradaDocDB->DBGuardar();
 
             // añadir fichero como adjunto

@@ -2,6 +2,7 @@
 
 use core\ViewTwig;
 use documentos\model\Documento;
+use escritos\model\TextoDelEscrito;
 use etherpad\model\Etherpad;
 
 // INICIO Cabecera global de URL de controlador *********************************
@@ -30,17 +31,12 @@ if (!empty($Q_id_doc)) {
     $f_upload = $oDocumento->getF_upload()->getFromLocal();
     $tipo_doc = $oDocumento->getTipo_doc();
     switch ($tipo_doc) {
-        case Documento::DOC_ETHERPAD:
-            $oEtherpad = new Etherpad();
-            $oEtherpad->setId(Etherpad::ID_DOCUMENTO, $Q_id_doc);
-
-            $escrito_html = $oEtherpad->generarHtml();
-            break;
-        case $oDocumento::DOC_UPLOAD:
+        case TextoDelEscrito::TIPO_UPLOAD:
             break;
         default:
+            $oTextoDelEscrito = new TextoDelEscrito($tipo_doc,TextoDelEscrito::ID_DOCUMENTO, $Q_id_doc);
+            $escrito_html = $oTextoDelEscrito->generarHtml();
             $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
-            exit ($err_switch);
     }
 
 } else {

@@ -7,6 +7,7 @@ namespace migration_ctr\model;
 use core\ConfigDB;
 use core\DBConnection;
 use entradas\model\Entrada;
+use escritos\model\TextoDelEscrito;
 use etherpad\model\Etherpad;
 use PDO;
 use PDOException;
@@ -226,9 +227,9 @@ class MigrationCtr
 
             $siglaDestino = $this->schema; // creo que al final es lo mismo
             $oEtherpad = new Etherpad();
-            $oEtherpad->setId(Etherpad::ID_ESCRITO, $id_escrito, $siglaDestino);
-            $pad_id = $oEtherpad->getPadId(); // Aquí crea el pad
-            $oEtherpad->setHTML($pad_id, $txt);
+            $oEtherpad->setId(TextoDelEscrito::ID_ESCRITO, $id_escrito, $siglaDestino);
+            $oEtherpad->crearTexto(); // Aquí crea el pad
+            $oEtherpad->setHTML($txt);
 
 
             // borrar la fila
@@ -273,10 +274,10 @@ class MigrationCtr
 
             $siglaDestino = $this->schema; // creo que al final es lo mismo
             $oEtherpad = new Etherpad();
-            $oEtherpad->setId(Etherpad::ID_ENTRADA, $id_entrada, $siglaDestino);
-            $pad_id = $oEtherpad->getPadId(); // Aquí crea el pad
+            $oEtherpad->setId(TextoDelEscrito::ID_ENTRADA, $id_entrada, $siglaDestino);
+            $oEtherpad->crearTexto(); // Aquí crea el pad
             //$oEtherpad->grabarMD($txt);
-            $oEtherpad->setHTML($pad_id, $txt);
+            $oEtherpad->setHTML($txt);
 
             // borrar la fila
             $sql = "DELETE FROM $tabla WHERE id_doc = $id_entrada";
@@ -319,10 +320,10 @@ class MigrationCtr
 
 
             $oEtherpad = new Etherpad();
-            $oEtherpad->setId(Etherpad::ID_COMPARTIDO, $id_entrada);
-            $pad_id = $oEtherpad->getPadId(); // Aquí crea el pad
+            $oEtherpad->setId(TextoDelEscrito::ID_COMPARTIDO, $id_entrada);
+            $oEtherpad->crearTexto(); // Aquí crea el pad
             //$oEtherpad->grabarMD($txt);
-            $oEtherpad->setHTML($pad_id, $txt);
+            $oEtherpad->setHTML($txt);
 
             // borrar la fila
             $sql = "DELETE FROM $tabla WHERE id_doc = $id_entrada";
@@ -414,7 +415,7 @@ class MigrationCtr
         // grabo el txt en entrada_doc_bytea, que es una tabla que no se usa. Después desde el servidor de ctr habrá que insertalo.
         // buscar el Etherpad
         $oEtherpad = new Etherpad();
-        $oEtherpad->setId(Etherpad::ID_ENTRADA, $id_entrada, $this->sigla_dl);
+        $oEtherpad->setId(TextoDelEscrito::ID_ENTRADA, $id_entrada, $this->sigla_dl);
         $txt = $oEtherpad->generarHtml();
         $campos = "(id_doc,txt)";
         $valores = "(:id_escrito,:txt)";
@@ -450,7 +451,7 @@ class MigrationCtr
         /* tipo documento (igual que entradadocdb)
                     public const TIPO_ETHERPAD = 1;
                     public const TIPO_ETHERCALC = 2;
-                    public const TIPO_OTRO = 3;
+                    public const TIPO_UPLOAD = 3;
                     */
         // El tipo ha de ser 3, pues son entradas antiguas que no son de tramity.
         foreach ($this->oDBDl->query($sql_entrada_adjuntos) as $a_row_entrada_adjuntos) {
@@ -563,7 +564,7 @@ class MigrationCtr
         // grabo el txt en entrada_doc_txt, que es una tabla que no se usa. Después desde el servidor de ctr habrá que insertalo.
         // buscar el Etherpad
         $oEtherpad = new Etherpad();
-        $oEtherpad->setId(Etherpad::ID_ESCRITO, $id_escrito, $this->sigla_dl);
+        $oEtherpad->setId(TextoDelEscrito::ID_ESCRITO, $id_escrito, $this->sigla_dl);
         $txt = $oEtherpad->generarHtml();
         //$txt = $oEtherpad->generarMD();
         $campos = "(id_doc,txt)";
@@ -593,7 +594,7 @@ class MigrationCtr
         // grabo el txt en entrada_doc_txt, que es una tabla que no se usa. Después desde el servidor de ctr habrá que insertalo.
         // buscar el Etherpad
         $oEtherpad = new Etherpad();
-        $oEtherpad->setId(Etherpad::ID_ESCRITO, $id_escrito, $this->sigla_dl);
+        $oEtherpad->setId(TextoDelEscrito::ID_ESCRITO, $id_escrito, $this->sigla_dl);
         $txt = $oEtherpad->generarHtml();
         //$txt = $oEtherpad->generarMD();
         $campos = "(id_doc,txt)";
@@ -628,7 +629,7 @@ class MigrationCtr
         /* tipo documento (igual que entradadocdb)
         public const TIPO_ETHERPAD = 1;
         public const TIPO_ETHERCALC = 2;
-        public const TIPO_OTRO = 3;
+        public const TIPO_UPLOAD = 3;
         */
         // El tipo ha de ser 3, pues son entradas antiguas que no son de tramity.
         foreach ($this->oDBDl->query($sql_escrito_adjuntos) as $a_row_escrito_adjuntos) {
@@ -765,7 +766,7 @@ class MigrationCtr
         /* tipo documento (igual que entradadocdb)
         public const TIPO_ETHERPAD = 1;
         public const TIPO_ETHERCALC = 2;
-        public const TIPO_OTRO = 3;
+        public const TIPO_UPLOAD = 3;
         */
         // El tipo ha de ser 3, pues son entradas antiguas que no son de tramity.
         foreach ($this->oDBDl->query($sql_escrito_adjuntos) as $a_row_escrito_adjuntos) {

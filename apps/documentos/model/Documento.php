@@ -15,17 +15,7 @@ class Documento extends DocumentoDB
 
     /* CONST -------------------------------------------------------------- */
 
-    // tipo doc  OJO también se usa para loas adjuntos.
-    /*
-    1 -> etherpad
-	2 -> ethercalc
-    3 -> otros
-    */
-    const DOC_ETHERPAD = 1;
-    const DOC_ETHERCALC = 2;
-    const DOC_UPLOAD = 3;
-
-    // visibilidad 
+    // visibilidad
     /*
     - Personal
     - Oficina
@@ -41,14 +31,6 @@ class Documento extends DocumentoDB
         ];
     }
 
-    public function getArrayTipos()
-    {
-        return [
-            self::DOC_ETHERPAD => _("etherpad"),
-            self::DOC_ETHERCALC => _("etheclac"),
-            self::DOC_UPLOAD => _("incrustado"),
-        ];
-    }
 
 
     /**
@@ -81,7 +63,7 @@ class Documento extends DocumentoDB
         return $a_etiquetas;
     }
 
-    public function getEtiquetasVisibles($id_cargo = '')
+    public function getEtiquetasVisibles($id_cargo = 0)
     {
         if (empty($id_cargo)) {
             $id_cargo = ConfigGlobal::role_id_cargo();

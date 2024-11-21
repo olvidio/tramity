@@ -33,13 +33,6 @@ use web\NullDateTimeLocal;
 class EntradaDocDB extends ClasePropiedades
 {
 
-    /* CONST -------------------------------------------------------------- */
-
-    // tipo documento
-    const TIPO_ETHERPAD = 1;
-    const TIPO_ETHERCALC = 2;
-    const TIPO_OTRO = 3;
-
     /* ATRIBUTOS ----------------------------------------------------------------- */
 
     /**

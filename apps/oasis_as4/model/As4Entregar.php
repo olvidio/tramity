@@ -8,7 +8,6 @@ use DOMDocument;
 use entidades\model\entity\GestorEntidadesDB;
 use entradas\model\entity\EntradaCompartida;
 use entradas\model\entity\EntradaCompartidaAdjunto;
-use entradas\model\entity\EntradaDocDB;
 use entradas\model\entity\GestorEntradaCompartida;
 use entradas\model\Entrada;
 use entradas\model\EntradaEntidad;
@@ -16,7 +15,7 @@ use entradas\model\EntradaEntidadAdjunto;
 use entradas\model\EntradaEntidadDoc;
 use entradas\model\GestorEntrada;
 use escritos\model\entity\GestorEscritoEntidad;
-use escritos\model\GestorEscrito;
+use escritos\model\TextoDelEscrito;
 use etherpad\model\Etherpad;
 use Exception;
 use lugares\model\entity\GestorLugar;
@@ -326,7 +325,7 @@ class As4Entregar extends As4CollaborationInfo
             $num = $oProtDst->num;
         }
         if (property_exists($oProtDst, 'any')) {
-            $any = empty($oProtDst->num)? '' : $oProtDst->any;
+            $any = empty($oProtDst->num) ? '' : $oProtDst->any;
         }
 
         if (!empty($id_lugar) && !empty($num) && !empty($any)) {
@@ -690,8 +689,7 @@ class As4Entregar extends As4CollaborationInfo
         if (!empty($this->oF_contestar) && empty($error_txt)
             && ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
                 || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO)
-            )
-        {
+        ) {
 
             $this->nuevoPendiente($id_entrada, $siglaDestino);
         }
@@ -756,15 +754,14 @@ class As4Entregar extends As4CollaborationInfo
         switch ($this->type) {
             case Payload::TYPE_ETHERAD_TXT:
                 // guardar el texto del escrito
-                $oEtherpad = new Etherpad();
                 if ($compartido) {
-                    $oEtherpad->setId(Etherpad::ID_COMPARTIDO, $id_entrada, $siglaDestino);
-                    $oEtherpad->setTextContent($this->content);
-                    $oEtherpad->getPadId(); // Aquí crea el pad y utiliza el $this->content
+                    $oTextoDelEscrito = new TextoDelEscrito(TextoDelEscrito::TIPO_ETHERPAD,TextoDelEscrito::TIPO_ETHERPAD, TextoDelEscrito::ID_COMPARTIDO, $id_entrada, $siglaDestino);
+                    $oTextoDelEscrito->setTextContent($this->content);
+                    $oTextoDelEscrito->crearTexto(); // Aquí crea el pad y utiliza el $this->content
                 } else {
-                    $oEtherpad->setId(Etherpad::ID_ENTRADA, $id_entrada, $siglaDestino);
-                    $oEtherpad->setTextContent($this->content);
-                    $oEtherpad->getPadId(); // Aquí crea el pad y utiliza el $this->content
+                    $oTextoDelEscrito = new TextoDelEscrito(TextoDelEscrito::TIPO_ETHERPAD,TextoDelEscrito::TIPO_ETHERPAD, TextoDelEscrito::ID_ENTRADA, $id_entrada, $siglaDestino);
+                    $oTextoDelEscrito->setTextContent($this->content);
+                    $oTextoDelEscrito->crearTexto(); // Aquí crea el pad y utiliza el $this->content
                     // la relación con la entrada y la fecha
                     $oEntradaDocDB = new EntradaEntidadDoc($id_entrada, $siglaDestino);
                     // no hace falta DBCargar, porque es nuevo y todavía no está en la DB.
@@ -774,9 +771,9 @@ class As4Entregar extends As4CollaborationInfo
                         // No puede ser NULL
                         $oEntradaDocDB->setF_doc($oHoy);
                     }
-                    $oEntradaDocDB->setTipo_doc(EntradaDocDB::TIPO_ETHERPAD);
+                    $oEntradaDocDB->setTipo_doc(TextoDelEscrito::TIPO_ETHERPAD);
                     if ($oEntradaDocDB->DBGuardar() === FALSE) {
-                         $error_txt .= $oEntradaDocDB->getErrorTxt();
+                        $error_txt .= $oEntradaDocDB->getErrorTxt();
                     }
                 }
                 break;
@@ -785,13 +782,13 @@ class As4Entregar extends As4CollaborationInfo
                 // guardar el texto del escrito
                 $oEtherpad = new Etherpad();
                 if ($compartido) {
-                    $oEtherpad->setId(Etherpad::ID_COMPARTIDO, $id_entrada, $siglaDestino);
-                    $pad_id = $oEtherpad->getPadId(); // Aquí crea el pad
-                    $oEtherpad->setHTML($pad_id, $this->content);
+                    $oTextoDelEscrito = new TextoDelEscrito(TextoDelEscrito::TIPO_ETHERPAD, TextoDelEscrito::ID_COMPARTIDO, $id_entrada, $siglaDestino);
+                    $oTextoDelEscrito->crearTexto(); // Aquí crea el pad
+                    $oTextoDelEscrito->setHTML($this->content);
                 } else {
-                    $oEtherpad->setId(Etherpad::ID_ENTRADA, $id_entrada, $siglaDestino);
-                    $pad_id = $oEtherpad->getPadId(); // Aquí crea el pad
-                    $oEtherpad->setHTML($pad_id, $this->content);
+                    $oTextoDelEscrito = new TextoDelEscrito(TextoDelEscrito::TIPO_ETHERPAD, TextoDelEscrito::ID_ENTRADA, $id_entrada, $siglaDestino);
+                    $oTextoDelEscrito->crearTexto(); // Aquí crea el pad
+                    $oTextoDelEscrito->setHTML($this->content);
                     // la relación con la entrada y la fecha
                     $oEntradaDocDB = new EntradaEntidadDoc($id_entrada, $siglaDestino);
                     // no hace falta DBCargar, porque es nuevo y todavía no está en la DB.
@@ -801,7 +798,7 @@ class As4Entregar extends As4CollaborationInfo
                         // No puede ser NULL
                         $oEntradaDocDB->setF_doc($oHoy);
                     }
-                    $oEntradaDocDB->setTipo_doc(EntradaDocDB::TIPO_ETHERPAD);
+                    $oEntradaDocDB->setTipo_doc(TextoDelEscrito::TIPO_ETHERPAD);
                     if ($oEntradaDocDB->DBGuardar() === FALSE) {
                         $error_txt .= $oEntradaDocDB->getErrorTxt();
                     }
@@ -946,9 +943,8 @@ class As4Entregar extends As4CollaborationInfo
                     // Compruebo si hay que generar un pendiente
                     if (!empty($this->oF_contestar)
                         && ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
-                           || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO)
-                    )
-                    {
+                            || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO)
+                    ) {
                         $this->nuevoPendiente($id_entrada, $siglaDestino);
                     }
                 }

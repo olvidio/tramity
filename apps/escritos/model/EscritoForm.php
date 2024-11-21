@@ -214,7 +214,7 @@ class EscritoForm
             }
 
             // Adjuntos Upload
-            $a_adjuntos = $oEscrito->getArrayIdAdjuntos(Documento::DOC_UPLOAD);
+            $a_adjuntos = $oEscrito->getArrayIdAdjuntos(TextoDelEscrito::TIPO_UPLOAD);
             $preview = [];
             $config = [];
             foreach ($a_adjuntos as $id_item => $nom) {
@@ -484,6 +484,8 @@ class EscritoForm
                 'comentario' => $comentario,
                 'conmutar_txt' => $conmutar_txt,
                 'vista' => ConfigGlobal::getVista(),
+                'TextoDelEscrito::TIPO_ETHERPAD' => TextoDelEscrito::TIPO_ETHERPAD,
+                'TIPO_SYNOTEXT' => TextoDelEscrito::TIPO_SYNOTEXT,
             ];
 
             $oView = new ViewTwig('escritos/controller');
@@ -547,6 +549,8 @@ class EscritoForm
                 'str_condicion' => $this->str_condicion,
                 // para ver comentario cuando se devuelve a la oficina
                 'comentario' => $comentario,
+                'TextoDelEscrito::TIPO_ETHERPAD' => TextoDelEscrito::TIPO_ETHERPAD,
+                'TIPO_SYNOTEXT' => TextoDelEscrito::TIPO_SYNOTEXT,
             ];
 
             $oView = new ViewTwig('escritos/controller');

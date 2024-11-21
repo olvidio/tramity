@@ -8,6 +8,7 @@ use documentos\model\GestorDocumento;
 use entradas\model\GestorEntrada;
 use escritos\model\Escrito;
 use escritos\model\GestorEscrito;
+use escritos\model\TextoDelEscrito;
 use etiquetas\model\entity\GestorEtiqueta;
 use etiquetas\model\entity\GestorEtiquetaExpediente;
 use expedientes\model\Expediente;
@@ -660,7 +661,7 @@ switch ($Q_que) {
         $a = 0;
         foreach ($cDocumentos as $oDocumento) {
             // Si sólo quiero los etherpad, quitar el resto:
-            if ($Q_tipo_n === 5 && $oDocumento->getTipo_doc() != Documento::DOC_ETHERPAD) {
+            if ($Q_tipo_n === 5 && $oDocumento->getTipo_doc() != TextoDelEscrito::TIPO_ETHERPAD) {
                 continue;
             }
             // mirar permisos...

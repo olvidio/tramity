@@ -18,6 +18,7 @@
     "ext-intl": "*",
     "symfony/http-foundation": "^6.3",
     "ext-zip": "*",
-    "ext-xml": "*"
+    "ext-xml": "*",
+    "kazio73/synology-api-client": "^0.3.8"
   }
 }

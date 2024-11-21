@@ -186,11 +186,27 @@
         <div class="col-4">
             <!--  --------------------  ANADIR ESCRITOS  --------------------------  -->
             {% if id_escrito %}
-                {% if tipo_doc == 1 or tipo_doc == 4 %}
+                {% if tipo_doc == TextoDelEscrito::TIPO_ETHERPAD %}
                     <div class="mb-2">
                         <label class="form-label">{{ "Ver escrito"|trans|raw }}:</label>
-                        <button tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep();">
+                        <button tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep(tipo_doc);">
                             {{ "Etherpad"|trans|raw }}
+                        </button>
+                    </div>
+                {% endif %}
+                {% if tipo_doc == TextoDelEscrito::TIPO_SYNOTEXT %}
+                    <div class="mb-2">
+                        <label class="form-label">{{ "Ver escrito"|trans|raw }}:</label>
+                        <button tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep(tipo_doc);">
+                            {{ "SynoText"|trans|raw }}
+                        </button>
+                    </div>
+                {% endif %}
+                {% if tipo_doc == TextoDelEscrito::TIPO_SYNOCALC %}
+                    <div class="mb-2">
+                        <label class="form-label">{{ "Ver escrito"|trans|raw }}:</label>
+                        <button tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep(tipo_doc);">
+                            {{ "SynoCalc"|trans|raw }}
                         </button>
                     </div>
                 {% endif %}
@@ -202,11 +218,17 @@
                 {% endif %}
                 {% if tipo_doc is empty %}
                     <div class="row mb-3">
-                        <label class="col-4 form-label">{{ "Insertar Etherpad"|trans|raw }}:</label>
-                        <button tabindex='100' class="col-2 btn btn-info" onClick="fnjs_add_escrito(1);">
-                            {{ "Nuevo"|trans|raw }}
+                        <label class="col-4 form-label">{{ "Insertar Nuevo"|trans|raw }}:</label>
+                        <button tabindex='100' class="me-3 col-2 btn btn-info" onClick="fnjs_add_escrito(1);">
+                            {{ "Etherpad"|trans|raw }}
                         </button>
-                        <button tabindex='101' type="button" class="col-4 btn btn-info ms-3 me-1" data-bs-toggle="modal"
+                        <button tabindex='101' class="me-3 col-2 btn btn-info" onClick="fnjs_add_escrito(4);">
+                            {{ "SynoText"|trans|raw }}
+                        </button>
+                        <button tabindex='101' class="me-3 col-2 btn btn-info" onClick="fnjs_add_escrito(5);">
+                            {{ "SynoCalc"|trans|raw }}
+                        </button>
+                        <button tabindex='102' type="button" class="col-8 btn btn-info m-3" data-bs-toggle="modal"
                                 data-bs-target="#ModalBuscar" onClick="fnjs_add_escrito(5);">
                             {{ "Buscar en Documentos"|trans|raw }}
                         </button>

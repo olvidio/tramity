@@ -131,7 +131,7 @@
                 $('#ModalBuscar').modal('hide');
                 $('#slow_load').hide();
                 // abrirlo:
-                fnjs_ver_doc_ep();
+                fnjs_ver_doc_ep(tipo);
             }
         });
         request.fail(function (JqXHR, textStatus, errorThrown) {
@@ -260,8 +260,8 @@
         }
 
         var winPrefs = "dependent=yes,width=1400,height=800,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
-        var url_ajax = 'apps/etherpad/controller/getUrlEscrito.php';
-        var param_json = {tipo_id: 'adjunto', id: id_adjunto};
+        var url_ajax = 'apps/escritos/controller/getUrlEscrito.php';
+        var param_json = {tipo_id: 'escrito', id: id_escrito, tipo_doc: 1};
 
         request = $.ajax({
             data: param_json,
@@ -269,7 +269,9 @@
             method: 'POST'
         });
 
-        request.done(function (url) {
+        request.done(function (rta) {
+            id = rta['id'];
+            url = rta['url'];
             win = window.open(url, "", winPrefs);
             win.focus();
         });
@@ -331,7 +333,51 @@
     }
 
 
-    fnjs_ver_doc_ep = function () {
+    fnjs_ver_doc_synText = function () {
+        if (typeof event !== 'undefined') {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+        }
+        // primero guardar los datos que se hayan modificado, porque si pasa algo hay que volver a meterlos.
+        //fnjs_guardar_quiet();
+
+        var id_escrito = $('#id_escrito').val();
+        var winPrefs = "dependent=yes,width=1400,height=800,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
+        var url_ajax = 'apps/escritos/controller/getUrlEscrito.php';
+        var param_json = {tipo_id: 'escrito', id: id_escrito, tipo_doc: 4};
+
+        request = $.ajax({
+            data: param_json,
+            url: url_ajax,
+            method: 'POST'
+        });
+
+        request.done(function (rta) {
+            id = rta['id'];
+            url = rta['url'];
+            win = window.open(url, "", winPrefs);
+            if (win) { // si no existe es null.
+                // Para que al cerrar la ventana se actualize ésta.
+                var timer = setInterval(function () {
+                    if (win.closed) {
+                        clearInterval(timer);
+                        fnjs_actualizar();
+                    }
+                }, 1000);
+                win.focus();
+            }
+        });
+
+        request.fail(function (JqXHR, textStatus, errorThrown) {
+            alert('An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
+            console.error("Hi ha un error: " + textStatus, errorThrown);
+        });
+
+        return false;
+    }
+
+    fnjs_ver_doc_ep = function (tipo_escrito) {
         if (typeof event !== 'undefined') {
             event.preventDefault();
             event.stopPropagation();
@@ -342,8 +388,8 @@
 
         var id_escrito = $('#id_escrito').val();
         var winPrefs = "dependent=yes,width=1400,height=800,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
-        var url_ajax = 'apps/etherpad/controller/getUrlEscrito.php';
-        var param_json = {tipo_id: 'escrito', id: id_escrito};
+        var url_ajax = 'apps/escritos/controller/getUrlEscrito.php';
+        var param_json = {tipo_id: 'escrito', id: id_escrito, tipo_doc: tipo_escrito};
 
         request = $.ajax({
             data: param_json,
@@ -352,9 +398,8 @@
         });
 
         request.done(function (rta) {
-            // antes, dentro del ajax, hacia falta el responseText
-            //url=rta.responseText;
-            url = rta;
+            id = rta['id'];
+            url = rta['url'];
             win = window.open(url, "", winPrefs);
             if (win) { // si no existe es null.
                 // Para que al cerrar la ventana se actualize ésta.
@@ -419,7 +464,9 @@
         //n = 1 -> etherpad
         //n = 2 -> ethercalc
         //n = 3 -> otros
-        //n = 4 -> documento etherpad
+        //n = 4 -> synoText
+        //n = 5 -> synoCalc
+        //n = 9 -> documento etherpad
         var err = 0;
         var id_escrito = $('#id_escrito').val();
         var f_escrito = $('#f_escrito').val();
@@ -460,7 +507,9 @@
 
             switch (n) {
                 case 1:
-                    fnjs_ver_doc_ep();
+                case 4:
+                case 5:
+                    fnjs_ver_doc_ep(n);
                     break;
                 case 2:
                     alert('hay que programar la función para ethercalc');
@@ -468,8 +517,7 @@
                 case 3:
                     alert('hay que programar la función para otros');
                     break;
-                case 4:
-                case 5:
+                case 9:
                     //alert('hay que programar la función para documentos');
                     fnjs_buscar_doc_ep(n);
                     break;

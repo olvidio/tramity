@@ -52,7 +52,7 @@
     }
     fnjs_revisar_escrito = function (id_escrito) {
         var winPrefs = "dependent=yes,width=1400,height=800,screenX=200,screenY=200,titlebar=yes,scrollbars=yes";
-        var url_ajax = 'apps/etherpad/controller/getUrlEscrito.php';
+        var url_ajax = 'apps/escritos/controller/getUrlEscrito.php';
         var param_json = {tipo_id: 'escrito', id: id_escrito};
 
         if (typeof event !== 'undefined') {
@@ -68,9 +68,8 @@
         });
 
         request.done(function (rta) {
-            // antes, dentro del ajax, hacia falta el responseText
-            //url=rta.responseText;
-            url = rta;
+            id = rta['id'];
+            url = rta['url'];
             w = window.open(url, "", winPrefs);
             if (w === null) {
                 alert("{{ "No se puede abrir una nueva ventana. Puede tener bloqueados los popup"|trans|raw }}");

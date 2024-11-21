@@ -9,6 +9,7 @@ use entradas\model\entity\EntradaAdjunto;
 use envios\model\MIMEAttachment;
 use envios\model\MIMEContainer;
 use escritos\model\entity\EscritoAdjunto;
+use escritos\model\TextoDelEscrito;
 use etherpad\model\Etherpad;
 use lugares\model\entity\GestorLugar;
 use stdClass;
@@ -47,7 +48,8 @@ class Payload
     private $a_id_adjuntos;
     private $id_escrito;
 
-    private $tipo_escrito;
+    private $entrada_o_escrito;
+    private $tipo_doc;
     private $descripcion;
     private $categoria;
     private $destinos;
@@ -67,14 +69,16 @@ class Payload
 
     public function setPayload($oEscrito, $tipo_escrito, $sufijo_dst = ''): void
     {
-        $this->tipo_escrito = $tipo_escrito;
+        $this->entrada_o_escrito = $tipo_escrito;
         $this->sufijo_dst = $sufijo_dst;
 
-        if ($this->tipo_escrito === 'escrito') {
+        if ($this->entrada_o_escrito === 'escrito') {
             $this->setPayloadEscrito($oEscrito);
+            $this->tipo_doc = $oEscrito->getTipo_doc();
         }
-        if ($this->tipo_escrito === 'entrada') {
+        if ($this->entrada_o_escrito === 'entrada') {
             $this->setPayloadEntrada($oEscrito);
+            $this->tipo_doc = $oEscrito->getTipo_documento();
         }
     }
 
@@ -303,7 +307,7 @@ class Payload
         $this->dom->appendChild($this->escrito);
 
         if ($this->dom->save($this->getFullFilename()) === FALSE) {
-            exit ("Error al guardar el excrito en xml");
+            exit ("Error al guardar el escrito en xml");
         }
     }
 
@@ -484,18 +488,17 @@ class Payload
      */
     private function createXmlContent()
     {
-        $oEtherpad = new Etherpad();
         /* Puede ser un bypass o simplemente una salida con múltiples destinos */
         if ($this->accion == As4CollaborationInfo::ACCION_COMPARTIR
             || $this->accion == As4CollaborationInfo::ACCION_REEMPLAZAR) {
-            if ($this->tipo_escrito === 'entrada') {
-                $oEtherpad->setId(Etherpad::ID_ENTRADA, $this->id_escrito);
+            if ($this->entrada_o_escrito === 'entrada') {
+                $oTextoDelEscrito = new TextoDelEscrito($this->tipo_doc,TextoDelEscrito::ID_ENTRADA, $this->id_escrito);
             }
-            if ($this->tipo_escrito === 'escrito') {
-                $oEtherpad->setId(Etherpad::ID_ESCRITO, $this->id_escrito);
+            if ($this->entrada_o_escrito === 'escrito') {
+                $oTextoDelEscrito = new TextoDelEscrito($this->tipo_doc,TextoDelEscrito::ID_ESCRITO, $this->id_escrito);
             }
         } else {
-            $oEtherpad->setId(Etherpad::ID_ESCRITO, $this->id_escrito);
+            $oTextoDelEscrito = new TextoDelEscrito($this->tipo_doc,TextoDelEscrito::ID_ESCRITO, $this->id_escrito);
         }
 
         switch ($this->getFormat()) {
@@ -503,7 +506,7 @@ class Payload
                 exit ('falta para pdf');
             case Payload::TYPE_ETHERAD_TXT:
             case 'txt':
-                $txt = $oEtherpad->generarMD();
+                $txt = $oTextoDelEscrito->generarMD();
                 $mime = new MIMEContainer();
                 $mime->set_content_type("multipart/mixed");
                 $attachment = new MIMEAttachment();
@@ -518,7 +521,7 @@ class Payload
                 return $content;
             case Payload::TYPE_ETHERAD_HTML:
             case 'html':
-                $txt = $oEtherpad->generarHtml();
+                $txt = $oTextoDelEscrito->generarHtml();
                 $mime = new MIMEContainer();
                 $mime->set_content_type("multipart/mixed");
                 $attachment = new MIMEAttachment();
@@ -575,33 +578,24 @@ class Payload
     {
         $a_adjuntos = [];
         foreach ($this->a_id_adjuntos as $item => $adjunto_filename) {
-            if ($this->tipo_escrito === 'entrada') {
+            if ($this->entrada_o_escrito === 'entrada') {
                 $oEntradaAdjunto = new EntradaAdjunto($item);
                 $escrito_txt = $oEntradaAdjunto->getAdjunto();
                 $a_adjuntos[$adjunto_filename] = $escrito_txt;
             }
-            if ($this->tipo_escrito === 'escrito') {
+            if ($this->entrada_o_escrito === 'escrito') {
                 $oEscritoAdjunto = new EscritoAdjunto($item);
                 $tipo_doc = $oEscritoAdjunto->getTipo_doc();
                 switch ($tipo_doc) {
-                    case Documento::DOC_UPLOAD:
+                    case TextoDelEscrito::TIPO_UPLOAD:
                         $escrito_txt = $oEscritoAdjunto->getAdjunto();
                         $a_adjuntos[$adjunto_filename] = $escrito_txt;
                         break;
-                    case Documento::DOC_ETHERPAD:
-                        $id_adjunto = $oEscritoAdjunto->getId_item();
-                        $oEtherpadAdj = new Etherpad();
-                        $oEtherpadAdj->setId(Etherpad::ID_ADJUNTO, $id_adjunto);
-                        $filename_uniq = uniqid('adj_', true);
-                        $file_pdf = $oEtherpadAdj->generarLOPDF($filename_uniq, [], '');
-                        $escrito_txt = file_get_contents($file_pdf);
-                        $a_adjuntos[$adjunto_filename] = $escrito_txt;
-                        // borrar los archivos temporales
-                        borrar_tmp($filename_uniq);
-                        break;
                     default:
-                        $err_switch = sprintf(_("opción no definida en switch en %s, linea %s"), __FILE__, __LINE__);
-                        exit ($err_switch);
+                        $id_adjunto = $oEscritoAdjunto->getId_item();
+                        $oTextoDelEscritoAdj = new TextoDelEscrito($tipo_doc, TextoDelEscrito::ID_ADJUNTO, $id_adjunto);
+                        $oTextoDelEscritoAdj->addHeaders([],'');
+                        $a_adjuntos[$adjunto_filename] = $oTextoDelEscritoAdj->getContentFormatPDF();
                 }
             }
         }

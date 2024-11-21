@@ -394,6 +394,68 @@
             "install-path": "../jblond/twig-trans"
         },
         {
+            "name": "kazio73/synology-api-client",
+            "version": "0.3.8",
+            "version_normalized": "0.3.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Kazio73/synology-api-client.git",
+                "reference": "a26a541bf6a0b1214e5574bc59c8c6b6072c83ff"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Kazio73/synology-api-client/zipball/a26a541bf6a0b1214e5574bc59c8c6b6072c83ff",
+                "reference": "a26a541bf6a0b1214e5574bc59c8c6b6072c83ff",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": ">=8.2.0"
+            },
+            "time": "2024-09-06T10:18:24+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Kazio73\\SynologyApiClient\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kazik Karczewski",
+                    "email": "kazio@kargraf.com.pl"
+                },
+                {
+                    "name": "Nicolas Cerveaux",
+                    "email": "nicolas.cerveaux@gmail.com"
+                },
+                {
+                    "name": "Victor Balssa",
+                    "email": "victor.balssa@gmail.com"
+                },
+                {
+                    "name": "Riccardo Bessone",
+                    "email": "riccardo@bess.one"
+                }
+            ],
+            "description": "Synology API client",
+            "homepage": "https://github.com/Kazio73/synology-api-client",
+            "keywords": [
+                "nas",
+                "synology"
+            ],
+            "support": {
+                "issues": "https://github.com/Kazio73/synology-api-client/issues",
+                "source": "https://github.com/Kazio73/synology-api-client/tree/0.3.8"
+            },
+            "install-path": "../kazio73/synology-api-client"
+        },
+        {
             "name": "mpdf/mpdf",
             "version": "v8.2.4",
             "version_normalized": "8.2.4.0",

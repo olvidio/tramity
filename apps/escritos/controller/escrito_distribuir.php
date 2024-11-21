@@ -2,6 +2,7 @@
 
 use core\ViewTwig;
 use escritos\model\Escrito;
+use escritos\model\TextoDelEscrito;
 use etherpad\model\Etherpad;
 use expedientes\model\entity\GestorAccion;
 use expedientes\model\Expediente;
@@ -69,10 +70,9 @@ if (!empty($Q_id_escrito)) {
         $f_escrito = $oEscrito->getF_escrito()->getFromLocal();
         $tipo_doc = $oEscrito->getTipo_doc();
 
-        $oEtherpad = new Etherpad();
-        $oEtherpad->setId(Etherpad::ID_ESCRITO, $id_escrito);
+        $oTextoDelEscrito = new TextoDelEscrito($tipo_doc,TextoDelEscrito::ID_ESCRITO, $id_escrito);
 
-        $escrito_html = $oEtherpad->generarHtml();
+        $escrito_html = $oTextoDelEscrito->generarHtml();
 
         $oView = new ViewTwig('escritos/controller');
         $a_campos = [
