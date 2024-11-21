@@ -186,7 +186,7 @@
         <div class="col-4">
             <!--  --------------------  ANADIR ESCRITOS  --------------------------  -->
             {% if id_escrito %}
-                {% if tipo_doc == TextoDelEscrito::TIPO_ETHERPAD %}
+                {% if tipo_doc == 1 %}
                     <div class="mb-2">
                         <label class="form-label">{{ "Ver escrito"|trans|raw }}:</label>
                         <button tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep(tipo_doc);">
@@ -194,7 +194,7 @@
                         </button>
                     </div>
                 {% endif %}
-                {% if tipo_doc == TextoDelEscrito::TIPO_SYNOTEXT %}
+                {% if tipo_doc == 4 %}
                     <div class="mb-2">
                         <label class="form-label">{{ "Ver escrito"|trans|raw }}:</label>
                         <button tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep(tipo_doc);">
@@ -202,7 +202,7 @@
                         </button>
                     </div>
                 {% endif %}
-                {% if tipo_doc == TextoDelEscrito::TIPO_SYNOCALC %}
+                {% if tipo_doc == 5 %}
                     <div class="mb-2">
                         <label class="form-label">{{ "Ver escrito"|trans|raw }}:</label>
                         <button tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep(tipo_doc);">
@@ -265,7 +265,6 @@
 {# Per ficar l'escrit, si cal #}
 <div id="prova">
 </div>
-
 {{ include ('_escrito_form_js.html.twig') }}
 {{ include ('_escrito_form_dl_js.html.twig') }}
 {{ include ('_escritos_js.html.twig') }}
