@@ -101,7 +101,7 @@ class Etherpad2ODF
         $ODF->saveOds($file_odt, $content_xml, $conv_style, $doc_type); //save the object to a ods file
         $ODF->newOds();
 
-        return $file_odt;
+        return file_get_contents($file_odt);
     }
 
     /**

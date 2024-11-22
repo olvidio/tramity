@@ -724,37 +724,36 @@ class Etherpad extends Client implements TextoDelEscritoInterface
     // generar el odt y luego convertirlo:
     public function getContentFormatODT(): string
     {
-        $file_odt = $this->generarODT();
-        return file_get_contents($file_odt);
+        return $this->generarODT();
     }
 
     public function getContentFormatPDF(): string
     {
-        $file_odt = $this->generarODT();
-        return (new DocConverter())->convertOdt2($file_odt, 'pdf');
+        $content_file_odt = $this->generarODT();
+        return (new DocConverter())->convertOdt2($content_file_odt, 'pdf');
     }
 
     public function getContentFormatDOCX(): string
     {
-        $file_odt = $this->generarODT();
-        return (new DocConverter())->convertOdt2($file_odt, 'docx');
+        $content_file_odt = $this->generarODT();
+        return (new DocConverter())->convertOdt2($content_file_odt, 'docx');
     }
 
     /**
-     * devuelve la ruta del fichero odt creado a partir del Etherpad.
+     * devuelve el contenido. El fichero odt creado se elimina.
      *
-     * @return string ruta del fichero odt que se ha creado
+     * @return string el contenido del fichero odt que se ha creado
      */
     private function generarODT(): string
     {
         $filename_uniq = uniqid('enviar_', true);
         $html = $this->cleanHtml($this->fecha);
 
-        $file_odt = (new Etherpad2ODF())->crearFicheroOdt($filename_uniq, $html, $this->a_header, $this->fecha);
+        $content_file_odt = (new Etherpad2ODF())->crearFicheroOdt($filename_uniq, $html, $this->a_header, $this->fecha);
         // borrar los archivos temporales
         borrar_tmp($filename_uniq);
 
-        return $file_odt;
+        return $content_file_odt;
     }
     /*----------------------------------------------------------------------------------------*/
 
