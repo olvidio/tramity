@@ -186,26 +186,26 @@
         <div class="col-4">
             <!--  --------------------  ANADIR ESCRITOS  --------------------------  -->
             {% if id_escrito %}
-                {% if tipo_doc == 1 %}
+                {% if tipo_doc == constant('escritos\\model\\TextoDelEscrito::TIPO_ETHERPAD') %}
                     <div class="mb-2">
                         <label class="form-label">{{ "Ver escrito"|trans|raw }}:</label>
-                        <button tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep(tipo_doc);">
+                        <button tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep({{ tipo_doc }});">
                             {{ "Etherpad"|trans|raw }}
                         </button>
                     </div>
                 {% endif %}
-                {% if tipo_doc == 4 %}
+                {% if tipo_doc == constant('escritos\\model\\TextoDelEscrito::TIPO_SYNOTEXT') %}
                     <div class="mb-2">
                         <label class="form-label">{{ "Ver escrito"|trans|raw }}:</label>
-                        <button tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep(tipo_doc);">
+                        <button tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep({{ tipo_doc }});">
                             {{ "SynoText"|trans|raw }}
                         </button>
                     </div>
                 {% endif %}
-                {% if tipo_doc == 5 %}
+                {% if tipo_doc == constant('escritos\\model\\TextoDelEscrito::TIPO_SYNOCALC') %}
                     <div class="mb-2">
                         <label class="form-label">{{ "Ver escrito"|trans|raw }}:</label>
-                        <button tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep(tipo_doc);">
+                        <button tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep({{ tipo_doc }});">
                             {{ "SynoCalc"|trans|raw }}
                         </button>
                     </div>

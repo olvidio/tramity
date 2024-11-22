@@ -169,10 +169,10 @@
         <div class="col-4">
             <!--  --------------------  ANADIR ESCRITOS  --------------------------  -->
             {% if id_escrito %}
-                {% if tipo_doc == 1 or tipo_doc == 4 %}
+                {% if tipo_doc ==  constant('escritos\\model\\TextoDelEscrito::TIPO_ETHERPAD') %}
                     <div class="mb-2">
                         <label class="form-label">{{ "Ver escrito"|trans|raw }}:</label>
-                        <button tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep();">
+                        <button tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep({{ tipo_doc }});">
                             {{ "Etherpad"|trans|raw }}
                         </button>
                     </div>
@@ -182,6 +182,22 @@
                 {% endif %}
                 {% if tipo_doc == 3 %}
                     <p>incrustado</p>
+                {% endif %}
+                {% if tipo_doc ==  constant('escritos\\model\\TextoDelEscrito::TIPO_SYNOTEXT') %}
+                    <div class="mb-2">
+                        <label class="form-label">{{ "Ver escrito"|trans|raw }}:</label>
+                        <button tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep({{ tipo_doc }});">
+                            {{ "SynoText"|trans|raw }}
+                        </button>
+                    </div>
+                {% endif %}
+                {% if tipo_doc ==  constant('escritos\\model\\TextoDelEscrito::TIPO_SYNOCALC') %}
+                    <div class="mb-2">
+                        <label class="form-label">{{ "Ver escrito"|trans|raw }}:</label>
+                        <button tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep({{ tipo_doc }});">
+                            {{ "SynoCalc"|trans|raw }}
+                        </button>
+                    </div>
                 {% endif %}
                 {% if tipo_doc is empty %}
                     <div class="row mb-3">
