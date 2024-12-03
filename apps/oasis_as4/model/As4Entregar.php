@@ -73,7 +73,7 @@ class As4Entregar extends As4CollaborationInfo
     private array $aEntidadesNombre;
     private array $aEntidadesSchema;
 
-    private $anular_txt;
+    private string $anular_txt = '';
 
     private string $asunto_secretaria;
     private ?string $detalle;

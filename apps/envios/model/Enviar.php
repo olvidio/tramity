@@ -65,15 +65,15 @@ class Enviar
         $this->setTipo($tipo);
 
         if ($this->tipo === 'escrito') {
-            $this->oEscrito = new Escrito($this->iid);
+            $this->oEscrito = new Escrito($id);
         }
         if ($this->tipo === 'entrada') {
             // Los centros no tienen bypass
             if ($_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR
                 || $_SESSION['oConfig']->getAmbito() === Cargo::AMBITO_CTR_CORREO) {
-                $this->oEntradaBypass = new Entrada($this->iid);
+                $this->oEntradaBypass = new Entrada($id);
             } else {
-                $this->oEntradaBypass = new EntradaBypass($this->iid);
+                $this->oEntradaBypass = new EntradaBypass($id);
             }
             $this->is_Bypass = $this->oEntradaBypass->getBypass();
         }
