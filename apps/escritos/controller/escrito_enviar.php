@@ -53,6 +53,7 @@ if (!empty($rta_txt)) {
 $oEnviar = new Enviar($Q_id_escrito, 'escrito');
 
 $a_rta = $oEnviar->enviar();
+$oEnviar = null;
 
 if ($a_rta['marcar'] === TRUE) {
     $oEscrito = new Escrito($Q_id_escrito);

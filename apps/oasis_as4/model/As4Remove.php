@@ -41,7 +41,7 @@ class As4Remove
                 $txt .= sprintf(_("No se ha podido eliminar el fichero %s"), $file_err);
             }
 
-            $this->xmldata = simplexml_load_file($file_rejected);
+            $this->xmldata = simplexml_load_string(file_get_contents($file_rejected));
 
             $location = $this->getLocation();
             if (!empty($location)) {
@@ -128,7 +128,7 @@ class As4Remove
         $this->getFiles();
         $txt = '';
         foreach ($this->a_files_accepted as $file_accepted) {
-            $this->xmldata = simplexml_load_file($file_accepted);
+            $this->xmldata = simplexml_load_string(file_get_contents($file_accepted));
 
             $location = $this->getLocation();
             if (!empty($location)) {
