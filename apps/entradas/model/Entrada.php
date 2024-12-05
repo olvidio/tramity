@@ -460,7 +460,7 @@ class Entrada extends EntradaDB
     public function DBGuardar(): bool
     {
         // El tipo y fecha documento: (excepto si es nuevo)
-        if (!empty($this->iid_entrada)) {
+        if (!empty($this->iid_entrada) && !empty($this->itipo_doc)) {
             $oEntradaDocDB = new EntradaDocDB($this->iid_entrada);
             $oEntradaDocDB->setF_doc($this->df_doc, TRUE);
             $oEntradaDocDB->setTipo_doc($this->itipo_doc);
