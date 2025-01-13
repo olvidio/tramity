@@ -1,0 +1,29 @@
+Para migrrar la base de datos del registro a Tramity:
+
+<ol>
+    <li> Eliminar entradas antes de 2 años
+        <a href="apps/migration/controller/redortar.php?que=oficinas">go</a></li>
+    <li> Eliminar expedientes antes de 2 años
+        <a href="apps/migration/controller/recortar.php?que=lugares">go</a></li>
+    <li> Eliminar escritos no permanentes antes de 2 años
+        <a href="apps/migration/controller/recortar.php?que=entradas">go</a></li>
+
+    <hr>
+    <li> cambiar adjuntos de entradas por los de la cartpeta "apps/..."
+        <a href="apps/migration/controller/recortar.php?que=entradas2">go</a></li>
+    <li> cambiar adjuntos de escritos por los de la cartpeta "apps/..."
+        <a href="apps/migration/controller/recortar.php?que=entradas_of">go</a></li>
+    <li> ANTECEDENTES????
+        <a href="apps/migration/controller/recortar.php?que=entradas_ref">go</a></li>
+
+    <hr>
+    <li> Borrar etherpad sin escrito ni entradas
+        <a href="apps/migration/controller/recortar.php?que=aprobaciones">go</a></li>
+    <li> borrar revisiones etherpad
+        <a href="apps/migration/controller/recortar.php?que=aprobaciones_destinos">go</a></li>
+    <li> Cambiar texto etherpad por...
+        <a href="apps/migration/controller/recortar.php?que=aprobaciones_referencias">go</a></li>
+
+
+</ol>
+  
