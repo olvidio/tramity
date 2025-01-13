@@ -15,14 +15,11 @@ use etiquetas\model\entity\GestorEtiquetaEntrada;
 use JsonException;
 use lugares\model\entity\GestorLugar;
 use lugares\model\entity\Lugar;
-use usuarios\model\entity\Cargo;
 use usuarios\model\PermRegistro;
-use usuarios\model\Visibilidad;
 use web\DateTimeLocal;
 use web\NullDateTimeLocal;
 use web\Protocolo;
 use web\ProtocoloArray;
-use function core\is_true;
 
 
 class Entrada extends EntradaDB
@@ -101,7 +98,7 @@ class Entrada extends EntradaDB
         }
 
         if (!empty($aRef['dst_org'])) {
-            $destinos_txt .= ($destinos_txt !== '<br>')? '<br>' : '';
+            $destinos_txt .= ($destinos_txt !== '<br>') ? '<br>' : '';
             $destinos_txt .= $aRef['dst_org'];
         }
         return $destinos_txt;
@@ -460,7 +457,7 @@ class Entrada extends EntradaDB
     public function DBGuardar(): bool
     {
         // El tipo y fecha documento: (excepto si es nuevo)
-        if (!empty($this->iid_entrada)) {
+        if (!empty($this->iid_entrada) && !empty($this->itipo_doc)) {
             $oEntradaDocDB = new EntradaDocDB($this->iid_entrada);
             $oEntradaDocDB->setF_doc($this->df_doc, TRUE);
             $oEntradaDocDB->setTipo_doc($this->itipo_doc);

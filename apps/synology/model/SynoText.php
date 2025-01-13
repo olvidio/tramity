@@ -2,12 +2,10 @@
 
 namespace synology\model;
 
-use convertir_odf\model\Odf;
 use convertirdocumentos\model\DocConverter;
-use core\ConfigGlobal;
-use envios\model\MIMETypeLocal;
 use escritos\model\TextoDelEscrito;
 use escritos\model\TextoDelEscritoInterface;
+use Mpdf\Mpdf;
 use web\StringLocal;
 
 class SynoText implements TextoDelEscritoInterface
@@ -22,6 +20,8 @@ class SynoText implements TextoDelEscritoInterface
     private $synologyDrive;
     private mixed $permanent_link;
     private string $ms_word;
+    private string $fecha;
+    private array $a_header;
 
     /**
      */
@@ -133,10 +133,25 @@ class SynoText implements TextoDelEscritoInterface
         return $rta;
     }
 
+    private function generarPdf(): string
+    {
+        $this->downloadAsDocx();
+        return $this->convert2Pdf();
+    }
+
     public function generarHtml(): string
     {
         $this->downloadAsDocx();
         return $this->convert2Html();
+    }
+
+    private function uploadDocx($file)
+    {
+        $synologyClient = new FileStationClientTramity('host.docker.internal', 5000, 'http', 2);
+        //$synologyOffice->activateDebug();
+        $synologyClient->connect('dani', 'Mam00t!$Dam#24');
+
+        $synologyClient->uploadFile($file, $this->filename);
     }
 
     public function downloadAsDocx()
@@ -151,113 +166,34 @@ class SynoText implements TextoDelEscritoInterface
         }
         $path_link = "link:" . $this->permanent_link;
 
-
         $this->ms_word = $synologyOffice->export($path_link);
 
         return $this->ms_word;
-
     }
 
     private function convert2Html(): string
     {
-
         $oDocConverter = new DocConverter();
         $oDocConverter->setNombreFicheroOriginalConExtension($this->filename);
         $oDocConverter->setDocIn($this->ms_word);
         $doc = $oDocConverter->convert('html');
-        $nombre_fichero_pdf = $this->filename . '.html';
-        $file_extension = 'html';
 
         return $doc;
     }
 
     public function getContentFormatODT(): string
     {
-        // Para poner las cabeceras y la fecha, genero tres pdf y los unifico.
-        // Para no pasar por el html com se hace en el etherpad.
-
-        $pdf_all = '';
-        // cabeceras
-        $cabecera = '';
-        if (!empty($a_header)) {
-            $origen = '';
-            $destino = '';
-            if (!empty($a_header['left'])) {
-                $a_izq = explode('<br>', $a_header['left']);
-                $destino = $a_izq[0];
-                $ref_izq = empty($a_izq[1]) ? '' : $a_izq[1];
-            }
-            if (!empty($a_header['right'])) {
-                $a_dcha = explode('<br>', $a_header['right']);
-                $origen = $a_dcha[0];
-                $ref_dcha = empty($a_dcha[1]) ? '' : $a_dcha[1];
-            }
-            // linea 1
-            $cabecera = "<cabecera>";
-            $cabecera .= $destino;
-            $cabecera .= "<cabecera_end>";
-            $cabecera .= $origen;
-            $cabecera .= "</cabecera_end>";
-            $cabecera .= "</cabecera>";
-            // liena 2
-            if (!empty($ref_izq) || !empty($ref_dcha)) {
-                $cabecera .= "<cabecera>";
-                if (!empty($ref_izq)) {
-                    $cabecera .= $ref_izq;
-                }
-                if (!empty($ref_dcha)) {
-                    $cabecera .= "<cabecera_end>";
-                    $cabecera .= $ref_dcha;
-                    $cabecera .= "</cabecera_end>";
-                }
-                $cabecera .= "</cabecera>";
-            }
-            $cabecera .= "<separacion></separacion>";
-        }
-
-        $file_txt = "/tmp/$filename_sin_ext.txt";
-        $file_xml = "/tmp/$filename_sin_ext.xml";
-        // Utilizo la misma plantilla que para el ethrepad
-        $xslt = "html2odftextTramity.xslt";
-        $conv_style = "5";
-
-        // para el bash. poner el nombre de fichero entre comillas simples, y escapar las posibles comillas del nombre.
-        $file_txt_escaped = "'" . str_replace("'", "\'", $file_txt) . "'";
-        $file_xml_escaped = "'" . str_replace("'", "\'", $file_xml) . "'";
-        $cmd = "xsltproc --html " . ConfigGlobal::getDIR() . ODF::DIR_COMPONENTES . "xslt/$xslt $file_txt_escaped > $file_xml_escaped";
-        $a_output = [];
-        exec($cmd, $a_output, $return_var);
-        $content_xml = file_get_contents($file_xml);
-
-        // fecha
-        if (!empty($fecha)) {
-            $fecha_txt = "<fecha>$fecha</fecha>";
-        }
-
-
-        $a_pdf = $this->convert2Pdf();
-        $filename_content = $a_pdf['nombre_fichero_pdf'];
-
-        return $pdf_all;
+        // TODO
     }
 
-    public function convert2Pdf(): array
+    private function convert2Pdf(): string
     {
-
         $oDocConverter = new DocConverter();
         $oDocConverter->setNombreFicheroOriginalConExtension($this->filename);
         $oDocConverter->setDocIn($this->ms_word);
         $doc = $oDocConverter->convert('pdf');
-        $nombre_fichero_pdf = $this->filename . '.pdf';
-        $file_extension = 'pdf';
 
-        $a_datos_fichero = [
-            'doc' => $doc,
-            'nombre_fichero_pdf' => $nombre_fichero_pdf,
-            'file_extension' => $file_extension,
-        ];
-
-        return $a_datos_fichero;
+        return $doc;
     }
 
 
@@ -292,11 +228,22 @@ class SynoText implements TextoDelEscritoInterface
     public function setHtml($html)
     {
         // TODO: Implement setHtml() method.
+        // Cero que no se puede. Hay que crear uno nuevo
+        // crear un archivo docx. (a partir del html)
+        // subirlo y pasarlo a odoc.
+
+        $oDocConverter = new DocConverter();
+        $oDocConverter->setNombreFicheroOriginalConExtension($this->filename);
+        $oDocConverter->setDocIn($html);
+        $docx = $oDocConverter->convert('docx');
+
+        $this->uploadDocx($docx);
     }
 
     public function eliminar()
     {
         // TODO: Implement eliminar() method.
+        $rta = $this->synologyDrive->delete($this->file_path);
     }
 
     public function copyTo($newId_escrito)
@@ -304,9 +251,13 @@ class SynoText implements TextoDelEscritoInterface
         // TODO: Implement copyTo() method.
     }
 
+    /**
+     * Se usa para añadir las firmas
+     * @return string
+     */
     public function getHtmlSinLimpiar(): string
     {
-        // TODO: Implement getHHtml() method.
+        return $this->generarHtml();
     }
 
     public function crearTexto(): void
@@ -317,6 +268,7 @@ class SynoText implements TextoDelEscritoInterface
     public function setTextContent($text_content): void
     {
         // TODO: Implement setTextContent() method.
+        // parece que la manera será crearlo de cero
     }
 
     public function generarMD(): string
@@ -337,16 +289,125 @@ class SynoText implements TextoDelEscritoInterface
 
     public function addHeaders(array $a_header = [], string $fecha = ''): void
     {
-        // TODO: Implement addHeaders() method.
+        $this->a_header = $a_header;
+        $this->fecha = $fecha;
     }
 
     public function getContentFormatPDF(): string
     {
-        // TODO: Implement getContentFormatPDF() method.
+        // Para poner las cabeceras y la fecha, genero tres pdf y los unifico.
+        // ESTO NO FUNCIONA porque cada pdf tiene sus márgenes y referencias de posición respecto a la página
+        // y al unir se sobreponen, o se pone un salto de página.
+
+        // Paso por el html como se hace en el etherpad.
+
+        // cabeceras
+        $cabeceraHtml = $this->cabeceraHtml();
+        // escrito
+        $docHtml = $this->generarHtml();
+        // fecha
+        $pieHtml = $this->pieHtml();
+
+        $html = $cabeceraHtml . $docHtml . $pieHtml;
+
+        $oDocConverter = new DocConverter();
+        $oDocConverter->setNombreFicheroOriginalConExtension($this->filename);
+        $oDocConverter->setDocIn($html);
+        $pdf = $oDocConverter->convert('pdf');
+
+        return $pdf;
     }
 
     public function getContentFormatDOCX(): string
     {
         // TODO: Implement getContentFormatDOCX() method.
+    }
+
+    private function cabeceraPdfFilename()
+    {
+        $filename_uniq = uniqid('convert_', true);
+        $path_temp = '/tmp/';
+        $file_cabecera = $path_temp . "$filename_uniq" . ".pdf";
+
+        $html = $this->cabeceraHtml();
+
+        $mpdf = new Mpdf();
+        $mpdf->WriteHTML($html);
+        $mpdf->Output($file_cabecera, \Mpdf\Output\Destination::FILE);
+
+        return $file_cabecera;
+    }
+
+    private function cabeceraHtml(): string
+    {
+        if (!empty($this->a_header)) {
+            $origen = '';
+            $destino = '';
+            if (!empty($this->a_header['left'])) {
+                $a_izq = explode('<br>', $this->a_header['left']);
+                $destino = $a_izq[0];
+                $ref_izq = empty($a_izq[1]) ? '' : $a_izq[1];
+            }
+            if (!empty($this->a_header['right'])) {
+                $a_dcha = explode('<br>', $this->a_header['right']);
+                $origen = $a_dcha[0];
+                $ref_dcha = empty($a_dcha[1]) ? '' : $a_dcha[1];
+            }
+            // linea 1
+            $cabecera = "<table width='600px' >";
+            $cabecera .= "<tr><td>";
+            $cabecera .= $destino;
+            $cabecera .= "</td><td style=\"text-align: right\">";
+            $cabecera .= $origen;
+            $cabecera .= "</td>";
+            $cabecera .= "</tr>";
+            // liena 2
+            if (!empty($ref_izq) || !empty($ref_dcha)) {
+                $cabecera .= "<tr>";
+                if (!empty($ref_izq)) {
+                    $cabecera .= $ref_izq;
+                }
+                if (!empty($ref_dcha)) {
+                    $cabecera .= "<td></td>";
+                    $cabecera .= "<td style=\"text-align: right\">";
+                    $cabecera .= $ref_dcha;
+                    $cabecera .= "</td>";
+                }
+                $cabecera .= "</tr>";
+            }
+            $cabecera .= "</table>";
+            $cabecera .= "<br />";
+        }
+        return $cabecera;
+    }
+
+    private function piePdfFilename()
+    {
+        $filename_uniq = uniqid('convert_', true);
+        $path_temp = '/tmp/';
+        $file_pie = $path_temp . "$filename_uniq" . ".pdf";
+
+        $html = $this->pieHtml();
+
+        $mpdf = new Mpdf();
+        $mpdf->WriteHTML($html);
+        $mpdf->Output($file_pie, \Mpdf\Output\Destination::FILE);
+
+        return $file_pie;
+    }
+
+    private function pieHtml(): string
+    {
+        $pie = '';
+        if (!empty($this->fecha)) {
+            $pie = "<table width='600px'>";
+            $pie .= "<tr><td></td>";
+            $pie .= "<td style=\"text-align: right\">";
+            $pie .= $this->fecha;
+            $pie .= "</td>";
+            $pie .= "</tr></table>";
+        }
+
+        return $pie;
     }
 }

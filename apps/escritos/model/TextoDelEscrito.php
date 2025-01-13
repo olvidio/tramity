@@ -70,6 +70,10 @@ class TextoDelEscrito implements TextoDelEscritoInterface
         return $this->documentoDeTexto->generarHtml();
     }
 
+    /**
+     * Se usa para añadir las firmas
+     * @return string
+     */
     public function getHtmlSinLimpiar(): string
     {
         return $this->documentoDeTexto->getHtmlSinLimpiar();

@@ -27,6 +27,7 @@ class GestorErrores
     private $filename = '';
 
     /* CONSTRUCTOR -------------------------------------------------------------- */
+    private string|int|null $stack;
 
     /**
      * Constructor de la classe.
