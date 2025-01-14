@@ -1,8 +1,8 @@
 <?php
 
-use core\ViewTwig;
-
 // INICIO Cabecera global de URL de controlador *********************************
+
+use web\DateTimeLocal;
 
 require_once("apps/core/global_header.inc");
 // Archivos requeridos por esta url **********************************************
@@ -13,10 +13,20 @@ require_once("apps/core/global_object.inc");
 
 // FIN de  Cabecera global de URL de controlador ********************************
 
-// Equivalencias
-$a_campos = [
-    'webserver' => core\ConfigGlobal::getWeb(),
-];
+$oHoy = new DateTimeLocal();
 
-$oView = new ViewTwig('migration/controller');
-$oView->renderizar('recortar_index.html.twig', $a_campos);
+$oFCorte = new DateTimeLocal('Y-m-d', strtotime(' - 3 years'));
+$f_corte_iso = $oFCorte->getIso();
+
+
+$oDbl = $GLOBALS['oDBT'];
+
+$sql = "DELETE FROM expedientes WHERE f_ini_circulacion < '$f_corte_iso' ;";
+
+if (($oDblSt = $oDbl->Query($sql)) === FALSE) {
+    echo "Error de algún tipo..."."<br>";
+}
+
+// Expediente_firmas y etiquetas se debería eliminar (foreing key)
+
+echo "fet!";
