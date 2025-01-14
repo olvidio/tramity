@@ -18,8 +18,9 @@ $oFCorte = (new web\DateTimeLocal)->sub(interval: new DateInterval('P3Y'));
 $f_corte_iso = $oFCorte->getIso();
 
 $oDbl = $GLOBALS['oDBT'];
+$centro = 'dlb';
 
-$sql = "DELETE FROM escritos 
+$sql = "DELETE FROM $centro.escritos 
     WHERE (f_escrito < '$f_corte_iso'  OR f_aprobacion < '$f_corte_iso')
      AND categoria != 3;";
 

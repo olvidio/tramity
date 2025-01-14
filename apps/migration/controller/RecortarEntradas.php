@@ -18,8 +18,9 @@ $oFCorte = (new web\DateTimeLocal)->sub(interval: new DateInterval('P3Y'));
 $f_corte_iso = $oFCorte->getIso();
 
 $oDbl = $GLOBALS['oDBT'];
+$centro = 'dlb';
 
-$sql = "DELETE FROM entradas 
+$sql = "DELETE FROM $centro.entradas 
     WHERE (f_entrada < '$f_corte_iso' OR f_entrada IS NULL)
         AND categoria != 3;";
 
