@@ -14,10 +14,8 @@ require_once("apps/core/global_object.inc");
 // FIN de  Cabecera global de URL de controlador ********************************
 
 $oHoy = new DateTimeLocal();
-
-$oFCorte = new DateTimeLocal('Y-m-d', strtotime(' - 3 years'));
+$oFCorte = (new web\DateTimeLocal)->sub(interval: new DateInterval('P3Y'));
 $f_corte_iso = $oFCorte->getIso();
-
 
 $oDbl = $GLOBALS['oDBT'];
 
