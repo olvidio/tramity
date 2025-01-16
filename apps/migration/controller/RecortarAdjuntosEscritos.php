@@ -56,6 +56,12 @@ $fp_5 = fopen($tmpFilePath_5, 'rb');
 $contenido_doc5 = fread($fp_5, filesize($tmpFilePath_5));
 $extension5 = 'doc';
 
+
+$oConfigDB = new ConfigDB('tramity'); //de la database comun
+$config = $oConfigDB->getEsquema($centro);
+$oConexion = new DBConnection($config);
+$oDbl2 = $oConexion->getPDO();
+
 //de 10 en 10
 $init = 0;
 $inc = 10;
@@ -70,15 +76,15 @@ for ($j = 0; $init < $num_adjuntos; $j++) {
         echo "Error de algún tipo..." . "<br>";
     }
 
-$i = 0;
-foreach ($oDblSt as $row) {
-    $i++;
-    $id_item = $row['id_item'];
-    $oEscritoAdjunto = new EscritoAdjunto();
-    $oEscritoAdjunto->setoDbl($oDbl);
-    $oEscritoAdjunto->setId_item($id_item);
-    $oEscritoAdjunto->DBCargar();
- $nom_fichero = $oEscritoAdjunto->getNom();
+    $i = 0;
+    foreach ($oDblSt as $row) {
+        $i++;
+        $id_item = $row['id_item'];
+        $oEscritoAdjunto = new EscritoAdjunto();
+        $oEscritoAdjunto->setoDbl($oDbl2);
+        $oEscritoAdjunto->setId_item($id_item);
+        $oEscritoAdjunto->DBCargar();
+        $nom_fichero = $oEscritoAdjunto->getNom();
 
         switch ($i) {
             case 1:
