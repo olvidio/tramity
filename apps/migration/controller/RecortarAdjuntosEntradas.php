@@ -17,7 +17,7 @@ require_once("apps/core/global_object.inc");
 $oDbl = $GLOBALS['oDBT'];
 $centro = 'dlb';
 
-$sql0 = "SELECT id_entrada 
+$sql0 = "SELECT id_item 
         FROM $centro.entrada_adjuntos 
         WHERE substr(nom, 0, 5) != 'mod_'
         ORDER BY id_item";
@@ -100,7 +100,7 @@ for ($j = 0; $init < $num_adjuntos; $j++) {
                 break;
         }
         // cambiar el nombre: prefix = mod_, extensión:
-        $nom_fichero = 'mod_' . preg_replace('/\..*\$/', ".$extension", $nom_fichero);
+        $nom_fichero = 'mod_' . preg_replace('/\..*$/', ".$extension", $nom_fichero);
         $oEntradaAdjunto->setNom($nom_fichero);
 
         if ($oEntradaAdjunto->DBGuardar() === FALSE) {
@@ -113,6 +113,6 @@ for ($j = 0; $init < $num_adjuntos; $j++) {
             $i = 0;
         }
 
-        $init = $init + $inc;
     }
+    $init = $init + $inc;
 }
