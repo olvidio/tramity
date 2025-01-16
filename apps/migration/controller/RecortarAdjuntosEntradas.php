@@ -17,7 +17,7 @@ require_once("apps/core/global_object.inc");
 $oDbl = $GLOBALS['oDBT'];
 $centro = 'dlb';
 
-$sql = "SELECT id_item FROM $centro.entrada_adjuntos";
+$sql = "SELECT id_item FROM $centro.entrada_adjuntos LIMIT 10";
 
 if (($oDblSt = $oDbl->Query($sql)) === FALSE) {
     echo "Error de algún tipo..." . "<br>";
@@ -74,6 +74,8 @@ foreach ($oDblSt as $row) {
     if ($oEntradaAdjunto->DBGuardar() === FALSE) {
         echo "Error al guardar..." . "<br>";
     }
+
+    echo "id_item: $id_item<br>";
 
     if ($i > 4) {
         $i = 0;

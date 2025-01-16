@@ -29,8 +29,6 @@ $oDbEtherpad = $oConexion->getPDO();
 $host = $oConexion->getHost();
 $tabla = '';
 
-$file_ref = '/tmp/z_ent_reales.sql';
-$file_log = '/tmp/z_log.txt';
 
 // entradas reales en tramity. Exportar a nueva taba z_entradas_reales
 $tabla_entradas_reales = 'z_entradas_reales';
@@ -45,26 +43,6 @@ if (($oDblSt = $oDbl->Query($sql2)) === FALSE) {
 
 $num_entradas = $oDblSt->rowCount();
 
-// exportar a etherpad
-
-/* En el docker no puedo usar pg_dump porque no está instalado !!!
-$dsn = $oConexion->getURI();
-// leer esquema
-//        $command = "/usr/bin/pg_dump -h " . $host . " -U postgres -s --schema=\\\"" . $this->getRef() . "\\\" ";
-$command = "/usr/bin/pg_dump -h " . $host . " -U postgres -t dlb.z_entradas_reales";
-$command .= "--file=" . $file_ref . " ";
-$command .= "\"" . $dsn . "\"";
-$command .= " > " . $file_log . " 2>&1";
-passthru($command); // no output to capture so no need to store it
-// read the file, if empty all's well
-$error = file_get_contents($file_log);
-if (trim($error) != '') {
-    echo sprintf(_("PSQL ERROR IN COMMAND(1): %s<br> mirar: %s<br>"), $command, $file_log);
-}
-*/
-
-// importar
-
 $sql30 = "DROP TABLE IF EXISTS $tabla_entradas_reales";
 if (($oDblSt = $oDbEtherpad->Query($sql30)) === FALSE) {
     echo "Error de algún tipo..." . "<br>";
@@ -74,7 +52,7 @@ if (($oDblSt = $oDbEtherpad->Query($sql31)) === FALSE) {
     echo "Error de algún tipo..." . "<br>";
 }
 
-//de 5 en 5
+//de 100 en 100
 $init = 0;
 $inc = 100;
 
