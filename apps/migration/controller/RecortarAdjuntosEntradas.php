@@ -19,7 +19,7 @@ $centro = 'dlb';
 
 $sql0 = "SELECT id_entrada 
         FROM $centro.entrada_adjuntos 
-        WHERE WHERE substr(nom, 0, 5) != 'mod_'
+        WHERE substr(nom, 0, 5) != 'mod_'
         ORDER BY id_item";
 if (($oDblSt = $oDbl->Query($sql0)) === FALSE) {
     echo "Error de algún tipo..." . "<br>";
@@ -61,7 +61,7 @@ $inc = 10;
 for ($j = 0; $init < $num_adjuntos; $j++) {
     $sql = "SELECT id_item 
         FROM $centro.entrada_adjuntos 
-        WHERE WHERE substr(nom, 0, 5) != 'mod_'
+        WHERE substr(nom, 0, 5) != 'mod_'
         ORDER BY id_item LIMIT $inc OFFSET $init";
 
     if (($oDblSt = $oDbl->Query($sql)) === FALSE) {
