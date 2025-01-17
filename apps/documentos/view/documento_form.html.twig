@@ -68,7 +68,7 @@
                     {% if tipo_doc == 2 %}
                         <p>etherCalc</p>
                     {% endif %}
-                    {% if tipo_doc == constant('escritos\\model\\TextoDelEscrito::TIPO_SYNOTEXT') 4 %}
+                    {% if tipo_doc == constant('escritos\\model\\TextoDelEscrito::TIPO_SYNOTEXT') %}
                         <div class="mb-3">
                             <label class="form-label">{{ "Ver escrito"|trans|raw }}:</label>
                             <button tabindex='100' class="btn btn-info" onClick="fnjs_ver_doc_ep({{ tipo_doc }});">
