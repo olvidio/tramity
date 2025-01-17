@@ -118,4 +118,5 @@ foreach ($oDblSt as $row) {
 
 }
 
-
+// finalmente, directamente en el postgresql:
+//DELETE FROM store s USING z_entradas_a_eliminar e WHERE e.fet='f' AND strpos(s.key,'dlb*ent'||e.id) > 0
