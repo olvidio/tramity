@@ -22,7 +22,7 @@ $oDbEtherpad = $oConexion->getPDO();
 $host = $oConexion->getHost();
 $tabla = '';
 
-
+/*
 // escritos reales en tramity. Exportar a nueva taba z_escritos_reales
 $tabla_escritos_reales = 'z_escritos_reales';
 $sql1 = "DROP TABLE IF EXISTS $tabla_escritos_reales";
@@ -96,6 +96,9 @@ $sql71 = "ALTER TABLE $tabla_escritos_a_eliminar ADD COLUMN fet bool DEFAULT 'f'
 if (($oDblSt = $oDbEtherpad->Query($sql71)) === FALSE) {
     echo "Error de algún tipo..." . "<br>";
 }
+*/
+
+$tabla_escritos_a_eliminar = 'z_escritos_a_eliminar';
 
 $sql8 = "SELECT * FROM $tabla_escritos_a_eliminar WHERE fet = 'f' ";
 if (($oDblSt = $oDbEtherpad->Query($sql8)) === FALSE) {
