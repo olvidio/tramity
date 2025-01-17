@@ -69,10 +69,10 @@ $tabla_id = 'z_escritos';
 $sql4 = "DROP TABLE IF EXISTS $tabla_id";
 $oDbEtherpad->exec($sql4);
 $regexpCentro = '\\$' . $centro;
-$sql5 = 'SELECT regexp_replace(key,\'(pad:.*' . $regexpCentro . '\*ent)(\d+)(:.*)*\', \'\2\')::int as id
+$sql5 = 'SELECT regexp_replace(key,\'(pad:.*' . $regexpCentro . '\*esc)(\d+)(:.*)*\', \'\2\')::int as id
         INTO ' . $tabla_id . '
         FROM store 
-        WHERE key ~ \'pad:.*' . $regexpCentro . '\*ent\d+\'
+        WHERE key ~ \'pad:.*' . $regexpCentro . '\*esc\d+\'
         GROUP BY id';
 if (($oDblSt = $oDbEtherpad->Query($sql5)) === FALSE) {
     echo "Error de algún tipo..." . "<br>";
@@ -103,7 +103,7 @@ if (($oDblSt = $oDbEtherpad->Query($sql8)) === FALSE) {
 foreach ($oDblSt as $row) {
     //:  dlb*ent277718
     $id_escrito_eliminada = $row['id'];
-    $padId2 = $centro .'*ent' . $id_escrito_eliminada;
+    $padId2 = $centro .'*esc' . $id_escrito_eliminada;
     //$sql = "DELETE FROM store WHERE key ~ '$padId'";
     // quizá más rápido:
     $sql = "DELETE FROM store WHERE strpos(key,'$padId2') > 0";
