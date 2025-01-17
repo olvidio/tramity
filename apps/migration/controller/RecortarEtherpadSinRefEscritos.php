@@ -23,24 +23,24 @@ $host = $oConexion->getHost();
 $tabla = '';
 
 
-// entradas reales en tramity. Exportar a nueva taba z_entradas_reales
-$tabla_entradas_reales = 'z_entradas_reales';
-$sql1 = "DROP TABLE IF EXISTS $tabla_entradas_reales";
+// escritos reales en tramity. Exportar a nueva taba z_escritos_reales
+$tabla_escritos_reales = 'z_escritos_reales';
+$sql1 = "DROP TABLE IF EXISTS $tabla_escritos_reales";
 if ($oDbl->Query($sql1) === FALSE) {
     echo "Error de algún tipo..." . "<br>";
 }
-$sql2 = "SELECT id_entrada INTO $tabla_entradas_reales FROM $centro.entradas ORDER BY id_entrada";
+$sql2 = "SELECT id_escrito INTO $tabla_escritos_reales FROM $centro.escritos ORDER BY id_escrito";
 if (($oDblSt = $oDbl->Query($sql2)) === FALSE) {
     echo "Error de algún tipo..." . "<br>";
 }
 
-$num_entradas = $oDblSt->rowCount();
+$num_escritos = $oDblSt->rowCount();
 
-$sql30 = "DROP TABLE IF EXISTS $tabla_entradas_reales";
+$sql30 = "DROP TABLE IF EXISTS $tabla_escritos_reales";
 if (($oDblSt = $oDbEtherpad->Query($sql30)) === FALSE) {
     echo "Error de algún tipo..." . "<br>";
 }
-$sql31 = "CREATE TABLE $tabla_entradas_reales (id_entrada int)";
+$sql31 = "CREATE TABLE $tabla_escritos_reales (id_escrito int)";
 if (($oDblSt = $oDbEtherpad->Query($sql31)) === FALSE) {
     echo "Error de algún tipo..." . "<br>";
 }
@@ -49,24 +49,24 @@ if (($oDblSt = $oDbEtherpad->Query($sql31)) === FALSE) {
 $init = 0;
 $inc = 100;
 
-for ($i = 0; $init < $num_entradas; $i++) {
-    $sql32 = "SELECT id_entrada FROM $tabla_entradas_reales LIMIT $inc OFFSET $init";
+for ($i = 0; $init < $num_escritos; $i++) {
+    $sql32 = "SELECT id_escrito FROM $tabla_escritos_reales LIMIT $inc OFFSET $init";
     // leo de tramity
     if (($oDblSt = $oDbl->Query($sql32)) === FALSE) {
         echo "Error de algún tipo..." . "<br>";
     }
     // inserto en etherpad
     foreach ($oDblSt as $row) {
-        $id = $row['id_entrada'];
-        $sql33 = "INSERT INTO $tabla_entradas_reales (id_entrada) VALUES ($id);";
+        $id = $row['id_escrito'];
+        $sql33 = "INSERT INTO $tabla_escritos_reales (id_escrito) VALUES ($id);";
         $oDbEtherpad->exec($sql33);
     }
     $init = $init + $inc;
 }
 
 
-// crear tabla en etherpad de las entradas que existen
-$tabla_id = 'z_entradas';
+// crear tabla en etherpad de las escritos que existen
+$tabla_id = 'z_escritos';
 $sql4 = "DROP TABLE IF EXISTS $tabla_id";
 $oDbEtherpad->exec($sql4);
 $regexpCentro = '\\$' . $centro;
@@ -80,38 +80,38 @@ if (($oDblSt = $oDbEtherpad->Query($sql5)) === FALSE) {
 }
 
 // crear tabla con los id que no están:
-$tabla_entradas_a_eliminar = 'z_entradas_a_eliminar';
-$sql6 = "DROP TABLE IF EXISTS $tabla_entradas_a_eliminar";
+$tabla_escritos_a_eliminar = 'z_escritos_a_eliminar';
+$sql6 = "DROP TABLE IF EXISTS $tabla_escritos_a_eliminar";
 $oDbEtherpad->exec($sql6);
-$sql7 = "SELECT p.id INTO $tabla_entradas_a_eliminar
-    FROM $tabla_id p LEFT JOIN $tabla_entradas_reales e ON (p.id = e.id_entrada) 
-    WHERE e.id_entrada IS NULL";
+$sql7 = "SELECT p.id INTO $tabla_escritos_a_eliminar
+    FROM $tabla_id p LEFT JOIN $tabla_escritos_reales e ON (p.id = e.id_escrito) 
+    WHERE e.id_escrito IS NULL";
 
 if (($oDblSt = $oDbEtherpad->Query($sql7)) === FALSE) {
     echo "Error de algún tipo..." . "<br>";
 }
 
-$sql71 = "ALTER TABLE $tabla_entradas_a_eliminar ADD COLUMN fet bool DEFAULT 'f'";
+$sql71 = "ALTER TABLE $tabla_escritos_a_eliminar ADD COLUMN fet bool DEFAULT 'f'";
 
 if (($oDblSt = $oDbEtherpad->Query($sql71)) === FALSE) {
     echo "Error de algún tipo..." . "<br>";
 }
 
-$sql8 = "SELECT * FROM $tabla_entradas_a_eliminar WHERE fet = 'f' ";
+$sql8 = "SELECT * FROM $tabla_escritos_a_eliminar WHERE fet = 'f' ";
 if (($oDblSt = $oDbEtherpad->Query($sql8)) === FALSE) {
     echo "Error de algún tipo..." . "<br>";
 }
 foreach ($oDblSt as $row) {
     //:  dlb*ent277718
-    $id_entrada_eliminada = $row['id'];
-    $padId2 = $centro .'*ent' . $id_entrada_eliminada;
+    $id_escrito_eliminada = $row['id'];
+    $padId2 = $centro .'*ent' . $id_escrito_eliminada;
     //$sql = "DELETE FROM store WHERE key ~ '$padId'";
     // quizá más rápido:
     $sql = "DELETE FROM store WHERE strpos(key,'$padId2') > 0";
     if ($oDbEtherpad->Query($sql) === FALSE) {
         echo "Error al borrar etherpad: $padId2<br>";
     }
-    $sql9 = "UPDATE $tabla_entradas_a_eliminar SET fet = 't' WHERE id = $id_entrada_eliminada";
+    $sql9 = "UPDATE $tabla_escritos_a_eliminar SET fet = 't' WHERE id = $id_escrito_eliminada";
     if (($oDblSt = $oDbEtherpad->Query($sql9)) === FALSE) {
         echo "999Error de algún tipo..." . "<br>";
     }

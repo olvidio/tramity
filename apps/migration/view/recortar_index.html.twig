@@ -19,12 +19,12 @@ Para recortar la base de datos de Tramity y Etherpad para hacer pruebas:
         <a href="apps/migration/controller/recortar.php?que=entradas_ref">go</a></li>
 
     <hr>
+    <li> borrar revisiones etherpad (mejor primero, para quitar volumen)
+        <button onClick="fnjs_update_div('#main','{{ webserver }}/apps/migration/controller/RecortarEtherpadRevisiones.php')">go</button></li>
     <li> Borrar etherpad sin referencia a entradas
         <button onClick="fnjs_update_div('#main','{{ webserver }}/apps/migration/controller/RecortarEtherpadSinRef.php')">go</button></li>
     <li> Borrar etherpad sin referencia a escritos
         <button onClick="fnjs_update_div('#main','{{ webserver }}/apps/migration/controller/RecortarEtherpadSinRefEscritos.php')">go</button></li>
-    <li> borrar revisiones etherpad
-        <button onClick="fnjs_update_div('#main','{{ webserver }}/apps/migration/controller/RecortarEtherpadRevisiones.php')">go</button></li>
     <li> Cambiar texto etherpad por...
         <button onClick="fnjs_update_div('#main','{{ webserver }}/apps/migration/controller/RecortarEtherpadFake.php')">go</button></li>
 
