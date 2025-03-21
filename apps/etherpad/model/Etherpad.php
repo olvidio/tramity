@@ -141,6 +141,9 @@ class Etherpad extends Client
     private function cleanHtml($fecha = '')
     {
         $contenido = $this->getHHtml();
+        // misteriosamente en alguna versión del etherpad, no convierte bien si dentro del último párrafo
+        // hay alguna marca html (negrita etc.) Añado un párrafo vacío.
+        $contenido .= "<p></p>";
 
         // acabar bien los <ul> o los <ol>
         //$pattern = "/(?<!<\/li>)(<\/[ou]l>)/";
