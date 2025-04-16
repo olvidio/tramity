@@ -493,6 +493,14 @@
     </xsl:template>
 
     <xsl:template match="strong">
+        <xsl:variable name="nodes1" select="ancestor::li"/>
+        <xsl:choose>
+            <xsl:when test="count($nodes1) > 0">
+                    <text:span text:style-name="T4">
+                        <xsl:apply-templates select="node()"/>
+                    </text:span>
+            </xsl:when>
+        </xsl:choose>
         <xsl:variable name="nodes" select="ancestor::p"/>
         <xsl:choose>
             <xsl:when test="count($nodes) = 0">
@@ -511,6 +519,14 @@
     </xsl:template>
 
     <xsl:template match="u">
+        <xsl:variable name="nodes1" select="ancestor::li"/>
+        <xsl:choose>
+            <xsl:when test="count($nodes1) > 0">
+                <text:span text:style-name="T5">
+                    <xsl:apply-templates select="node()"/>
+                </text:span>
+            </xsl:when>
+        </xsl:choose>
         <xsl:variable name="nodes" select="ancestor::p"/>
         <xsl:choose>
             <xsl:when test="count($nodes) = 0">
@@ -529,6 +545,14 @@
     </xsl:template>
 
     <xsl:template match="em">
+        <xsl:variable name="nodes1" select="ancestor::li"/>
+        <xsl:choose>
+            <xsl:when test="count($nodes1) > 0">
+                <text:span text:style-name="T6">
+                    <xsl:apply-templates select="node()"/>
+                </text:span>
+            </xsl:when>
+        </xsl:choose>
         <xsl:variable name="nodes" select="ancestor::p"/>
         <xsl:choose>
             <xsl:when test="count($nodes) = 0">
