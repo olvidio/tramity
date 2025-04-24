@@ -68,6 +68,7 @@ if ($a_rta['success'] === TRUE) {
 			  </script>";
     }
     $oEntrada = new Entrada($Q_id_entrada);
+    $oEntrada->DBCargar();
     $oEntrada->setEstado(Entrada::ESTADO_ENVIADO_CR);
     if ($oEntrada->DBGuardar() === FALSE) {
         $error_txt = $oEntrada->getErrorTxt();
