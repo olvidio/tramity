@@ -207,7 +207,7 @@ class Rrule
                         if ($ordinal_db < 0) {
                             $dia_w_txt = $a_dias_w[$dia_w_db];
                             $txt = "$ordinal_db $dia_w_txt";
-                            $dia = date("d", strtotime($txt, mktime(0, 0, 0, $mes + 1, 1, $any)));
+                            $dia = date("d", strtotime($txt, mktime(0, 0, 0, (int)$mes + 1, 1, $any)));
                         }
                         // Me salto los dias del mes anteriores a la fecha de inicio y los posteriores a la de fin
                         if (($dia < $day_ini && $mes == $month_ini && $any == $any_ini) || ($dia > $day_fin && $mes == $month_fin && $any == $any_fin)) {
@@ -216,7 +216,7 @@ class Rrule
                         $f_recurrencias[] = "$any-$mes-$dia";
                         break;
                     case "semana":
-                        $dias_del_mes = date("d", mktime(0, 0, 0, $mes + 1, 0, $any));
+                        $dias_del_mes = date("d", mktime(0, 0, 0, (int)$mes + 1, 0, $any));
                         for ($dia = 1; $dia <= $dias_del_mes; $dia++) {
                             $letras = strtoupper(substr(date("D", mktime(0, 0, 0, $mes, $dia, $any)), 0, 2));
                             if (in_array($letras, $dias_w_db)) {
@@ -229,7 +229,7 @@ class Rrule
                         }
                         break;
                     case "todos":
-                        $dias_del_mes = date("d", mktime(0, 0, 0, $mes + 1, 0, $any));
+                        $dias_del_mes = date("d", mktime(0, 0, 0, (int)$mes + 1, 0, $any));
                         for ($dia = 1; $dia <= $dias_del_mes; $dia++) {
                             // Me salto los dias del mes anteriores a la fecha de inicio y los posteriores a la de fin
                             if (($dia < $day_ini && $mes == $month_ini && $any == $any_ini) || ($dia > $day_fin && $mes == $month_fin && $any == $any_fin)) {
@@ -245,25 +245,23 @@ class Rrule
             }
         }
         /*********** Ordenar  **********************/
+        $a_fechas = [];
         if (count($f_recurrencias)) {
             // ordenar por f_plazo:
-            $a_fechas = [];
             foreach ($f_recurrencias as $f_iso) {
                 $oFecha = new DateTimeLocal($f_iso);
                 $f_sin_separador = $oFecha->format('Ymd');
                 $a_fechas[$f_sin_separador] = $f_iso;
             }
             ksort($a_fechas);
-            return $a_fechas;
-        } else {
-            return array();
         }
+        return $a_fechas;
     }
 
 
     /**
      *
-     * Deshago un RRULE del calendario y develvo un vector con los
+     * Deshago un RRULE del calendario y devuelvo un vector con los
      *  valores necesarios para dar las opciones en el formulario web.
      *
      */
@@ -310,18 +308,18 @@ class Rrule
             $rta['until'] = $f_until;
         }
 
-        if (!$error && $freq == "YEARLY" && !$dias && !$meses && !$dia_semana) {
+        if (!$error && $freq === "YEARLY" && !$dias && !$meses && !$dia_semana) {
             $rta['tipo'] = "d_a";
             $rta['tipo_dia'] = "num_ini";
             $rta['dias'] = "";
         }
-        if (!$error && $freq == "YEARLY" && $dias && $meses && !$dia_semana) {
+        if (!$error && $freq === "YEARLY" && $dias && $meses && !$dia_semana) {
             $rta['tipo'] = "d_a";
             $rta['tipo_dia'] = "num";
             $rta['meses'] = $meses;
             $rta['dias'] = $dias;
         }
-        if (!$error && $freq == "YEARLY" && $dia_semana && !$dias && $meses) {
+        if (!$error && $freq === "YEARLY" && $dia_semana && !$dias && $meses) {
             $rta['tipo'] = "d_a";
             $rta['tipo_dia'] = "ref";
             $matches = [];
@@ -333,24 +331,24 @@ class Rrule
             $rta['meses'] = $meses;
         }
         //if (!$error && $freq=="DAILY" && $dias && $meses) {
-        if (!$error && $freq == "YEARLY" && $dias && $meses) {
+        if (!$error && $freq === "YEARLY" && $dias && $meses) {
             $rta['tipo'] = "d_a";
             $rta['tipo_dia'] = "num_dm";
             $rta['meses'] = $meses;
             $rta['dias'] = $dias;
             $rta['interval'] = $interval;
         }
-        if (!$error && $freq == "MONTHLY" && !$dias && !$meses && !$dia_semana) {
+        if (!$error && $freq === "MONTHLY" && !$dias && !$meses && !$dia_semana) {
             $rta['tipo'] = "d_m";
             $rta['tipo_dia'] = "num_ini";
             $rta['dias'] = "";
         }
-        if (!$error && $freq == "MONTHLY" && $dias && !$meses) {
+        if (!$error && $freq === "MONTHLY" && $dias && !$meses) {
             $rta['tipo'] = "d_m";
             $rta['tipo_dia'] = "num";
             $rta['dias'] = $dias;
         }
-        if (!$error && $freq == "MONTHLY" && $dia_semana && !$dias && !$meses) {
+        if (!$error && $freq === "MONTHLY" && $dia_semana && !$dias && !$meses) {
             $rta['tipo'] = "d_m";
             $rta['tipo_dia'] = "ref";
             preg_match('/([\+\-]*)(\d)(\w\w)/', $dia_semana, $matches);
@@ -359,16 +357,16 @@ class Rrule
             $rta['ordinal'] = $signo . $matches[2];
             $rta['dia_semana'] = $matches[3];
         }
-        if (!$error && $freq == "WEEKLY" && !$dia_semana && !$meses) {
+        if (!$error && $freq === "WEEKLY" && !$dia_semana && !$meses) {
             $rta['tipo'] = "d_s";
             $rta['tipo_dia'] = "num_ini";
         }
-        if (!$error && $freq == "WEEKLY" && $dia_semana && !$meses) {
+        if (!$error && $freq === "WEEKLY" && $dia_semana && !$meses) {
             $rta['tipo'] = "d_s";
             $rta['tipo_dia'] = "ref";
             $rta['dias'] = $dia_semana;
         }
-        if (!$error && $freq == "DAILY" && !$dias && !$meses) {
+        if (!$error && $freq === "DAILY" && !$dias && !$meses) {
             $rta['tipo'] = "d_d";
             $rta['meses'] = "";
             $rta['dias'] = "";

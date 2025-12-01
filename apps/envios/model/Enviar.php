@@ -871,11 +871,15 @@ class Enviar
         // Protocolo. Copiado de $this->oEscrito->cabeceraDerecha();
         $oEscrito = $this->oEscrito;
         $id_dst = '';
+        $prot_dst = '';
         $a_json_prot_dst = $oEscrito->getJson_prot_destino();
         if (!empty((array)$a_json_prot_dst)) {
             $json_prot_dst = $a_json_prot_dst[0];
             if (!empty((array)$json_prot_dst)) {
                 $id_dst = $json_prot_dst->id_lugar;
+                if ($a_json_prot_dst->num !== '') {
+                    $prot_dst = $a_json_prot_dst->num . '/' . $a_json_prot_dst->any;
+                }
             }
         }
 
@@ -922,7 +926,9 @@ class Enviar
 
         $protocolo = $origen_txt;
         $ref = '';
-        if (!empty($aRef['local'])) {
+        if (!empty($prot_dst)) {
+            $ref = ';'. $this->sigla_destino . ' ' . $prot_dst;
+        } elseif (!empty($aRef['local'])) {
             $ref = ";".$aRef['local'];
         } else {
             // si la ref está vacía, pongo el destino

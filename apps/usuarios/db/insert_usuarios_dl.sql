@@ -20,7 +20,7 @@ VALUES (9, 'vest', 90);
 INSERT INTO nombre_del_esquema.x_oficinas(id_oficina, sigla, orden)
 VALUES (10, 'adl', 100);
 INSERT INTO nombre_del_esquema.x_oficinas(id_oficina, sigla, orden)
-VALUES (11, 'des', 110);
+VALUES (11, 'pffed', 110);
 INSERT INTO nombre_del_esquema.x_oficinas(id_oficina, sigla, orden)
 VALUES (12, 'ofsvsm', 120);
 INSERT INTO nombre_del_esquema.x_oficinas(id_oficina, sigla, orden)
@@ -82,7 +82,7 @@ VALUES (19, 3, 'aop', 'Oficina aop', 13, 't', 'f');
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
 VALUES (20, 3, 'dagd', 'dagd', 8, 't', 'f');
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
-VALUES (21, 3, 'dre', 'Director espritiual', 11, 't', 't');
+VALUES (21, 3, 'pffed', 'Director espritiual', 11, 't', 't');
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
 VALUES (22, 3, 'ocs', 'Causas de los santos', 15, 't', 'f');
 INSERT INTO nombre_del_esquema.aux_cargos (id_cargo, id_ambito, cargo, descripcion, id_oficina, director, sacd)
