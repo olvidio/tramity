@@ -877,9 +877,9 @@ class Enviar
             $json_prot_dst = $a_json_prot_dst[0];
             if (!empty((array)$json_prot_dst)) {
                 $id_dst = $json_prot_dst->id_lugar;
-                if ($a_json_prot_dst->num !== '') {
-                    $prot_dst = $a_json_prot_dst->num . '/' . $a_json_prot_dst->any;
-                }
+                $oProtDestino = new Protocolo();
+                $oProtDestino->setJson($json_prot_dst);
+                $prot_dst = $oProtDestino->ver_txt();
             }
         }
 
@@ -925,9 +925,8 @@ class Enviar
         }
 
         $protocolo = $origen_txt;
-        $ref = '';
         if (!empty($prot_dst)) {
-            $ref = ';'. $this->sigla_destino . ' ' . $prot_dst;
+            $ref = ';'. $prot_dst;
         } elseif (!empty($aRef['local'])) {
             $ref = ";".$aRef['local'];
         } else {
